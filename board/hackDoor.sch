@@ -1,0 +1,242 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:fm_tuner
+LIBS:hackDoor
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L rpiPins pi?
+U 1 1 57EDDA21
+P 1050 650
+F 0 "pi?" H 2700 -950 60  0000 C CNN
+F 1 "rpiPins" H 1250 550 60  0000 C CNN
+F 2 "" H 1550 450 60  0001 C CNN
+F 3 "" H 1550 450 60  0001 C CNN
+	1    1050 650 
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 57EDDB87
+P 3000 900
+F 0 "#PWR?" H 3000 750 50  0001 C CNN
+F 1 "+5V" H 3000 1040 50  0000 C CNN
+F 2 "" H 3000 900 50  0000 C CNN
+F 3 "" H 3000 900 50  0000 C CNN
+	1    3000 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 57EDDB9E
+P 3000 1100
+F 0 "#PWR?" H 3000 850 50  0001 C CNN
+F 1 "GND" H 3000 950 50  0000 C CNN
+F 2 "" H 3000 1100 50  0000 C CNN
+F 3 "" H 3000 1100 50  0000 C CNN
+	1    3000 1100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +3.3V #PWR?
+U 1 1 57EDDBBB
+P 850 900
+F 0 "#PWR?" H 850 750 50  0001 C CNN
+F 1 "+3.3V" H 850 1040 50  0000 C CNN
+F 2 "" H 850 900 50  0000 C CNN
+F 3 "" H 850 900 50  0000 C CNN
+	1    850  900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 P?
+U 1 1 57EDDC69
+P 4200 1200
+F 0 "P?" H 4200 1500 50  0000 C CNN
+F 1 "RFID Reader" V 4300 1200 50  0000 C CNN
+F 2 "" H 4200 1200 50  0000 C CNN
+F 3 "" H 4200 1200 50  0000 C CNN
+	1    4200 1200
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 57EDDC9A
+P 4000 1400
+F 0 "#PWR?" H 4000 1150 50  0001 C CNN
+F 1 "GND" H 4000 1250 50  0000 C CNN
+F 2 "" H 4000 1400 50  0000 C CNN
+F 3 "" H 4000 1400 50  0000 C CNN
+	1    4000 1400
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 57EDDCB2
+P 4000 1000
+F 0 "#PWR?" H 4000 850 50  0001 C CNN
+F 1 "+5V" H 4000 1140 50  0000 C CNN
+F 2 "" H 4000 1000 50  0000 C CNN
+F 3 "" H 4000 1000 50  0000 C CNN
+	1    4000 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR?
+U 1 1 57EDDCCA
+P 3850 1100
+F 0 "#PWR?" H 3850 950 50  0001 C CNN
+F 1 "+3.3V" H 3850 1240 50  0000 C CNN
+F 2 "" H 3850 1100 50  0000 C CNN
+F 3 "" H 3850 1100 50  0000 C CNN
+	1    3850 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P?
+U 1 1 57EDDDE7
+P 4200 2800
+F 0 "P?" H 4200 3050 50  0000 C CNN
+F 1 "Lock/Unlock" V 4300 2800 50  0000 C CNN
+F 2 "" H 4200 2800 50  0000 C CNN
+F 3 "" H 4200 2800 50  0000 C CNN
+	1    4200 2800
+	1    0    0    -1  
+$EndComp
+Text Label 3250 1300 0    60   ~ 0
+RX
+Text Label 700  1400 0    60   ~ 0
+RX
+$Comp
+L CONN_01X03 P?
+U 1 1 57EDDED4
+P 4200 2050
+F 0 "P?" H 4200 2250 50  0000 C CNN
+F 1 "Lock Button" V 4300 2050 50  0000 C CNN
+F 2 "" H 4200 2050 50  0000 C CNN
+F 3 "" H 4200 2050 50  0000 C CNN
+	1    4200 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW?
+U 1 1 57EDE441
+P 7000 3250
+F 0 "SW?" H 7150 3360 50  0000 C CNN
+F 1 "SW_PUSH" H 7000 3170 50  0000 C CNN
+F 2 "" H 7000 3250 50  0000 C CNN
+F 3 "" H 7000 3250 50  0000 C CNN
+	1    7000 3250
+	0    1    1    0   
+$EndComp
+$Comp
+L CONN_01X03 P?
+U 1 1 57EDE86B
+P 5950 3250
+F 0 "P?" H 5950 3450 50  0000 C CNN
+F 1 "Lock Button" V 6050 3250 50  0000 C CNN
+F 2 "" H 5950 3250 50  0000 C CNN
+F 3 "" H 5950 3250 50  0000 C CNN
+	1    5950 3250
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_01X05 P?
+U 1 1 57EDEA73
+P 5550 1400
+F 0 "P?" H 5550 1700 50  0000 C CNN
+F 1 "RFID Reader" V 5650 1400 50  0000 C CNN
+F 2 "" H 5550 1400 50  0000 C CNN
+F 3 "" H 5550 1400 50  0000 C CNN
+	1    5550 1400
+	-1   0    0    -1  
+$EndComp
+$Comp
+L RFID-ID12 U?
+U 1 1 57EDED30
+P 7500 600
+F 0 "U?" H 8300 -850 60  0000 C CNN
+F 1 "RFID-ID12" H 8050 500 60  0000 C CNN
+F 2 "" H 7500 600 60  0001 C CNN
+F 3 "" H 7500 600 60  0001 C CNN
+	1    7500 600 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3000 1300 4000 1300
+Wire Wire Line
+	850  900  1150 900 
+Wire Wire Line
+	3850 1100 4000 1100
+Wire Wire Line
+	3500 2850 3500 2100
+Wire Wire Line
+	3500 2100 3000 2100
+Wire Wire Line
+	3000 2000 3600 2000
+Wire Wire Line
+	3600 2000 3600 2750
+Wire Wire Line
+	700  1400 1150 1400
+Wire Wire Line
+	4000 2050 3750 2050
+Wire Wire Line
+	3750 2050 3750 1600
+Wire Wire Line
+	3750 1600 3000 1600
+Wire Wire Line
+	3600 2750 4000 2750
+Wire Wire Line
+	3500 2850 4000 2850
+$Comp
+L Q_NPN_BCE Q?
+U 1 1 57EDEEF1
+P 7000 1650
+F 0 "Q?" H 7300 1700 50  0000 R CNN
+F 1 "Q_NPN_BCE" H 7600 1600 50  0000 R CNN
+F 2 "" H 7200 1750 50  0000 C CNN
+F 3 "" H 7000 1650 50  0000 C CNN
+	1    7000 1650
+	-1   0    0    1   
+$EndComp
+$EndSCHEMATC
