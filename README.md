@@ -7,3 +7,5 @@ Secure Network IP: 172.12.123.20 up on eth1
 Software: Apache2, php5 w/all mods, mariaDB, phpMyAdmin   
 Services: SSHD   
 
+### Diagram
+![Diagram](https://github.com/Ranthalion/rfidLock/blob/master/rfidLockDiagram.png "Diagram")
