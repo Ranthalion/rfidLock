@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-import RPIO
-import serial
 import mysql.connector
 from mysql.connector import errorcode
 import sqlite3
@@ -8,11 +6,11 @@ import time
 from functools import partial
 
 
-# remote_db = MySQLdb.connect(
+# remote_db = mysql.connector.connect(
 #   host = db_path,
 #   user = db_user,
-#   db = db_name,
-#   passwd = db_pass)
+#   database = db_name,
+#   password = db_pass)
 # local_db = sqlite3.connect(db_path)
 
 class DoorConnection(object):

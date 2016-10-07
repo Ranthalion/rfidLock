@@ -1,10 +1,7 @@
 # This is mostly a CRUD package for accessing the database of users
 # There are certain
 
-# Core system
-import mysql.connector
 import hashlib
-import sqlite3
 
 # Used to abstract database details a little bit more
 class MemberDatabase(object):
@@ -51,7 +48,7 @@ class MemberDatabase(object):
       SELECT id FROM member_table WHERE hash={0} AND revoked=FALSE;
       """.format(subs)
     self.list_query = """
-      SELECT name, email FROM member_table;
+      SELECT name, email, revoked FROM member_table;
       """
     self.content_query = """
       SELECT id, name, email, hash, revoked FROM member_table;
@@ -62,8 +59,9 @@ class MemberDatabase(object):
   def __del__(self):
     self.cur.close()
   def hash(self, card_data):
+    """Hashes the provided RFID data using MD5"""
     m = hashlib.md5()
-    m.update(carddata)
+    m.update(card_data.encode())
     return m.digest()
   def add(self, card_data, member_name, member_email):
     """Adds a new member to the list of members"""
@@ -111,41 +109,4 @@ class MemberDatabase(object):
     self.clear()
     other.cur.execute(other.content_query)
     self.cur.execute(self.clone_query, other.cur.fetchall())
-
-# remote_db = MySQLdb.connect(
-#   host = db_path,
-#   user = db_user,
-#   db = db_name,
-#   passwd = db_pass)
-# local_db = sqlite3.connect(db_path)
-
-class Door(object):
-  """Contains the functionalities required for the Raspberry Pi"""
-  def __init__(self, local_member_db, remote_member_db):
-    self.local = local_member_db
-    self.remote = remote_member_db
-  def update(self):
-    """Updates the local database to match the remote database"""
-    self.local.mimic(self.remote)
-  def door_check(self, remote_db, card_data):
-    try:
-      # Check the local database first
-      if self.local.have_current(card_data):
-        # found locally
-        return True
-      elif self.remote.have_current(card_data):
-        # found remotely, sync
-        self.local.sync()
-        sync(local_cursor, remote_cursor)
-        local_db.commit()
-        return True
-      else:
-        # reject
-        return False
-    finally:
-      local_db.close()
-      remote_db.close()
-  def recover(self):
-    """Allows replacing the remote database connection in case it goes away"""
-    self.remote.cmd_reset_connection()
 
