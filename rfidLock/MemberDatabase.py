@@ -25,7 +25,7 @@ class MemberDatabase(object):
         hash BLOB(32),
         name TEXT,
         email TEXT,
-        revoked BOOLEAN DEFAULT FALSE,
+        revoked BOOLEAN DEFAULT 0,
         CONSTRAINT pk_hash PRIMARY KEY(hash),
         CONSTRAINT unique_email UNIQUE(email));
       """
@@ -36,19 +36,16 @@ class MemberDatabase(object):
       INSERT INTO member_table (name, email, hash) VALUES ({0}, {0}, {0});
       """.format(subs)
     self.revoke_query = """
-      UPDATE member_table SET revoked=TRUE WHERE email={0};
+      UPDATE member_table SET revoked=1 WHERE email={0};
       """.format(subs)
-    self.revoked_query = """
-      SELECT hash FROM member_table WHERE revoked=TRUE;
-      """
     self.reinstate_query = """
-      UPDATE member_table SET revoked=FALSE WHERE email={0};
+      UPDATE member_table SET revoked=0 WHERE email={0};
       """.format(subs)
     self.have_query = """
       SELECT COUNT(hash) FROM member_table WHERE hash={0};
       """.format(subs)
     self.have_current_query = """
-      SELECT COUNT(hash) FROM member_table WHERE hash={0} AND revoked=FALSE;
+      SELECT COUNT(hash) FROM member_table WHERE hash={0} AND revoked=0;
       """.format(subs)
     self.list_query = """
       SELECT name, email, revoked FROM member_table;
@@ -57,7 +54,7 @@ class MemberDatabase(object):
       SELECT hash, name, email, revoked FROM member_table;
       """
     self.clone_query = """
-      INSERT INTO member_table (hash, name, email, revoked) VALUES {0};
+      INSERT INTO member_table (hash, name, email, revoked) VALUES ({0}, {0}, {0}, {0});
       """.format(subs)
   def hash(self, card_data):
     """Hashes the provided RFID data using MD5"""
@@ -108,11 +105,12 @@ class MemberDatabase(object):
   def clear(self):
     """Resets the contents of this database to be empty"""
     self.destroy()
-    self.start()
+    self.create()
   def mimic(self, other):
     """Makes this database identical to the provided database"""
     self.clear()
     with closing(self.db.cursor()) as cur, closing(other.db.cursor()) as othercur:
       othercur.execute(other.content_query)
-      cur.execute(self.clone_query, other.cur.fetchall())
+      for entry in othercur:
+        cur.execute(self.clone_query, entry)
 

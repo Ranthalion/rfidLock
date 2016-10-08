@@ -49,12 +49,6 @@ class TestMemberDatabaseDestroy(unittest.TestCase):
     self.member_db.create()
     self.member_db.destroy()
 
-class TestMemberDatabaseClear(unittest.TestCase):
-  pass
-
-class TestMemberDatabaseMimic(unittest.TestCase):
-  pass
-
 class TestMemberDatabaseAdd(unittest.TestCase):
   db_path = "/tmp/test_member_database_add.db"
   def setUp(self):
@@ -84,20 +78,113 @@ class TestMemberDatabaseHave(unittest.TestCase):
   def test_checks_member_non_existence(self):
     self.assertFalse(self.member_db.have(b'bad_test_data'))
 
-class TestMemberDatabaseRevoke(unittest.TestCase):
-  pass
+class TestMemberDatabaseHaveCurrent(unittest.TestCase):
+  db_path = "/tmp/test_member_database_add.db"
+  def setUp(self):
+    self.db = sqlite3.connect(self.db_path)
+    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db.create()
+    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org")
+  def tearDown(self):
+    # close the connection and delete the object
+    self.db.close()
+    remove(self.db_path)
+  def test_checks_member_existence(self):
+    self.assertTrue(self.member_db.have_current(b'test_data'))
+  def test_checks_member_non_existence(self):
+    self.assertFalse(self.member_db.have_current(b'bad_test_data'))
 
-class TestMemberDatabaseRevoked(unittest.TestCase):
-  pass
+class TestMemberDatabaseRevoke(unittest.TestCase):
+  db_path = "/tmp/test_member_database_revoke.db"
+  def setUp(self):
+    self.db = sqlite3.connect(self.db_path)
+    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db.create()
+    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+  def tearDown(self):
+    # close the connection and delete the object
+    self.db.close()
+    remove(self.db_path)
+  def test_revocation_does_not_fail(self):
+    self.member_db.revoke("jsmith@hackrva.org")
+  def test_revocation_does_not_delete(self):
+    self.member_db.revoke("jsmith@hackrva.org")
+    self.assertTrue(self.member_db.have(b'test_data'))
+  def test_revocation_is_targeted(self):
+    self.member_db.revoke("jsmith@hackrva.org")
+    self.assertTrue(self.member_db.have_current(b'othe_data'))
 
 class TestMemberDatabaseReinstate(unittest.TestCase):
-  pass
-
-class TestMemberDatabaseHaveCurrent(unittest.TestCase):
-  pass
+  db_path = "/tmp/test_member_database_reinstate.db"
+  def setUp(self):
+    self.db = sqlite3.connect(self.db_path)
+    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db.create()
+    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+  def tearDown(self):
+    # close the connection and delete the object
+    self.db.close()
+    remove(self.db_path)
+  def test_reinstatement_works(self):
+    self.member_db.revoke("cmeth@hackrva.org")
+    self.member_db.reinstate("cmeth@hackrva.org")
+    self.assertTrue(self.member_db.have_current(b'othe_data'))
 
 class TestMemberDatabaseList(unittest.TestCase):
-  pass
+  db_path = "/tmp/test_member_database_list.db"
+  def setUp(self):
+    self.db = sqlite3.connect(self.db_path)
+    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db.create()
+    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+  def tearDown(self):
+    # close the connection and delete the object
+    self.db.close()
+    remove(self.db_path)
+  def test_list_contains_users(self):
+    member_list = self.member_db.list()
+    self.assertEqual(len(member_list), 2)
+
+class TestMemberDatabaseClear(unittest.TestCase):
+  db_path = "/tmp/test_member_database_clear.db"
+  def setUp(self):
+    self.db = sqlite3.connect(self.db_path)
+  def tearDown(self):
+    self.db.close()
+    remove(self.db_path)
+  def test_clear_database(self):
+    member_db = MemberDatabase(self.db, "?")
+    member_db.create()
+    member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    member_db.clear()
+    self.assertEqual(len(member_db.list()), 0)
+
+class TestMemberDatabaseMimic(unittest.TestCase):
+  db_path1 = "/tmp/test_member_database_mimic1.db"
+  db_path2 = "/tmp/test_member_database_mimic2.db"
+  def setUp(self):
+    self.db1 = sqlite3.connect(self.db_path1)
+    self.db2 = sqlite3.connect(self.db_path2)
+  def tearDown(self):
+    self.db1.close()
+    self.db2.close()
+    remove(self.db_path1)
+    remove(self.db_path2)
+  def test_mimic_database(self):
+    member_db1 = MemberDatabase(self.db1, "?")
+    member_db1.create()
+    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    self.db1.commit()
+    #
+    member_db2 = MemberDatabase(self.db2, "?")
+    member_db2.create()
+    member_db2.mimic(member_db1)
+    self.assertEqual(len(member_db2.list()), 2)
 
 if __name__ == '__main__':
   unittest.main()
