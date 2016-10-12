@@ -1,10 +1,11 @@
 #!/usr/bin/python3
+
+# TODO need to make things a bit more database agnostic if possible
 import mysql.connector
 from mysql.connector import errorcode
-import sqlite3
+
 import time
 from functools import partial
-
 
 # remote_db = mysql.connector.connect(
 #   host = db_path,
@@ -27,28 +28,41 @@ class DoorConnection(object):
   def update(self):
     """Updates the local database to match the remote database"""
     self.local.mimic(self.remote)
-  def door_check(self, remote_db, card_data):
+  def checkRequest(self, card_data):
+    """
+    Whether the card_data's hash is in the local or remote databases
+
+    First checks the local database, returns true if card_data's hash
+    is available locally, otherwise checks the remote database 
+    and returns true if the hash is available remotely, and returns false
+    otherwise.
+    """
     try:
       # Check the local database first
       if self.local.have_current(card_data):
         # found locally
         return True
-      elif self.remote.alive() and self.remote.have_current(card_data):
+      elif self.remote.have_current(card_data):
         # found remotely, sync 
-        self.local.sync(local_cursor, card_data)
-        self.local.commit()
+        self.local.sync(self.remote, card_data)
         return True
       else:
         # reject
         return False
     except mysql.connector.errors.OperationalError as e:
-      self.remote.recover()
-      pass
+      if e.errno == errorcode.CR_SERVER_GONE_ERROR:
+        # Attempt to recover
+        if self.recover():
+          return self.checkRequest(card_data)
     except mysql.connector.errors.DatabaseError as e:
-      if e.errno == errorcode.CR_SERVER_GONE_ERROR or e.errno == errorcode.:
-      # Attempt to recover
-      self.remote.recover()
       return False
   def recover(self):
-    """Allows replacing the remote database connection in case it goes away"""
-    self.remote.cmd_reset_connection()
+    """
+    Allows repairing the remote database connection in case it goes away
+
+    Returns true if the connection is successfully reestablished.
+    Note that this will only work for mysql.connector connections.
+    """
+    self.remote.reconnect()
+    return self.remote.is_connected()
+

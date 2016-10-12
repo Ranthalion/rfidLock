@@ -20,11 +20,12 @@ class MemberDatabase(object):
     subs - substitution expression for the database in use
     """
     self.db = db
+    # Technically, emails may be 254 characters at most
     self.start_query = """
       CREATE TABLE member_table (
-        hash BLOB(32),
+        hash BINARY(16),
         name TEXT,
-        email TEXT,
+        email VARCHAR(254),
         revoked BOOLEAN DEFAULT 0,
         CONSTRAINT pk_hash PRIMARY KEY(hash),
         CONSTRAINT unique_email UNIQUE(email));
@@ -56,6 +57,9 @@ class MemberDatabase(object):
     self.clone_query = """
       INSERT INTO member_table (hash, name, email, revoked) VALUES ({0}, {0}, {0}, {0});
       """.format(subs)
+    self.record_query = """
+      SELECT hash, name, email, revoked FROM member_table WHERE hash={0};
+      """.format(subs)
   def hash(self, card_data):
     """Hashes the provided RFID data using MD5"""
     m = hashlib.md5()
@@ -65,15 +69,18 @@ class MemberDatabase(object):
     """Adds a new member to the list of members"""
     with closing(self.db.cursor()) as cur:
       cur.execute(self.add_query, (member_name, member_email, self.hash(card_data)))
+    self.db.commit()
   def revoke(self, email):
     """Marks a member as no longer a current member of the space."""
     with closing(self.db.cursor()) as cur:
       cur.execute(self.revoke_query, (email, ))
+      self.db.commit()
       return cur.rowcount > 0
   def reinstate(self, email):
     """Marks a former member as a current member of the space again."""
     with closing(self.db.cursor()) as cur:
       cur.execute(self.reinstate_query, (email, ))
+    self.db.commit()
   def have(self, card_data):
     """
     Uses the hash of the member's RFID data to check whether they have ever
@@ -98,10 +105,12 @@ class MemberDatabase(object):
     """Creates the tables necessary for the membership system"""
     with closing(self.db.cursor()) as cur:
       cur.execute(self.start_query)
+    self.db.commit()
   def destroy(self):
     """Removes the tables created for this system"""
     with closing(self.db.cursor()) as cur:
       cur.execute(self.destroy_query)
+    self.db.commit()
   def clear(self):
     """Resets the contents of this database to be empty"""
     self.destroy()
@@ -113,4 +122,11 @@ class MemberDatabase(object):
       othercur.execute(other.content_query)
       for entry in othercur:
         cur.execute(self.clone_query, entry)
+    self.db.commit()
+  def sync(self, other, card_data):
+    """Updates a singular record from a different database"""
+    with closing(self.db.cursor()) as cur, closing(other.db.cursor()) as othercur:
+      othercur.execute(other.record_query, (other.hash(card_data), ))
+      cur.execute(self.clone_query, othercur.fetchone())
+    self.db.commit()
 

@@ -186,6 +186,29 @@ class TestMemberDatabaseMimic(unittest.TestCase):
     member_db2.mimic(member_db1)
     self.assertEqual(len(member_db2.list()), 2)
 
+class TestMemberDatabaseSync(unittest.TestCase):
+  db_path1 = "/tmp/test_member_database_sync1.db"
+  db_path2 = "/tmp/test_member_database_sync2.db"
+  def setUp(self):
+    self.db1 = sqlite3.connect(self.db_path1)
+    self.db2 = sqlite3.connect(self.db_path2)
+  def tearDown(self):
+    self.db1.close()
+    self.db2.close()
+    remove(self.db_path1)
+    remove(self.db_path2)
+  def test_mimic_database(self):
+    member_db1 = MemberDatabase(self.db1, "?")
+    member_db1.create()
+    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org")
+    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    self.db1.commit()
+    #
+    member_db2 = MemberDatabase(self.db2, "?")
+    member_db2.create()
+    member_db2.sync(member_db1, b'othe_data')
+    self.assertTrue(member_db2.have_current(b'othe_data'))
+
 if __name__ == '__main__':
   unittest.main()
 
