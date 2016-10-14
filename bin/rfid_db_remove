@@ -1,20 +1,23 @@
 #!/usr/bin/python3
 
-import rfidLock
+from rfidLock import MemberDatabase
 import json
 import mysql.connector
+from sys import argv
 
 def main():
   db = None
   try:
-    with open("db_config.json") as db_config:
+    with open(argv[1]) as db_config:
       db = mysql.connector.connect(**json.load(db_config))
-    member_db = MemberDatabase(db)
+    member_db = MemberDatabase(db, "%s")
     member_db.destroy()
     db.commit()
     db.close()
   except FileNotFoundError:
     print("db_config.json must exist to remove the database")
+  except IndexError:
+    print("The JSON config file must be provided as the first command line argument")
 
 if __name__ == '__main__':
   main()
