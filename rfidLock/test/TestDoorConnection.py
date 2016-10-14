@@ -79,11 +79,7 @@ class TestDoorConnectionRecover(unittest.TestCase):
     self.member_db_remote = None
     self.door_connection = None
     try:
-      self.db_remote = mysql.connector.connect(
-        host = config["host"],
-        user = config["user"],
-        password = config["password"],
-        database = config["database"])
+      self.db_remote = mysql.connector.connect(**config)
     except:
       self.has_mysql = False
       print("MySQL DB Connection Failure")
