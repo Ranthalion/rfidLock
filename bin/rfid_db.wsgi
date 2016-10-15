@@ -1,63 +1,79 @@
 #!/usr/bin/python3
 
 from cgi import parse_qs
+from sys import exc_info, exc_clear
 import mysql.connector
 from rfidLock import MemberDatabase
+from jinja2 import FileSystemLoader, Envrionment
 
-def redirect(destination, start_response):
-  # Redirects to static pages
-  response_headers = [
-    ('Location', destination)
-  ]
-  start_response('303 See Other', response_headers)
-  return []
-
-def list_members(db, args, start_response):
-  # Get the list of members
-  table_html =
-    "<table>" + 
-    "".join(["<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(*data) 
-      for data in db.list()]) + "</table>"
-  response_headers = [
-    ('Content-type: text/html')
-  ]
-  start_response('200 OK', response_headers)
-  with open("list_members.html") as list_html:
-    return [table_html if line == "<!-- LIST -->" else line for line in readlines(list_html)]
-
-def add_member(db, args, start_response):
-  if args["rfid"] != args["rerfid"]:
-    return redirect('rfid_no_match.html')
-  else:
-    db.add(args["rfid"], args["name"], args["email"])
-    # TODO, also send a slack invitation
-    return redirect('added_member.html')
-
-def revoke_member(db, args, start_response):
-  db.revoke(args["email"])
-  return redirect('revoke_member.html')
-
-def reinstate_member(db, args, start_response):
-  db.reinstate(args["email"])
-  return redirect('reinstate_member.html')
-
-# WSGI application
-def application(environ, start_response):
-  try:
-    db = None
-    with open("db_config.json") as db_config:
-      db = MemberDatabase(mysql.connector.connect(**json.load(db_config)), "%s")
+class MemberManager(object):
+  def __init__(self, template_dir, db):
+    self.loader = FileSystemLoader(template_dir)
+    self.env = Environment(loader=self.loader)
+    self.db = db
+  def respond_ok(self, start_response, content):
+    response_headers = [
+      ('Content-type: text/html')
+    ]
+    start_response('200 OK')
+    return content
+  def respond_fail(self, start_response, content):
+    response_headers = [
+      ('Content-type: text/html')
+    ]
+    start_response('500 Server Error')
+    return content
+  def manage(self, args, start_response):
+    manager_html = self.env.get_template('manage.html')
+    return self.respond_ok([manager_html.render(member_list=self.db.list())])
+  def add(self, args, start_response):
+    if args["rfid"] != args["rerfid"]:
+      args["message"] = "RFID data did not match"
+    else:
+      self.db.add(args["rfid"], args["name"], args["email"])
+      args["message"] = "\"{0}\" added as a member".format(args["email"])
+      # TODO, also send a slack invitation
+    return self.manage_members(args, start_response)
+  def revoke(self, args, start_response):
+    email = args["email"]
+    self.db.revoke(email)
+    # TODO also suspend from slack
+    args["message"] = "\"{0}\" suspended as a member".format(email)
+    return self.manage_members(args, start_response)
+  def reinstate(self, args, start_response):
+    email = args["email"]
+    # TODO unsuspend from slack
+    self.db.reinstate(email)
+    args["message"] = "\"{0}\" reinstated as a member".format(email)
+    return self.manage_members(args, start_response)
+  def __call__(self, environ, start_response):
     args = parse_qs(environ['QUERY_STRING'])
-    # This is much like a switch-case statement but is a bit easier 
-    # to read in my opinion.
+    if not "cmd" in args:
+      args["cmd"] = 'manage'
     cmds = {
-      "list": list_members,
-      "add": add_member,
-      "revoke": revoke_member,
-      "reinstate": reinstate_member
+      'manage': self.manage,
+      'add': self.add,
+      'revoke': self.revoke,
+      'reinstate': self.reinstate
     }
-    return cmds[args["cmd"]](db, args, start_response)
-  except:
-    # TODO write the failure to a log file
-    return redirect('server_failure.html')
+    try:
+      return cmds[args["cmd"]](args, start_response)
+    except:
+      exctype, excvalue = exc_info()
+      exc_clear()
+      except_html = self.env.get_template('except.html')
+      return self.respond_ok(
+        start_response,
+        [except_html.render(exception=str(excvalue))])
+
+def main():
+  global application
+  db = None
+  config = None
+  with open("config/config.json") as config_file:
+    config = json.load(config_file))
+    db = MemberDatabase(mysql.connector.connect(**config, "%s"))
+  return MemberManager(config['templates'], db)
+
+application = main()
 

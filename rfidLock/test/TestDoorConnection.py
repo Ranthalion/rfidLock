@@ -51,19 +51,19 @@ class TestDoorConnectionCheckRequest(unittest.TestCase):
     remove(self.db_path_local)
     remove(self.db_path_remote)
   def test_remote_verifies(self):
-    self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-    self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+    self.assertTrue(self.door_connection.check_request(b'test_data'))
+    self.assertTrue(self.door_connection.check_request(b'dope_data'))
   def test_local_verifies_with_broken_remote(self):
     self.door_connection.update()
     self.db_remote.close()
-    self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-    self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+    self.assertTrue(self.door_connection.check_request(b'test_data'))
+    self.assertTrue(self.door_connection.check_request(b'dope_data'))
   def test_checking_syncs(self):
-    self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-    self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+    self.assertTrue(self.door_connection.check_request(b'test_data'))
+    self.assertTrue(self.door_connection.check_request(b'dope_data'))
     self.db_remote.close()
-    self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-    self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+    self.assertTrue(self.door_connection.check_request(b'test_data'))
+    self.assertTrue(self.door_connection.check_request(b'dope_data'))
 
 # Need a mysql.connector connection to test this one
 class TestDoorConnectionRecover(unittest.TestCase):
@@ -96,8 +96,8 @@ class TestDoorConnectionRecover(unittest.TestCase):
     remove(self.db_path_local)
   def test_mysql_remote_verifies(self):
     if self.has_mysql:
-      self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-      self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+      self.assertTrue(self.door_connection.check_request(b'test_data'))
+      self.assertTrue(self.door_connection.check_request(b'dope_data'))
       self.member_db_remote.destroy()
       self.db_remote.close()
   def test_local_verifies_with_broken_mysql_remote(self):
@@ -105,16 +105,16 @@ class TestDoorConnectionRecover(unittest.TestCase):
       self.door_connection.update()
       self.member_db_remote.destroy()
       self.db_remote.close()
-      self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-      self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+      self.assertTrue(self.door_connection.check_request(b'test_data'))
+      self.assertTrue(self.door_connection.check_request(b'dope_data'))
   def test_checking_syncs_mysql(self):
     if self.has_mysql:
-      self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-      self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+      self.assertTrue(self.door_connection.check_request(b'test_data'))
+      self.assertTrue(self.door_connection.check_request(b'dope_data'))
       self.member_db_remote.destroy()
       self.db_remote.close()
-      self.assertTrue(self.door_connection.checkRequest(b'test_data'))
-      self.assertTrue(self.door_connection.checkRequest(b'dope_data'))
+      self.assertTrue(self.door_connection.check_request(b'test_data'))
+      self.assertTrue(self.door_connection.check_request(b'dope_data'))
 
 if __name__ == '__main__':
   unittest.main()

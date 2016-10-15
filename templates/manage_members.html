@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Member List</title>
+<link rel="stylesheet" type="text/css" href="css/base.css">
+</head>
+<body>
+<h1>Member List</h1>
+<!-- Using a proper templating package with Jinja -->
+<!-- Make this the comprehensive interface -->
+<table>
+  <tr>
+    <td>Name</td>
+    <td>E-mail</td>
+    <td>Current</td>
+  </tr>
+  {% for name, email, revoked in member_list %}
+  <tr>
+    <td>{{ name }}</td>
+    <td>{{ email }}</td>
+    <td><a href="rfid_db.wsgi?cmd=toggle&email={{ email }}">{{ revoked }}</a><td>
+  </tr>
+  {% endfor %}
+</table>
+</body>
+</html>

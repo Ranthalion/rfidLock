@@ -28,7 +28,7 @@ class DoorConnection(object):
   def update(self):
     """Updates the local database to match the remote database"""
     self.local.mimic(self.remote)
-  def checkRequest(self, card_data):
+  def check_request(self, card_data):
     """
     Whether the card_data's hash is in the local or remote databases
 
