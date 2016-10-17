@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Member;
 
 class MemberController extends Controller
 {
@@ -23,6 +24,12 @@ class MemberController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $members = Member::all();
+        return view('members.index', compact('members'));
+    }
+
+    public function create(Member $member)
+    {
+        return view('members.create', compact('member'));
     }
 }

@@ -13,6 +13,10 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'MemberController@index');
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'MemberController@index');
+
+Route::get('/addMember', 'MemberController@create');
+
+Route::post('/addMember', 'MemberController@create');
