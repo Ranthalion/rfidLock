@@ -7,15 +7,18 @@ from sys import argv
 
 def main():
   db = None
+  config_path = "/etc/rfidlock/config.json"
+  if len(argv) >= 2:
+    config_path = argv[1]
   try:
-    with open(argv[1]) as db_config:
-      db = mysql.connector.connect(**json.load(db_config))
+    with open(config_path) as db_config:
+      db = mysql.connector.connect(**json.load(db_config)["database"])
     member_db = MemberDatabase(db, "%s")
     member_db.create()
     db.commit()
     db.close()
   except FileNotFoundError:
-    print("JSON config file must exist to install the database")
+    print("config file must exist to install the database")
   except IndexError:
     print("The JSON config file must be provided as the first command line argument")
 

@@ -12,22 +12,26 @@ Services: SSHD
 
 ### Installation
 
-#### Database Configuration File
+#### Configuration File
 
-A database configuration file is necessary for managing the connection to the
-mysql database which is used as the authoratative data source.
+A configuration file is necessary for managing the connection to the mysql 
+database which is used as the authoratative data source. This file is also 
+needed for other configuration details such as the location of templates.
 
-The options that can be configured in this file match with mysql.connector's 
+The options that can be configured in this file's database parameter match with mysql.connector's 
 [Python Connection Arguments](https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html)
 
 A simple example configuration file is shown here for reference.
 
 ```json
 {
-  "username": "rfid_user",
-  "password": "db_passwd",
-  "host": "rfid_host",
-  "database": "rfid_db"
+  "database": {
+    "username": "rfid_user",
+    "password": "db_passwd",
+    "host": "rfid_host",
+    "database": "rfid_db"
+  },
+  "templates": "/usr/share/rfidlock/templates"
 }
 ```
 
@@ -38,12 +42,25 @@ To install the member server and web interface:
 ```bash
 git clone https://github.com/Ranthalion/rfidLock.git
 sudo pip install rfidLock/
-rfid_db_install db_file.json
+# Edit or create the config.json file described above
+vim /etc/rfidlock/config.json
+# Creates the necessary database tables
+rfid_db_install
+
+# For Arch, this should enable wsgi
+echo "LoadModule wsgi_module modules/mod_wsgi.so" >> /etc/httpd/conf/httpd.conf
+# For Debian/Ubuntu, this should enable wsgi
+a2enmod wsgi
+
+# Mount the WSGI script, again, this is for Arch, will be different on other distros
+echo "WSGIScriptAlias /rfid_db.wsgi $(which rfid_db.wsgi)" >> /etc/httpd/conf/httpd.conf
+
+# Install and enable mod_wsgi
+# Modify Apache server configuration
 
 # TODO run a script that installs an apache server site to a path
 # Varies by distribution
 
-# ln -s /usr/local/scripts/.wsgi
 # ? WSGIScriptAlias /wsgi /path/to/script/rfid_members.wsgi
 # TODO configure apache server to run mod_wsgi
 ```
