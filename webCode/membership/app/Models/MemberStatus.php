@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Resource extends Model
+class MemberStatus extends Model
 {
     protected $guarded = [];
 }

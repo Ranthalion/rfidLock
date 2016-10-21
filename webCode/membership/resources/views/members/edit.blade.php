@@ -5,15 +5,16 @@
     <div class="row">
         <div class="col-md-12">
         	<div class="panel panel-default">
-        		<div class="panel-heading">Add Member</div>
+        		<div class="panel-heading">Edit Member</div>
         		<div class="panel-body">
-                    {{ Form::model($member, ['action' => 'MemberController@store', 'class' => 'form-horizontal']) }}
+
+                    {{ Form::model($member, ['action' => ['MemberController@update', $member->id], 'method' => 'PUT', 'class' => 'form-horizontal']) }}
                         
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             {{ Form::label('name', 'Name', ['class' => 'col-md-4 control-label']) }}
 
                             <div class="col-md-6">
-                                {{ Form::text('name', '', ['class' => 'form-control']) }}
+                                {{ Form::text('name', null, ['class' => 'form-control']) }}
 
                                 @if ($errors->has('name'))
                                     <span class="help-block">
@@ -27,7 +28,7 @@
                             {{ Form::label('email', 'Email', ['class' => 'col-md-4 control-label']) }}
 
                             <div class="col-md-6">
-                                {{ Form::email('email', '', ['class' => 'form-control']) }}
+                                {{ Form::email('email', null, ['class' => 'form-control']) }}
                                 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -41,7 +42,7 @@
                             {{ Form::label('payment_provider_id', 'Payment Via', ['class' => 'col-md-4 control-label']) }}
 
                             <div class="col-md-6">
-                                {{ Form::select('payment_provider_id', $providers, 2, ['class' => 'form-control']) }}
+                                {{ Form::select('payment_provider_id', $providers, null, ['class' => 'form-control']) }}
 
                                 
 
@@ -57,7 +58,7 @@
                             {{ Form::label('member_tier_id', 'Membership Tier', ['class' => 'col-md-4 control-label']) }}
                                                         
                             <div class="col-md-6">
-                                {{ Form::select('member_tier_id', $tiers, 2, ['class' => 'form-control']) }}
+                                {{ Form::select('member_tier_id', $tiers, null, ['class' => 'form-control']) }}
 
                                 @if ($errors->has('member_tier_id'))
                                     <span class="help-block">
@@ -71,11 +72,25 @@
                             <label for="rfid" class="col-md-4 control-label">rfid</label>
 
                             <div class="col-md-6">
-                                {{ Form::text('rfid', '', ['class' => 'form-control']) }}
+                                {{ Form::text('rfid', null, ['class' => 'form-control']) }}
 
                                 @if ($errors->has('rfid'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('rfid') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('resources') ? ' has-error' : '' }}">
+                            <label for="resources" class="col-md-4 control-label">Resource Access</label>
+
+                            <div class="col-md-6">
+                                {{ Form::select('resources[]', $resources, $member->resources->pluck('id')->all(), ['id' => 'resources', 'class' => 'form-control', 'multiple' => 'multiple']) }}
+
+                                @if ($errors->has('resources'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('resources') }}</strong>
                                     </span>
                                 @endif
                             </div>

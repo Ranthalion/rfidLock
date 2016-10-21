@@ -8,7 +8,7 @@ class MemberStatusSeeder extends Seeder {
     public function run()
     {
         // Uncomment the below to wipe the table clean before populating
-        DB::table('member_status')->delete();
+        DB::table('member_statuses')->delete();
  
         $member_statuses = array(
             ['id' => 1, 'description' => 'Active', 'created_at' => new DateTime, 'updated_at' => new DateTime],
@@ -16,7 +16,7 @@ class MemberStatusSeeder extends Seeder {
         );
  
         // Uncomment the below to run the seeder
-        DB::table('member_status')->insert($member_statuses);
+        DB::table('member_statuses')->insert($member_statuses);
     }
  
 }
