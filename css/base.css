@@ -1,0 +1,17 @@
+body {
+  background-color: #CCC;
+}
+
+h1 {
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p {
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
