@@ -28,16 +28,24 @@ class MemberController extends Controller
      */
     public function index($status = 'active')
     {
-        if ($status == 'active')
-        {
-            $status_id = 1;
-        }
-        else 
-        {
-            $status_id = 2;
-        }
+        $status_id = 1; //Active
+        
         $members = Member::where('member_status_id', $status_id)->orderBy('name')->get();
         return view('members.index', compact('members'));
+    }
+
+    /**
+     * Display a listing of the inactive members.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function inactive()
+    {
+        $status_id = 2; //Inactive
+        
+        $members = Member::where('member_status_id', $status_id)->orderBy('name')->get();
+        return view('members.inactive', compact('members'));
     }
 
     /**
@@ -145,6 +153,25 @@ class MemberController extends Controller
         $member->member_status_id = 2;
         $member->save();
 
+        Session::flash('message', $member->name.' has been revoked.');
         return redirect('members');
     }
+
+    /**
+     * Restore the member's access
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+
+        $member = Member::find($id);
+        $member->member_status_id = 1;
+        $member->save();
+
+        Session::flash('message', $member->name.' has been restored.');
+        return redirect('members/inactive');
+    }
+
 }

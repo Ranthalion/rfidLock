@@ -17,7 +17,9 @@ Route::get('/', 'MemberController@index');
 
 Route::get('/home', 'MemberController@index');
 
-Route::get('members/{status?}', 'MemberController@index');
+Route::get('members/inactive', 'MemberController@inactive')->name('members.inactive');
+Route::post('members/{member}/restore', 'MemberController@restore')->name('members.restore');
+
 Route::resource('members', 'MemberController',
 	['except' => ['show']]);
 
