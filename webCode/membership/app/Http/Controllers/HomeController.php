@@ -11,6 +11,9 @@ use App\Models\MemberTier;
 use App\Models\PaymentProvider;
 use App\Models\Resource;
 
+use App\Mail\Welcome;
+use Illuminate\Support\Facades\Mail;
+
 use Session;
 
 class HomeController extends Controller
@@ -111,6 +114,8 @@ class HomeController extends Controller
             $member->save();
 
             $member->resources()->attach([1,2]);
+
+            Mail::to($member->email)->send(new Welcome($member));
             
             // redirect
             Session::flash('message', 'Successfully registered member and activated key.');
