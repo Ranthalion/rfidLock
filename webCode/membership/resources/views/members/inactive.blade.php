@@ -9,15 +9,12 @@
         		<div class="panel-body">
         			<div class="row">
         				<div class="col-md-6">
-        					<a href="/members/inactive">View Inactive Members</a>
-        				</div>
-        				<div class="col-md-6">
-        					<a class="btn btn-primary pull-right" href="{{ URL::to('members/create') }}">Add Member</a>
+        					<a href="/members">View Active Members</a>
         				</div>
         			</div>
 
     			 	@if ( !$members->count() )
-				        There are no members
+				        There are no inactive members
 				    @else
 				        <table class="table">
 				        	<thead>
@@ -40,8 +37,8 @@
 				            		<td>{{ $member->paymentProvider->description }}</td>
 				            		<td>
             			                <a class="btn btn-xs btn-info" href="{{ URL::to('members/' . $member->id . '/edit') }}">Edit</a>
-            			                {!! Form::open(['method' => 'DELETE','route' => ['members.destroy', $member->id], 'style' => 'display: inline;	']) !!}
-            								{!! Form::submit('Revoke', ['class' => 'btn btn-xs btn-warning revoke-member']) !!}
+            			                {!! Form::open(['method' => 'POST','route' => ['members.restore', $member->id], 'style' => 'display: inline;	']) !!}
+            								{!! Form::submit('Restore', ['class' => 'btn btn-xs btn-success']) !!}
         								{!! Form::close() !!}
 				            		</td>
 				                </tr>
@@ -50,7 +47,7 @@
 				        </table>
 
 				        <div>
-				        	{{count($members)}} total members
+				        	{{count($members)}} total inactive members
 				        </div>
 				    @endif
         		</div>
@@ -58,8 +55,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('pagescript')
-    <script src="/js/index.js"></script>
 @endsection

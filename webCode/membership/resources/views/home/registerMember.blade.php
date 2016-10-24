@@ -5,24 +5,10 @@
     <div class="row">
         <div class="col-md-12">
         	<div class="panel panel-default">
-        		<div class="panel-heading">Add Member</div>
+        		<div class="panel-heading">New Member</div>
         		<div class="panel-body">
-                    {{ Form::model($member, ['action' => 'MemberController@store', 'class' => 'form-horizontal']) }}
+                    {{ Form::model($member, ['action' => 'HomeController@confirmMember', 'class' => 'form-horizontal']) }}
                         
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            {{ Form::label('name', 'Name', ['class' => 'col-md-4 control-label']) }}
-
-                            <div class="col-md-6">
-                                {{ Form::text('name', '', ['class' => 'form-control']) }}
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             {{ Form::label('email', 'Email', ['class' => 'col-md-4 control-label']) }}
 
@@ -43,25 +29,9 @@
                             <div class="col-md-6">
                                 {{ Form::select('payment_provider_id', $providers, 2, ['class' => 'form-control']) }}
 
-                                
-
                                 @if ($errors->has('payment_provider_id'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('payment_provider_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('member_tier_id') ? ' has-error' : '' }}">
-                            {{ Form::label('member_tier_id', 'Membership Tier', ['class' => 'col-md-4 control-label']) }}
-                                                        
-                            <div class="col-md-6">
-                                {{ Form::select('member_tier_id', $tiers, 2, ['class' => 'form-control']) }}
-
-                                @if ($errors->has('member_tier_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('member_tier_id') }}</strong>
                                     </span>
                                 @endif
                             </div>

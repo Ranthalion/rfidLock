@@ -9,7 +9,8 @@ setup(
   scripts = [
     'bin/rfid_db_install',
     'bin/rfid_db_remove',
-    'bin/rfid_db.wsgi'])
+    'bin/rfid_db.wsgi',
+    'bin/rfid_door'])
 
 # TODO Create /etc/rfidlock/config.json
 

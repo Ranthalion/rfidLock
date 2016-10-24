@@ -13,7 +13,7 @@ class CreateMembersTable extends Migration
      */
     public function up()
     {
-        Schema::create('member_status', function (Blueprint $table) {
+        Schema::create('member_statuses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
             $table->timestamps();
@@ -42,12 +42,13 @@ class CreateMembersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('rfid')->unique();
             $table->integer('member_status_id')->unsigned();
             $table->integer('member_tier_id')->unsigned();
             $table->integer('payment_provider_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('member_status_id')->references('id')->on('member_status');
+            $table->foreign('member_status_id')->references('id')->on('member_statuses');
             $table->foreign('member_tier_id')->references('id')->on('member_tiers');
             $table->foreign('payment_provider_id')->references('id')->on('payment_providers');
         });
@@ -71,12 +72,13 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
-        
-        Schema::dropIfExists('member_status');
+        Schema::dropIfExists('member_resource');
+        Schema::dropIfExists('members');
+        Schema::dropIfExists('member_statuses');
         Schema::dropIfExists('member_tiers');
         Schema::dropIfExists('payment_providers');
-        Schema::dropIfExists('member_resource');
+        
         Schema::dropIfExists('resources');
-        Schema::dropIfExists('members');
+        
     }
 }

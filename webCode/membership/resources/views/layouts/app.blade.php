@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
+    <link href="/css/chosen.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -81,10 +82,41 @@
             </div>
         </nav>
 
+        @if(Session::has('message'))
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-success text-center">
+                        {{ Session::get('message') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if(Session::has('error'))
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-danger text-center">
+                        {{ Session::get('error') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         @yield('content')
     </div>
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    @yield('pagescript')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.0/js/toastr.min.js"></script>
+    <script src="/js/chosen.jquery.js"></script>
+    
+    <script>
+    $('select').chosen({disable_search_threshold: 10});
+    </script>
 </body>
 </html>
