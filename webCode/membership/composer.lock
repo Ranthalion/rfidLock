@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d17b190440a8b4d6df600248ed4128db",
+    "content-hash": "3067612ade3f76e74eb0481a15e3328f",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -304,44 +304,6 @@
                 "tokenizer"
             ],
             "time": "2015-12-05 17:17:57"
-        },
-        {
-            "name": "kamaln7/toastr",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kamaln7/toastr.git",
-                "reference": "bf555883de08191b82b753d176048cb696036e97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kamaln7/toastr/zipball/bf555883de08191b82b753d176048cb696036e97",
-                "reference": "bf555883de08191b82b753d176048cb696036e97",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/session": ">=4.0.0",
-                "illuminate/support": ">=4.0.0",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Kamaln7\\Toastr\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kamal Nasser",
-                    "email": "kamal@kamalnasser.net"
-                }
-            ],
-            "description": "Easy toastr notifications for Laravel 4",
-            "time": "2015-01-17 19:57:31"
         },
         {
             "name": "laravel/framework",
@@ -875,6 +837,55 @@
                 "random"
             ],
             "time": "2016-04-03 06:00:07"
+        },
+        {
+            "name": "paypal/rest-api-sdk-php",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypal/PayPal-PHP-SDK.git",
+                "reference": "97e5102dc8e8a3c1ee954aa067505671caa65b59"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypal/PayPal-PHP-SDK/zipball/97e5102dc8e8a3c1ee954aa067505671caa65b59",
+                "reference": "97e5102dc8e8a3c1ee954aa067505671caa65b59",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0",
+                "psr/log": "^1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PayPal": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "PayPal",
+                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
+                }
+            ],
+            "description": "PayPal's PHP SDK for REST APIs",
+            "homepage": "http://paypal.github.io/PayPal-PHP-SDK/",
+            "keywords": [
+                "payments",
+                "paypal",
+                "rest",
+                "sdk"
+            ],
+            "time": "2016-10-21 18:07:19"
         },
         {
             "name": "psr/log",
@@ -3624,9 +3635,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "kamaln7/toastr": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

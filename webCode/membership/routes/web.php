@@ -11,22 +11,18 @@
 |
 */
 
-Auth::routes();
+Route::get('/', 'HomeController@addMember');
+Route::post('/confirm', 'HomeController@confirmMember')->name('home.confirm');
+Route::post('/store', 'HomeController@storeMember')->name('home.store');
 
-Route::get('/', 'MemberController@index');
+Auth::routes();
 
 Route::get('/home', 'MemberController@index');
 
 Route::get('members/inactive', 'MemberController@inactive')->name('members.inactive');
 Route::post('members/{member}/restore', 'MemberController@restore')->name('members.restore');
 
-Route::resource('members', 'MemberController',
-	['except' => ['show']]);
+Route::resource('members', 'MemberController', ['except' => ['show']]);
 
 Route::resource('resources', 'ResourceController');
 
-/*
-Route::get('/addMember', 'MemberController@create');
-
-Route::post('/addMember', 'MemberController@store');
-*/

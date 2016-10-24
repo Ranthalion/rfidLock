@@ -83,8 +83,26 @@
         </nav>
 
         @if(Session::has('message'))
-        <div class="alert alert-success">
-            {{ Session::get('message') }}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-success text-center">
+                        {{ Session::get('message') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if(Session::has('error'))
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-danger text-center">
+                        {{ Session::get('error') }}
+                    </div>
+                </div>
+            </div>
         </div>
         @endif
 

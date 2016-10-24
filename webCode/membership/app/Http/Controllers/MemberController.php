@@ -26,7 +26,7 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($status = 'active')
+    public function index()
     {
         $status_id = 1; //Active
         
