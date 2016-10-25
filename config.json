@@ -1,0 +1,17 @@
+{
+  "templates": "/usr/share/rfidlock/templates",
+  "rfid_interface": "/dev/ttyAMA0",
+  "baud": 9600,
+  "timeout": 3.0,
+  "lock_pin": 7,
+  "unlock_pin": 8,
+  "start_tx_pin": 17,
+  "lock_button_pin": 23,
+  "local_database": "/tmp/rfidlock.db",
+  "database": {
+    "user": "",
+    "password": "",
+    "database": "rfidlock",
+    "host": ""
+  }
+}

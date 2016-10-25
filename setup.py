@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from distutils.core import setup
+from setuptools import setup
+from os import mkdir
 
 setup(
   name='rfidLock',
@@ -13,6 +14,7 @@ setup(
     'bin/rfid_door'])
 
 # TODO Create /etc/rfidlock/config.json
+
 
 # TODO Install templates to /usr/share/rfidlock
 

@@ -15,7 +15,16 @@ try:
   local_db = MemberDatabase(sqlite3.connect(config["local_database"]))
   remote_db = MemberDatabase(mysql.connector.connect(**config["database"]))
   door_connection = DoorConnection(local_db, remote_db)
-  Door(door_connection).run()
+  Door(
+    door_connection,
+    serial.Serial(
+      config["rfid_interface"],
+      config["baudrate"],
+      config["timeout"]),
+    config["lock_pin"],
+    config["unlock_pin"],
+    config["start_tx_pin"],
+    config["lock_button_pin"]).run()
 except FileNotFoundError:
   print("Config file must exist to start the RFID lock")
 except IndexError:
