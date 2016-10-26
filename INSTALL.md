@@ -2,7 +2,8 @@
 
 These instructions are for purposes of getting the Python package installed
 and configured on the Raspberry Pi that controls the door. There is also
-a Python based web interface
+a Python based web interface. As the code currently exists, this package
+should work equally well under Python 2 or Python 3.
 
 ## Install Using pip
 
@@ -13,24 +14,6 @@ server.
 git clone https://github.com/ranthalion/rfidLock.git
 sudo pip install rfidLock/
 ```
-
-## Configuring the RFID System
-
-During installation a JSON file was created at `/etc/rfidlock/config.json`
-
-This file needs to be updated differently on the Raspberry Pi and the server.
-
-On the Raspberry Pi the "database" entry needs to be updated with 
-information to connect to the remote database while the `local_database`
-entry needs to be set to the path for the local sqlite database.
-
-On the server, the "database" entry needs to be updated with information
-to connect to the authoratative database which is most likely local to
-that server.
-
-In both cases, the configuration entries for the "database" entry correspond
-to the keyword arguments for the [`mysql.connector.connect` function call](https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html).
-A user
 
 ## Create Database
 
@@ -43,9 +26,8 @@ server, which will be localhost if the database is hosted on the same computer
 as the web gui. Naturally, in both cases the passwords need to be set with
 appropriately hard to brute force or guess passwords.
 
-The user names and passwords generated in this step need to be set in their
-appropriate `config.json` files on the appropriate installs of the rfidlock
-package.
+The user names and passwords used in this step should be kept on hand so that
+they can be inputted at the configuration prompts in the next step.
 
 ```MySQL
 CREATE DATABASE rfidlock;
@@ -54,6 +36,17 @@ CREATE USER *RFIDLOCK_DOOR*@*HOSTNAME* IDENTIFIED BY "*RASPBERRY_PI_PASSWORD*";
 GRANT CREATE, SELECT, UPDATE ON rfidlock.* TO *RFIDLOCK_MANAGER*@*HOSTNAME*; 
 GRANT SELECT ON rfidlock.* TO rfidlock_door@*HOSTNAME*;
 ```
+
+## Basic Configuration
+
+A utility is provided to perform configuration. From the command line run the
+`rfid_config` script.
+
+A series of prompts will appear that must be filled out properly using the
+values from the previous step. This supports most basic configurations, but 
+more complex configurations are available through manipulation of 
+`/etc/rfidlock/config.json` as seen in the *Advanced Database Configuration* 
+section.
 
 ## Create Tables
 
@@ -112,4 +105,21 @@ WSGIScriptAlias /rfid_db.wsgi /path/to/rfid_db.wsgi
 
 Finally, restart Apache and the Python web interface should be available at
 `localhost/rfid_db.wsgi`.
+
+## Advanced Database Configuration
+
+During configuration a JSON file was created at `/etc/rfidlock/config.json`
+
+This file needs to be updated differently on the Raspberry Pi and the server.
+
+On the Raspberry Pi the `database` entry needs to be updated with 
+information to connect to the remote database while the `local_database`
+entry needs to be set to the path for the local sqlite database.
+
+On the server, the `database` entry needs to be updated with information
+to connect to the authoratative database which is most likely local to
+that server.
+
+In both cases, the configuration entries for the `database` entry correspond
+to the keyword arguments for the [`mysql.connector.connect` function call](https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html).
 

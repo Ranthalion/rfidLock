@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from rfidLock import Door
+from rfidDoor import Door
+from rfidLock import MemberDatabase, DoorConnection
 import json
 import serial
 import mysql.connector

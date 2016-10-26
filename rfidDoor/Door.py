@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 import RPIO
 import serial
 import time
@@ -68,7 +67,7 @@ class Door(object):
     #send lock signal to door
     self.lock()
   def serial_cb(self, gpio_id, value):
-    rcv = self.port.read(16):
+    rcv = self.port.read(16)
     if rcv != '':
       print rcv
       #removing whitespace characters coming from rdif reader

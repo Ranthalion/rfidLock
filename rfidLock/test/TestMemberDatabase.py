@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import unittest
 import sqlite3
@@ -10,10 +10,10 @@ import random, string
 class TestMemberDatabaseHash(unittest.TestCase):
   def test_hash_mutates(self):
     # Check that the hash isn't a nop 
-    self.assertNotEqual(MemberDatabase.hash(None, "hello".encode()), "hello".encode())
+    self.assertNotEqual(MemberDatabase.hash("hello".encode()), "hello".encode())
   def test_hash_does_not_collide(self):
     # Check that hash doesn't collide with 2000 unique random strings
-    self.assertEqual(len(frozenset([MemberDatabase.hash(None, ''.join(random.sample(string.ascii_lowercase + string.ascii_uppercase + string.digits, 10)).encode()) for i in range(0, 2000)])), 2000)
+    self.assertEqual(len(frozenset([MemberDatabase.hash(''.join(random.sample(string.ascii_lowercase + string.ascii_uppercase + string.digits, 10)).encode()) for i in range(0, 2000)])), 2000)
 
 class TestMemberDatabaseCreate(unittest.TestCase):
   db_path = "/tmp/test_member_database_create.db"
