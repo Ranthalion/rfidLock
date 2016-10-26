@@ -2,23 +2,49 @@
 
 import pkg_resources
 from shutil import copyfile
+from jinja2 import PackageLoader, Environment
 import sqlite3
 
+def install_mysql_connection():
+  print('What is the hostname for the MySQL database? (defaults to localhost)')
+  mysql_host = input('-->')
+  print('What is the username for the MySQL database?')
+  mysql_user = input('-->')
+  print('What is the password for the MySQL database?')
+  mysql_password = input('-->')
+  print('What is the database name for the MySQL database?')
+  mysql_database = input('-->')
+  # TODO Try actually connecting to the database, don't take their word for it
+  return (mysql_user, mysql_password, mysql_database, mysql_host)
+
 def install_raspberry_pi():
-  print('What path should the local database be at?')
+  print('What path should the local sqlite database be at?')
   sqlite_path = input('-->')
-  # Try actually creating the database, don't take their word for it.
-  pass
+  # TODO Try actually creating the database, don't take their word for it.
+  mysql_config = install_mysql_connection()
+  env = Environment(PackageLoader('rfidLock', 'templates'))
+  config_file = open('/etc/rfidlock/config.json', 'w')
+  config_file.write(env.get_template("raspberrypi.json").render(
+      mysql = mysql_config, 
+      sqlite = sqlite_path)
+  config_file.close()
 
 def install_server():
-  pass
+  mysql_config = install_mysql_connection()
+  env = Environment(PackageLoader('rfidLock', 'templates'))
+  config_file = open('/etc/rfidlock/config.json', 'w')
+  config_file.write(env.get_template("server.json").render(
+      mysql = mysql_config)
+  config_file.close()
 
-print('Is this a Raspberry Pi installation? (Y/n)')
-if input('-->').upper()[0] == 'Y':
-  print('Okay, this is a Raspberry Pi!')
-  install_raspberry_pi()
-else:
-  print('Okay, this is server')
-  install_server()
+def main():
+  print('Is this a Raspberry Pi installation? (Y/n)')
+  if input('-->').upper()[0] == 'Y':
+    print('Okay, this is a Raspberry Pi!')
+    install_raspberry_pi()
+  else:
+    print('Okay, this is server')
+    install_server()
 
+main()
 
