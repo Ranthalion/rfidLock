@@ -7,7 +7,7 @@ from sys import argv
 
 def main():
   config_path = "/etc/rfidlock/config.json"
-  if argv.length >= 2:
+  if len(argv) >= 2:
     config_path = argv[1]
   db = None
   try:

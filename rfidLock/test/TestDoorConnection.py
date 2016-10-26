@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import unittest
 import sqlite3
@@ -9,8 +9,8 @@ from rfidLock import MemberDatabase, DoorConnection
 from os import remove
 
 class TestDoorConnectionUpdate(unittest.TestCase):
-  db_path_local = "/tmp/test_door_connection_update_local.db"
-  db_path_remote = "/tmp/test_door_connection_update_remote.db"
+  db_path_local = u'/tmp/test_door_connection_update_local.db'
+  db_path_remote = u'/tmp/test_door_connection_update_remote.db'
   def setUp(self):
     self.db_local = sqlite3.connect(self.db_path_local)
     self.member_db_local = MemberDatabase(self.db_local, "?")
@@ -18,8 +18,8 @@ class TestDoorConnectionUpdate(unittest.TestCase):
     self.db_remote = sqlite3.connect(self.db_path_remote)
     self.member_db_remote = MemberDatabase(self.db_remote, "?")
     self.member_db_remote.create()
-    self.member_db_remote.add(b'test_data', 'John Smith', 'jsmith@hackrva.org')
-    self.member_db_remote.add(b'dope_data', 'Crystal Meth', 'cmeth@hackrva.org')
+    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
+    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
     self.db_local.close()
@@ -33,17 +33,17 @@ class TestDoorConnectionUpdate(unittest.TestCase):
     self.assertTrue(self.member_db_local.have(b'dope_data'))
 
 class TestDoorConnectionCheckRequest(unittest.TestCase):
-  db_path_local = "/tmp/test_door_connection_check_request_local.db"
-  db_path_remote = "/tmp/test_door_connection_check_request_remote.db"
+  db_path_local = u'/tmp/test_door_connection_check_request_local.db'
+  db_path_remote = u'/tmp/test_door_connection_check_request_remote.db'
   def setUp(self):
     self.db_local = sqlite3.connect(self.db_path_local)
     self.member_db_local = MemberDatabase(self.db_local, "?")
     self.member_db_local.create()
     self.db_remote = sqlite3.connect(self.db_path_remote)
-    self.member_db_remote = MemberDatabase(self.db_remote, "?")
+    self.member_db_remote = MemberDatabase(self.db_remote, u'?')
     self.member_db_remote.create()
-    self.member_db_remote.add(b'test_data', 'John Smith', 'jsmith@hackrva.org')
-    self.member_db_remote.add(b'dope_data', 'Crystal Meth', 'cmeth@hackrva.org')
+    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
+    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
     self.db_local.close()
@@ -67,10 +67,10 @@ class TestDoorConnectionCheckRequest(unittest.TestCase):
 
 # Need a mysql.connector connection to test this one
 class TestDoorConnectionRecover(unittest.TestCase):
-  db_path_local = "/tmp/test_door_connection_check_recover_local.db"
+  db_path_local = u'/tmp/test_door_connection_check_recover_local.db'
   def setUp(self):
     config = {}
-    with open("test_db.json") as config_file:
+    with open(u'test_db.json') as config_file:
       config = json.load(config_file)
     self.db_local = sqlite3.connect(self.db_path_local)
     self.member_db_local = None
@@ -82,13 +82,13 @@ class TestDoorConnectionRecover(unittest.TestCase):
       self.db_remote = mysql.connector.connect(**config)
     except:
       self.has_mysql = False
-      print("MySQL DB Connection Failure")
-    self.member_db_remote = MemberDatabase(self.db_remote, "%s")
+      print(u'MySQL DB Connection Failure')
+    self.member_db_remote = MemberDatabase(self.db_remote, u'%s')
     if self.has_mysql:
       self.member_db_remote.create()
-      self.member_db_remote.add(b'test_data', 'John Smith', 'jsmith@hackrva.org')
-      self.member_db_remote.add(b'dope_data', 'Crystal Meth', 'cmeth@hackrva.org')
-    self.member_db_local = MemberDatabase(self.db_local, "?")
+      self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
+      self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
+    self.member_db_local = MemberDatabase(self.db_local, u'?')
     self.member_db_local.create()
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
