@@ -18,8 +18,8 @@ class TestDoorConnectionUpdate(unittest.TestCase):
     self.db_remote = sqlite3.connect(self.db_path_remote)
     self.member_db_remote = MemberDatabase(self.db_remote, "?")
     self.member_db_remote.create()
-    self.member_db_remote.add(u'test_data', u'John Smith', u'jsmith@hackrva.org')
-    self.member_db_remote.add(u'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
+    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
+    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
     self.db_local.close()
