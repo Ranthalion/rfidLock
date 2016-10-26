@@ -3,43 +3,52 @@
 import pkg_resources
 from shutil import copyfile
 from jinja2 import PackageLoader, Environment
+from sys import version_info
+from os import mkdir
+from os.path import isdir
 import sqlite3
+
+get_input = input
+if version_info.major <= 2:
+  get_input = raw_input
 
 def install_mysql_connection():
   print('What is the hostname for the MySQL database? (defaults to localhost)')
-  mysql_host = input('-->')
+  mysql_host = get_input('-->')
   print('What is the username for the MySQL database?')
-  mysql_user = input('-->')
+  mysql_user = get_input('-->')
   print('What is the password for the MySQL database?')
-  mysql_password = input('-->')
+  mysql_password = get_input('-->')
   print('What is the database name for the MySQL database?')
-  mysql_database = input('-->')
+  mysql_database = get_input('-->')
   # TODO Try actually connecting to the database, don't take their word for it
   return (mysql_user, mysql_password, mysql_database, mysql_host)
 
 def install_raspberry_pi():
   print('What path should the local sqlite database be at?')
-  sqlite_path = input('-->')
+  sqlite_path = get_input('-->')
   # TODO Try actually creating the database, don't take their word for it.
   mysql_config = install_mysql_connection()
-  env = Environment(PackageLoader('rfidLock', 'templates'))
+  env = Environment(loader = PackageLoader('rfidLock', 'templates'))
   config_file = open('/etc/rfidlock/config.json', 'w')
-  config_file.write(env.get_template("raspberrypi.json").render(
-      mysql = mysql_config, 
-      sqlite = sqlite_path)
+  config_file.write(env.get_template("raspberrypi.json").render( \
+      mysql = mysql_config, \
+      sqlite = sqlite_path))
   config_file.close()
 
 def install_server():
   mysql_config = install_mysql_connection()
-  env = Environment(PackageLoader('rfidLock', 'templates'))
+  env = Environment(loader = PackageLoader('rfidLock', 'templates'))
   config_file = open('/etc/rfidlock/config.json', 'w')
   config_file.write(env.get_template("server.json").render(
-      mysql = mysql_config)
+       mysql = mysql_config))
   config_file.close()
 
 def main():
+  if not isdir('/etc/rfidlock'):
+    mkdir('/etc/rfidlock', 0o755)
   print('Is this a Raspberry Pi installation? (Y/n)')
-  if input('-->').upper()[0] == 'Y':
+  if get_input('-->').upper()[0] == 'Y':
     print('Okay, this is a Raspberry Pi!')
     install_raspberry_pi()
   else:
