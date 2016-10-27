@@ -1,9 +1,10 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 from rfidLock import MemberDatabase
 import json
 import mysql.connector
 from sys import argv
+import sqlite3
 
 def main():
   db = None
@@ -27,7 +28,7 @@ def main():
     local_db.commit()
     local_db.close()
     remote_db.close()
-  except FileNotFoundError:
+  except OSError:
     print("config file must exist to install the database")
   except IndexError:
     print("The JSON config file must be provided as the first command line argument")

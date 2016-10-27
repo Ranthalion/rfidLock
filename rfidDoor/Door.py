@@ -20,7 +20,7 @@ class Door(object):
     # could not configure pin 10 as the serial port and allow it to interrupt
     self.door_connection = door_connection
     self.lock_status = -1
-    self.port = serial.Serial(port_dev, baudrate = 9600, timeout = 3.0)
+    self.port = port
     self.lock_pin = lock_pin
     self.unlock_pin = unlock_pin
     self.start_tx_pin = 17
@@ -63,17 +63,16 @@ class Door(object):
     RPIO.output(self.unlock_pin,False)
     self.lock_status = 0
   def lock_button_cb(self, gpio_id, value):
-    print "falling edge detected on 23"
+    print("falling edge detected on 23")
     #send lock signal to door
     self.lock()
   def serial_cb(self, gpio_id, value):
     rcv = self.port.read(16)
     if rcv != '':
-      print rcv
       #removing whitespace characters coming from rdif reader
       x = rcv[1:13]
+      print(x)
       #check db for user
-      print rcv
       # This is the part swapped in
       if self.door_connection.check_request(x):
         print 'unlocking'
