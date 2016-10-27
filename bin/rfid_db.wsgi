@@ -2,15 +2,14 @@
 
 from cgi import parse_qs
 from sys import exc_info
-from os import getcwd
 import mysql.connector
 from rfidLock import MemberDatabase
-from jinja2 import FileSystemLoader, Environment
+from jinja2 import PackageLoader, Environment
 import json
 
 class MemberManager(object):
-  def __init__(self, template_dir, db):
-    self.loader = FileSystemLoader(template_dir)
+  def __init__(self, db):
+    self.loader = PackageLoader('rfidLock', 'templates')
     self.env = Environment(loader=self.loader)
     self.db = db
   def respond_ok(self, start_response, content):
