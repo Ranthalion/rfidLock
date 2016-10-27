@@ -11,7 +11,6 @@ setup(
     'bin/rfid_config',
     'bin/rfid_db_install',
     'bin/rfid_db_remove',
-    'bin/rfid_db.wsgi',
     'bin/rfid_door'],
   install_requires = [
     # "Must not install sqlite3 from pypi"
