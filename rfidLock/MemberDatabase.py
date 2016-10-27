@@ -4,6 +4,7 @@
 import hashlib
 from base64 import b64encode
 from contextlib import closing
+from datetime import datetime
 
 # Used to abstract database details a little bit more
 class MemberDatabase(object):
@@ -27,7 +28,7 @@ class MemberDatabase(object):
         hash CHAR(24),
         name TEXT,
         email VARCHAR(254),
-        revoked BOOLEAN DEFAULT 0,
+        expiration_date DATE,
         CONSTRAINT pk_hash PRIMARY KEY(hash),
         CONSTRAINT unique_email UNIQUE(email));
       """
@@ -35,31 +36,25 @@ class MemberDatabase(object):
       DROP TABLE member_table;
       """
     self.add_query = u"""
-      INSERT INTO member_table (name, email, hash) VALUES ({0}, {0}, {0});
-      """.format(subs)
-    self.revoke_query = u"""
-      UPDATE member_table SET revoked=1 WHERE email={0};
-      """.format(subs)
-    self.reinstate_query = u"""
-      UPDATE member_table SET revoked=0 WHERE email={0};
+      INSERT INTO member_table (name, email, hash, expiration_date) VALUES ({0}, {0}, {0}, {0});
       """.format(subs)
     self.have_query = u"""
       SELECT COUNT(hash) FROM member_table WHERE hash={0};
       """.format(subs)
     self.have_current_query = u"""
-      SELECT COUNT(hash) FROM member_table WHERE hash={0} AND revoked=0;
+      SELECT COUNT(hash) FROM member_table WHERE hash={0} AND expiration_date > {0};
       """.format(subs)
     self.list_query = u"""
-      SELECT name, email, revoked FROM member_table;
+      SELECT name, email, expiration_date FROM member_table;
       """
     self.content_query = u"""
-      SELECT hash, name, email, revoked FROM member_table;
+      SELECT hash, name, email, expiration_date FROM member_table;
       """
     self.clone_query = u"""
-      INSERT INTO member_table (hash, name, email, revoked) VALUES ({0}, {0}, {0}, {0});
+      INSERT INTO member_table (hash, name, email, expiration_date) VALUES ({0}, {0}, {0}, {0});
       """.format(subs)
     self.record_query = u"""
-      SELECT hash, name, email, revoked FROM member_table WHERE hash={0};
+      SELECT hash, name, email, expiration_date FROM member_table WHERE hash={0};
       """.format(subs)
   @staticmethod
   def hash(card_data):
@@ -69,21 +64,10 @@ class MemberDatabase(object):
     # Needs to go through this for Python2 support
     # Binary data is hard to work with across versions
     return b64encode(m.digest()).decode()
-  def add(self, card_data, member_name, member_email):
+  def add(self, card_data, member_name, member_email, expiration):
     """Adds a new member to the list of members"""
     with closing(self.db.cursor()) as cur:
-      cur.execute(self.add_query, (member_name, member_email, MemberDatabase.hash(card_data)))
-    self.db.commit()
-  def revoke(self, email):
-    """Marks a member as no longer a current member of the space."""
-    with closing(self.db.cursor()) as cur:
-      cur.execute(self.revoke_query, (email, ))
-      self.db.commit()
-      return cur.rowcount > 0
-  def reinstate(self, email):
-    """Marks a former member as a current member of the space again."""
-    with closing(self.db.cursor()) as cur:
-      cur.execute(self.reinstate_query, (email, ))
+      cur.execute(self.add_query, (member_name, member_email, MemberDatabase.hash(card_data), expiration))
     self.db.commit()
   def have(self, card_data):
     """
@@ -98,7 +82,7 @@ class MemberDatabase(object):
     Uses the member's RFID data to check whether they are a current member.
     """
     with closing(self.db.cursor()) as cur:
-      cur.execute(self.have_current_query, (MemberDatabase.hash(card_data), ))
+      cur.execute(self.have_current_query, (MemberDatabase.hash(card_data), datetime.now()))
       return cur.fetchone()[0] > 0
   def list(self):
     """Retrieves a list of all members and former members"""

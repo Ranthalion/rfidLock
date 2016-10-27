@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 from rfidDoor import Door
 from rfidLock import MemberDatabase, DoorConnection
@@ -12,21 +12,21 @@ config_path = "/etc/rfidlock/config.json"
 try:
   config = None
   with open(config_path) as db_config:
-    config = json.load(config_path)
-  local_db = MemberDatabase(sqlite3.connect(config["local_database"]))
-  remote_db = MemberDatabase(mysql.connector.connect(**config["database"]))
+    config = json.load(db_config)
+  local_db = MemberDatabase(sqlite3.connect(config["local_database"]), "?")
+  remote_db = MemberDatabase(mysql.connector.connect(**config["database"]), "%s")
   door_connection = DoorConnection(local_db, remote_db)
   Door(
     door_connection,
     serial.Serial(
       config["rfid_interface"],
-      config["baudrate"],
-      config["timeout"]),
+      baudrate = config["baud"],
+      timeout = config["timeout"]),
     config["lock_pin"],
     config["unlock_pin"],
     config["start_tx_pin"],
     config["lock_button_pin"]).run()
-except FileNotFoundError:
+except OSError:
   print("Config file must exist to start the RFID lock")
 except IndexError:
   print("The JSON config file is missing information necessary to the RFID lock")

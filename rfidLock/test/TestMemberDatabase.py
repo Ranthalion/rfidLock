@@ -6,6 +6,7 @@ from context import rfidLock
 from rfidLock import MemberDatabase
 from os import remove
 import random, string
+from datetime import datetime, timedelta
 
 class TestMemberDatabaseHash(unittest.TestCase):
   def test_hash_mutates(self):
@@ -60,7 +61,7 @@ class TestMemberDatabaseAdd(unittest.TestCase):
     self.db.close()
     remove(self.db_path)
   def test_add_member_does_not_fail(self):
-    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org")
+    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org", datetime.now() + timedelta(days = 1))
 
 class TestMemberDatabaseHave(unittest.TestCase):
   db_path = "/tmp/test_member_database_add.db"
@@ -68,7 +69,7 @@ class TestMemberDatabaseHave(unittest.TestCase):
     self.db = sqlite3.connect(self.db_path)
     self.member_db = MemberDatabase(self.db, "?")
     self.member_db.create()
-    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org")
+    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org", datetime.now() + timedelta(days = 1))
   def tearDown(self):
     # close the connection and delete the object
     self.db.close()
@@ -84,7 +85,7 @@ class TestMemberDatabaseHaveCurrent(unittest.TestCase):
     self.db = sqlite3.connect(self.db_path)
     self.member_db = MemberDatabase(self.db, "?")
     self.member_db.create()
-    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org")
+    self.member_db.add(b'test_data', "John Smith", "js@hackrva.org", datetime.now() + timedelta(days = 1))
   def tearDown(self):
     # close the connection and delete the object
     self.db.close()
@@ -94,52 +95,14 @@ class TestMemberDatabaseHaveCurrent(unittest.TestCase):
   def test_checks_member_non_existence(self):
     self.assertFalse(self.member_db.have_current(b'bad_test_data'))
 
-class TestMemberDatabaseRevoke(unittest.TestCase):
-  db_path = "/tmp/test_member_database_revoke.db"
-  def setUp(self):
-    self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
-    self.member_db.create()
-    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
-  def tearDown(self):
-    # close the connection and delete the object
-    self.db.close()
-    remove(self.db_path)
-  def test_revocation_does_not_fail(self):
-    self.member_db.revoke("jsmith@hackrva.org")
-  def test_revocation_does_not_delete(self):
-    self.member_db.revoke("jsmith@hackrva.org")
-    self.assertTrue(self.member_db.have(b'test_data'))
-  def test_revocation_is_targeted(self):
-    self.member_db.revoke("jsmith@hackrva.org")
-    self.assertTrue(self.member_db.have_current(b'othe_data'))
-
-class TestMemberDatabaseReinstate(unittest.TestCase):
-  db_path = "/tmp/test_member_database_reinstate.db"
-  def setUp(self):
-    self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
-    self.member_db.create()
-    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
-  def tearDown(self):
-    # close the connection and delete the object
-    self.db.close()
-    remove(self.db_path)
-  def test_reinstatement_works(self):
-    self.member_db.revoke("cmeth@hackrva.org")
-    self.member_db.reinstate("cmeth@hackrva.org")
-    self.assertTrue(self.member_db.have_current(b'othe_data'))
-
 class TestMemberDatabaseList(unittest.TestCase):
   db_path = "/tmp/test_member_database_list.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
     self.member_db = MemberDatabase(self.db, "?")
     self.member_db.create()
-    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
+    self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
   def tearDown(self):
     # close the connection and delete the object
     self.db.close()
@@ -158,8 +121,8 @@ class TestMemberDatabaseClear(unittest.TestCase):
   def test_clear_database(self):
     member_db = MemberDatabase(self.db, "?")
     member_db.create()
-    member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
+    member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
     member_db.clear()
     self.assertEqual(len(member_db.list()), 0)
 
@@ -177,8 +140,8 @@ class TestMemberDatabaseMimic(unittest.TestCase):
   def test_mimic_database(self):
     member_db1 = MemberDatabase(self.db1, "?")
     member_db1.create()
-    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
+    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
     self.db1.commit()
     #
     member_db2 = MemberDatabase(self.db2, "?")
@@ -200,8 +163,8 @@ class TestMemberDatabaseSync(unittest.TestCase):
   def test_mimic_database(self):
     member_db1 = MemberDatabase(self.db1, "?")
     member_db1.create()
-    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org")
-    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org")
+    member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
+    member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
     self.db1.commit()
     #
     member_db2 = MemberDatabase(self.db2, "?")
