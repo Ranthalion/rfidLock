@@ -9,6 +9,21 @@
         		<div class="panel-body">
                     {{ Form::model($member, ['action' => 'HomeController@storeMember', 'class' => 'form-horizontal']) }}
                         
+
+                        <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
+                            <label for="rfid" class="col-md-4 control-label">rfid</label>
+
+                            <div class="col-md-6">
+                                {{ Form::text('rfid', '', ['class' => 'form-control']) }}
+
+                                @if ($errors->has('rfid'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('rfid') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             {{ Form::label('name', 'Name', ['class' => 'col-md-4 control-label']) }}
 
@@ -40,15 +55,7 @@
                                 <input type="text" class="form-control" readonly="readonly" value="{{$tier->description}}">
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
-                            <label for="rfid" class="col-md-4 control-label">rfid</label>
-
-                            <div class="col-md-6">
-                                {{ Form::text('rfid', null, ['class' => 'form-control', 'readonly'=>'readonly']) }}
-                            </div>
-                        </div>
-                        
+                       
             			<div class="row">
             				<div class="col-md-12 text-right">
             					<a class="btn btn-default cancel-confirmation" href="{{ url('/') }}">Cancel</a>

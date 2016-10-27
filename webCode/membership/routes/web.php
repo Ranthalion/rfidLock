@@ -12,9 +12,11 @@
 */
 
 Route::get('/', 'HomeController@addMember');
-Route::post('/confirm', 'HomeController@confirmMember')->name('home.confirm');
+Route::post('/validate', 'HomeController@checkForPayment')->name('home.validate');
+Route::get('/confirm', 'HomeController@confirmMember')->name('home.confirm');
 Route::post('/store', 'HomeController@storeMember')->name('home.store');
 
+Route::get('/info', 'HomeController@info');
 Auth::routes();
 
 Route::get('/home', 'MemberController@index');
