@@ -7,6 +7,7 @@ import mysql.connector
 from context import rfidLock
 from rfidLock import MemberDatabase, DoorConnection
 from os import remove
+from datetime import datetime, timedelta
 
 class TestDoorConnectionUpdate(unittest.TestCase):
   db_path_local = u'/tmp/test_door_connection_update_local.db'
@@ -18,8 +19,8 @@ class TestDoorConnectionUpdate(unittest.TestCase):
     self.db_remote = sqlite3.connect(self.db_path_remote)
     self.member_db_remote = MemberDatabase(self.db_remote, "?")
     self.member_db_remote.create()
-    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
-    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
+    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org', datetime.now() + timedelta(days = 1))
+    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org', datetime.now() + timedelta(days = 1))
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
     self.db_local.close()
@@ -42,8 +43,8 @@ class TestDoorConnectionCheckRequest(unittest.TestCase):
     self.db_remote = sqlite3.connect(self.db_path_remote)
     self.member_db_remote = MemberDatabase(self.db_remote, u'?')
     self.member_db_remote.create()
-    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
-    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
+    self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org', datetime.now() + timedelta(days = 1))
+    self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org', datetime.now() + timedelta(days = 1))
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)
   def tearDown(self):
     self.db_local.close()
@@ -86,8 +87,8 @@ class TestDoorConnectionRecover(unittest.TestCase):
     self.member_db_remote = MemberDatabase(self.db_remote, u'%s')
     if self.has_mysql:
       self.member_db_remote.create()
-      self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org')
-      self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org')
+      self.member_db_remote.add(b'test_data', u'John Smith', u'jsmith@hackrva.org', datetime.now() + timedelta(days = 1))
+      self.member_db_remote.add(b'dope_data', u'Crystal Meth', u'cmeth@hackrva.org', datetime.now() + timedelta(days = 1))
     self.member_db_local = MemberDatabase(self.db_local, u'?')
     self.member_db_local.create()
     self.door_connection = DoorConnection(self.member_db_local, self.member_db_remote)

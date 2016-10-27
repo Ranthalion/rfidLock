@@ -12,11 +12,21 @@ def main():
     config_path = argv[1]
   try:
     with open(config_path) as db_config:
-      db = mysql.connector.connect(**json.load(db_config)["database"])
-    member_db = MemberDatabase(db, "%s")
-    member_db.create()
-    db.commit()
-    db.close()
+      config = json.load(db_config)
+    if config['role'] == 'server':
+      print('Server configuration must be done from PHP')
+      return
+    # Create the database
+    local_db = sqlite3.connect(config['local_database'])
+    local_member_db = MemberDatabase(local_db, u'?')
+    local_member_db.create()
+    # Connect to the remote database and sync
+    remote_db = mysql.connector.connect(**config['database'])
+    remote_member_db = MemberDatabase(remote_db, u'%s')
+    local_member_db.mimic(remote_member_db)
+    local_db.commit()
+    local_db.close()
+    remote_db.close()
   except FileNotFoundError:
     print("config file must exist to install the database")
   except IndexError:
