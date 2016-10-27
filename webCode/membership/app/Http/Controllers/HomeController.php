@@ -15,6 +15,8 @@ use App\Mail\Welcome;
 use Illuminate\Support\Facades\Mail;
 
 use Session;
+use DateTime;
+use DateInterval;
 
 class HomeController extends Controller
 {
@@ -38,6 +40,11 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function info()
+    {
+        return view('info');
+    }
+
     public function addMember(Member $member)
     {
         $tiers = MemberTier::pluck('description', 'id');
@@ -49,11 +56,11 @@ class HomeController extends Controller
         return view('home.registerMember', compact('member', 'tiers', 'providers'));
     }
 
-    public function confirmMember(Request $request)
+    public function checkForPayment(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|unique:members|max:255',
-            'rfid' => 'required|unique:members|max:50'
+            'email' => 'required|unique:members|max:255'
+            
         ]);
         
         if ($request->payment_provider_id != 2)
@@ -71,7 +78,7 @@ class HomeController extends Controller
 
         if ($response->status != "Success")
         {
-            Session::flash('error', 'Key not activated.  There are no recorded payments in the last month from '.$request->email.'.');
+            Session::flash('error', 'There are no recorded payments in the last month from '.$request->email.'.');
 
             return Redirect::back()
                 ->withInput();       
@@ -99,17 +106,44 @@ class HomeController extends Controller
 
         session(['memberToAdd' => $member]);
 
-        $tier = MemberTier::find($member->member_tier_id);
-        $provider = PaymentProvider::find($request->payment_provider_id);
+        return redirect()->route('home.confirm');
+        
+    }
 
-        return view('home.confirm', compact('member', 'tier', 'provider'));        
+    public function confirmMember(Request $request)
+    {
+        
+        if ($request->session()->exists('memberToAdd')) 
+        {
+            $member = $request->session()->get('memberToAdd');
+            $tier = MemberTier::find($member->member_tier_id);
+            $provider = PaymentProvider::find($member->payment_provider_id);
+
+            return view('home.confirm', compact('member', 'tier', 'provider'));        
+        }
+        else
+        {
+            Session::flash('error', 'Unable to register member.  Please try again.');   
+            return redirect('/');
+        }
     }
 
     public function storeMember(Request $request)
     {
+        $this->validate($request, [
+            'rfid' => 'required|unique:members|max:50'
+        ]);
+
         if ($request->session()->exists('memberToAdd')) 
         {
             $member = $request->session()->pull('memberToAdd');
+
+            $member->rfid = $request->input('rfid');
+
+            $expireDate = new DateTime;
+            $expireDate->add(new DateInterval("P62D"));
+
+            $member->expire_date = $expireDate;
 
             $member->save();
 

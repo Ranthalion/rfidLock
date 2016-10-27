@@ -43,6 +43,7 @@ class CreateMembersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('rfid')->unique();
+            $table->date('expire_date');
             $table->integer('member_status_id')->unsigned();
             $table->integer('member_tier_id')->unsigned();
             $table->integer('payment_provider_id')->unsigned();
@@ -56,6 +57,7 @@ class CreateMembersTable extends Migration
 
         schema::create('member_resource', function(Blueprint $table){
             $table->increments('id');
+            $table->date('expire_date')->nullable();
             $table->integer('member_id')->unsigned();
             $table->integer('resource_id')->unsigned();
             $table->timestamps();
@@ -63,6 +65,15 @@ class CreateMembersTable extends Migration
             $table->foreign('member_id')->references('id')->on('members');
             $table->foreign('resource_id')->references('id')->on('resources');
         });
+
+        DB::statement('Create View member_table
+As
+Select m.rfid as hash, m.name, m.email, m.expire_date, r.id as resource_id, r.description as resource
+from members m
+inner join  member_resource mr
+on m.id = mr.member_id
+inner join resources r
+on mr.resource_id = r.id;' );
     }
 
     /**
@@ -72,6 +83,8 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
+        DB::statement('Drop View member_table;');
+        
         Schema::dropIfExists('member_resource');
         Schema::dropIfExists('members');
         Schema::dropIfExists('member_statuses');
@@ -79,6 +92,6 @@ class CreateMembersTable extends Migration
         Schema::dropIfExists('payment_providers');
         
         Schema::dropIfExists('resources');
-        
+
     }
 }

@@ -7,7 +7,7 @@
         	<div class="panel panel-default">
         		<div class="panel-heading">New Member</div>
         		<div class="panel-body">
-                    {{ Form::model($member, ['action' => 'HomeController@confirmMember', 'class' => 'form-horizontal']) }}
+                    {{ Form::model($member, ['action' => 'HomeController@checkForPayment', 'class' => 'form-horizontal']) }}
                         
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             {{ Form::label('email', 'Email', ['class' => 'col-md-4 control-label']) }}
@@ -32,20 +32,6 @@
                                 @if ($errors->has('payment_provider_id'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('payment_provider_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
-                            <label for="rfid" class="col-md-4 control-label">rfid</label>
-
-                            <div class="col-md-6">
-                                {{ Form::text('rfid', '', ['class' => 'form-control']) }}
-
-                                @if ($errors->has('rfid'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('rfid') }}</strong>
                                     </span>
                                 @endif
                             </div>

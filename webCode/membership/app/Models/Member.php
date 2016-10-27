@@ -10,7 +10,7 @@ use App\Models\PaymentProvider;
 class Member extends Model
 {
 
-	protected $fillable = ['name', 'email', 'rfid', 'member_tier_id', 'member_status_id', 'payment_provider_id'];
+	protected $fillable = ['name', 'email', 'rfid', 'expire_date', 'member_tier_id', 'member_status_id', 'payment_provider_id'];
 
 	public function memberTier()
 	{

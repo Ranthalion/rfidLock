@@ -10,6 +10,9 @@ Services: SSHD
 ### Diagram
 ![Diagram](https://github.com/Ranthalion/rfidLock/blob/master/rfidLockDiagram.png "Diagram")
 
+### Database Diagram
+![Database Diagram](https://github.com/Ranthalion/rfidLock/blob/master/databaseDiagram.png "Database Diagram")
+
 ### Installation
 
 #### Configuration File
