@@ -54,6 +54,8 @@ class DoorConnection(object):
         # Attempt to recover
         if self.recover():
           return self.checkRequest(card_data)
+      print(e)
+      return False
     except mysql.connector.errors.DatabaseError as e:
       return False
   def recover(self):

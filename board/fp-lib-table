@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name hackDoor)(type KiCad)(uri "$(KIPRJMOD)/hackDoor.pretty")(options "")(descr ""))
+)
