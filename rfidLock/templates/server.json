@@ -1,0 +1,9 @@
+{
+  "role": "server",
+  "database": {
+    "user": "{{ mysql[0] }}",
+    "password": "{{ mysql[1] }}",
+    "database": "{{ mysql[2] }}",
+    "host": "{{ mysql[3] }}"
+  }
+}

@@ -1,0 +1,4 @@
+mysql-connector
+sqlite3
+hashlib
+jinja2
