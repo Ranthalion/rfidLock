@@ -40,7 +40,7 @@
             			<div class="row">
             				<div class="col-md-12 text-right">
             					<a class="btn btn-default" href="{{ url('/') }}">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Next</button>
             				</div>
             			</div>
 

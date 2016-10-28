@@ -83,7 +83,7 @@
                         
             			<div class="row">
             				<div class="col-md-12 text-right">
-            					<a class="btn btn-default" href="{{ url('/') }}">Cancel</a>
+            					<a class="btn btn-default" href="{{ url('/members') }}">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
             				</div>
             			</div>

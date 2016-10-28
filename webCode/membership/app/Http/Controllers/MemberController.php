@@ -12,6 +12,8 @@ use App\Models\Resource;
 
 use Session;
 use View;
+use DateTime;
+use DateInterval;
 
 class MemberController extends Controller
 {
@@ -82,8 +84,14 @@ class MemberController extends Controller
         
         $member = new Member;
         $member->fill($input);
-        
+
+        $expireDate = new DateTime;
+        $expireDate->add(new DateInterval("P62D"));
+
+        $member->expire_date = $expireDate;
+
         $member->member_status_id = 1;
+        $member->rfid = base64_encode(md5($request->input('rfid'), true));
 
         $member->save();
 
@@ -122,8 +130,7 @@ class MemberController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|max:255|unique:members,email,'.$id,
-            'rfid' => 'required|max:50|unique:members,rfid,'.$id
+            'email' => 'required|max:255|unique:members,email,'.$id
         ]);
 
         $input = $request->all();

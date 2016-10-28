@@ -68,20 +68,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
-                            <label for="rfid" class="col-md-4 control-label">rfid</label>
-
-                            <div class="col-md-6">
-                                {{ Form::text('rfid', null, ['class' => 'form-control']) }}
-
-                                @if ($errors->has('rfid'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('rfid') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('resources') ? ' has-error' : '' }}">
                             <label for="resources" class="col-md-4 control-label">Resource Access</label>
 
@@ -98,7 +84,7 @@
                         
             			<div class="row">
             				<div class="col-md-12 text-right">
-            					<a class="btn btn-default" href="{{ url('/') }}">Cancel</a>
+            					<a class="btn btn-default" href="{{ url('/members') }}">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
             				</div>
             			</div>
