@@ -1,0 +1,39 @@
+#!/usr/bin/python
+
+from rfidLock import MemberDatabase
+import json
+import mysql.connector
+from sys import argv
+import sqlite3
+
+def main():
+  db = None
+  config_path = "/etc/rfidlock/config.json"
+  if len(argv) >= 2:
+    config_path = argv[1]
+  try:
+    with open(config_path) as db_config:
+      config = json.load(db_config)
+    if config['role'] == 'server':
+      print('Server configuration must be done from PHP')
+      return
+    # Create the database
+    local_db = sqlite3.connect(config['local_database'])
+    local_member_db = MemberDatabase(local_db, u'?')
+    # Connect to the remote database and sync
+    remote_db = mysql.connector.connect(**config['database'])
+    remote_member_db = MemberDatabase(remote_db, u'%s', config['table_name'])
+    if 'resource' in config:
+      remote_member_db.use_resource(config['resource'])
+    local_member_db.mimic(remote_member_db)
+    local_db.commit()
+    local_db.close()
+    remote_db.close()
+  except OSError:
+    print("config file must exist to install the database")
+  except IndexError:
+    print("The JSON config file must be provided as the first command line argument")
+
+if __name__ == '__main__':
+  main()
+
