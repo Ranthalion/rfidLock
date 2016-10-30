@@ -20,7 +20,6 @@ def main():
     # Create the database
     local_db = sqlite3.connect(config['local_database'])
     local_member_db = MemberDatabase(local_db, u'?')
-    local_member_db.create()
     # Connect to the remote database and sync
     remote_db = mysql.connector.connect(**config['database'])
     remote_member_db = MemberDatabase(remote_db, u'%s', config['table_name'])

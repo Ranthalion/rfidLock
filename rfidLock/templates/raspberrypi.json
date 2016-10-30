@@ -7,6 +7,8 @@
   "unlock_pin": 8,
   "start_tx_pin": 17,
   "lock_button_pin": 23,
+  "resource": "{{ resource }}",
+  "table_name": "{{ table_name }}",
   "local_database": "{{ sqlite }}",
   "database": {
     "user": "{{ mysql[0] }}",
