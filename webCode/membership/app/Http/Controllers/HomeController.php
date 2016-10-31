@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\PayPal\PayPalService;
+use App\Services\PaymentProviders\QuickbooksService;
+use App\Services\PaymentProviders\PayPalService;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Models\Member;
@@ -42,6 +43,12 @@ class HomeController extends Controller
 
     public function info()
     {
+        
+        $qbo = new QuickbooksService;
+    
+        $response = $qbo->findMember('all');
+        dd($response);
+        
         return view('info');
     }
 
@@ -63,18 +70,16 @@ class HomeController extends Controller
             
         ]);
         
-        if ($request->payment_provider_id != 2)
+        if ($request->payment_provider_id == 1)
         {
-            Session::flash('error', 'Only PayPal is supported at this time, so an administrator will need to manually add this member.');
-
-            return Redirect::back()
-                ->withInput();
+            $qbo = new QuickbooksService;        
+            $response = $qbo->findMember($request->email);
         }
-
-
-        $paypal = new PayPalService;
-        
-        $response = $paypal->findMember($request->email);
+        else if ($request->payment_provider_id == 2)
+        {
+            $paypal = new PayPalService;        
+            $response = $paypal->findMember($request->email);
+        }
 
         if ($response->status != "Success")
         {
