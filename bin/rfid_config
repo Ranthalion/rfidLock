@@ -27,13 +27,19 @@ def install_mysql_connection():
 def install_raspberry_pi():
   print('What path should the local sqlite database be at?')
   sqlite_path = get_input('-->')
+  print('Which resource is this controlling?')
+  resource = get_input('-->')
+  print('What is the table name for the MySQL database?')
+  table_name = get_input('-->')
   # TODO Try actually creating the database, don't take their word for it.
   mysql_config = install_mysql_connection()
   env = Environment(loader = PackageLoader('rfidLock', 'templates'))
   config_file = open('/etc/rfidlock/config.json', 'w')
   config_file.write(env.get_template("raspberrypi.json").render( \
       mysql = mysql_config, \
-      sqlite = sqlite_path))
+      sqlite = sqlite_path, \
+      resource = resource, \
+      table_name = table_name))
   config_file.close()
 
 def install_server():

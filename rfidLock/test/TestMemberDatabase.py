@@ -20,7 +20,7 @@ class TestMemberDatabaseCreate(unittest.TestCase):
   db_path = "/tmp/test_member_database_create.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
   def tearDown(self):
     # close the connection and delete the object
     self.db.close()
@@ -38,7 +38,7 @@ class TestMemberDatabaseDestroy(unittest.TestCase):
   db_path = "/tmp/test_member_database_destroy.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
   def tearDown(self):
     # close the connection and delete the object
     self.db.close()
@@ -54,7 +54,7 @@ class TestMemberDatabaseAdd(unittest.TestCase):
   db_path = "/tmp/test_member_database_add.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
     self.member_db.create()
   def tearDown(self):
     # close the connection and delete the object
@@ -67,7 +67,7 @@ class TestMemberDatabaseHave(unittest.TestCase):
   db_path = "/tmp/test_member_database_add.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
     self.member_db.create()
     self.member_db.add(b'test_data', "John Smith", "js@hackrva.org", datetime.now() + timedelta(days = 1))
   def tearDown(self):
@@ -83,7 +83,7 @@ class TestMemberDatabaseHaveCurrent(unittest.TestCase):
   db_path = "/tmp/test_member_database_add.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
     self.member_db.create()
     self.member_db.add(b'test_data', "John Smith", "js@hackrva.org", datetime.now() + timedelta(days = 1))
   def tearDown(self):
@@ -99,7 +99,7 @@ class TestMemberDatabaseList(unittest.TestCase):
   db_path = "/tmp/test_member_database_list.db"
   def setUp(self):
     self.db = sqlite3.connect(self.db_path)
-    self.member_db = MemberDatabase(self.db, "?")
+    self.member_db = MemberDatabase(self.db, "?", "member_table_v")
     self.member_db.create()
     self.member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
     self.member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
@@ -119,7 +119,7 @@ class TestMemberDatabaseClear(unittest.TestCase):
     self.db.close()
     remove(self.db_path)
   def test_clear_database(self):
-    member_db = MemberDatabase(self.db, "?")
+    member_db = MemberDatabase(self.db, "?", "member_table_v")
     member_db.create()
     member_db.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
     member_db.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
@@ -138,13 +138,13 @@ class TestMemberDatabaseMimic(unittest.TestCase):
     remove(self.db_path1)
     remove(self.db_path2)
   def test_mimic_database(self):
-    member_db1 = MemberDatabase(self.db1, "?")
+    member_db1 = MemberDatabase(self.db1, "?", "member_table_v")
     member_db1.create()
     member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
     member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
     self.db1.commit()
     #
-    member_db2 = MemberDatabase(self.db2, "?")
+    member_db2 = MemberDatabase(self.db2, "?", "member_table_v")
     member_db2.create()
     member_db2.mimic(member_db1)
     self.assertEqual(len(member_db2.list()), 2)
@@ -161,16 +161,92 @@ class TestMemberDatabaseSync(unittest.TestCase):
     remove(self.db_path1)
     remove(self.db_path2)
   def test_mimic_database(self):
-    member_db1 = MemberDatabase(self.db1, "?")
+    member_db1 = MemberDatabase(self.db1, "?", "member_table_v")
     member_db1.create()
     member_db1.add(b'test_data', "John Smith", "jsmith@hackrva.org", datetime.now() + timedelta(days = 1))
     member_db1.add(b'othe_data', "Crystal Meth", "cmeth@hackrva.org", datetime.now() + timedelta(days = 1))
     self.db1.commit()
     #
-    member_db2 = MemberDatabase(self.db2, "?")
+    member_db2 = MemberDatabase(self.db2, "?", "member_table_v")
     member_db2.create()
-    member_db2.sync(member_db1, b'othe_data')
+    member_db2.mimic(member_db1)
+    self.assertTrue(member_db2.have_current(b'test_data'))
     self.assertTrue(member_db2.have_current(b'othe_data'))
+
+class TestMemberDatabaseUseResource(unittest.TestCase):
+  db_path1 = "/tmp/test_member_database_use_resource1.db"
+  db_path2 = "/tmp/test_member_database_use_resource2.db"
+  db_path3 = "/tmp/test_member_database_use_resource3.db"
+  def setUp(self):
+    self.db1 = sqlite3.connect(self.db_path1)
+    self.db2 = sqlite3.connect(self.db_path2)
+    self.db3 = sqlite3.connect(self.db_path3)
+  def tearDown(self):
+    self.db1.close()
+    self.db2.close()
+    self.db3.close()
+    remove(self.db_path1)
+    remove(self.db_path2)
+    remove(self.db_path3)
+  def test_use_resource(self):
+    cur = self.db1.cursor()
+    cur.execute("""
+      CREATE TABLE member_table_v (
+        hash CHAR(24),
+        name TEXT,
+        email VARCHAR(254),
+        expiration_date DATE,
+        resource VARCHAR(255));
+    """)
+    cur.execute("""
+      INSERT INTO member_table_v (hash, name, email, expiration_date, resource) VALUES 
+        (
+          ?,
+          'John Smith',
+          'jsmith@hackrva.org',
+          ?,
+          'door'
+        ),
+        (
+          ?,
+          'John Smith',
+          'jsmith@hackrva.org',
+          ?,
+          'laser'
+        ),
+        (
+          ?,
+          'Crystal Meth',
+          'cmeth@hackrva.org',
+          ?,
+          'door'
+        );
+    """,
+      (
+        MemberDatabase.hash(b'test_data'), 
+        datetime.now() + timedelta(days = 1),
+        MemberDatabase.hash(b'test_data'), 
+        datetime.now() + timedelta(days = 1),
+        MemberDatabase.hash(b'othe_data'), 
+        datetime.now() + timedelta(days = 1),
+      ))
+    self.db1.commit()
+    # Use laser resource
+    member_db1a = MemberDatabase(self.db1, "?", "member_table_v")
+    member_db1a.use_resource('laser')
+    member_db2 = MemberDatabase(self.db2, "?", "member_table_v")
+    member_db2.create()
+    member_db2.mimic(member_db1a)
+    self.assertTrue(member_db2.have_current(b'test_data'))
+    self.assertFalse(member_db2.have_current(b'othe_data'))
+    # Use door resource
+    member_db1b = MemberDatabase(self.db1, "?", "member_table_v")
+    member_db1b.use_resource('door')
+    member_db3 = MemberDatabase(self.db3, "?", "member_table_v")
+    member_db3.create()
+    member_db3.mimic(member_db1b)
+    self.assertTrue(member_db3.have_current(b'test_data'))
+    self.assertTrue(member_db3.have_current(b'othe_data'))
 
 if __name__ == '__main__':
   unittest.main()

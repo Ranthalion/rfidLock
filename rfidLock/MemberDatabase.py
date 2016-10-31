@@ -16,46 +16,47 @@ class MemberDatabase(object):
 
   The RFID data is hashed before use to prevent abuse
   """
-  def __init__(self, db, subs):
+  def __init__(self, db, subs, table_name = "member_table"):
     """
     db - database object to use
     subs - substitution expression for the database in use
     """
     self.db = db
+    self.subs = subs
+    self.table_name = table_name
     # Technically, emails may be 254 characters at most
     self.start_query = u"""
-      CREATE TABLE member_table (
+      CREATE TABLE {1} (
         hash CHAR(24),
         name TEXT,
         email VARCHAR(254),
         expiration_date DATE,
-        CONSTRAINT pk_hash PRIMARY KEY(hash),
-        CONSTRAINT unique_email UNIQUE(email));
-      """
+        CONSTRAINT pk_hash PRIMARY KEY(hash));
+      """.format(subs, table_name)
     self.destroy_query = u"""
-      DROP TABLE member_table;
-      """
+      DROP TABLE {1};
+      """.format(subs, table_name)
     self.add_query = u"""
-      INSERT INTO member_table (name, email, hash, expiration_date) VALUES ({0}, {0}, {0}, {0});
-      """.format(subs)
+      INSERT INTO {1} (name, email, hash, expiration_date) VALUES ({0}, {0}, {0}, {0});
+      """.format(subs, table_name)
     self.have_query = u"""
-      SELECT COUNT(hash) FROM member_table WHERE hash={0};
-      """.format(subs)
+      SELECT COUNT(hash) FROM {1} WHERE hash={0};
+      """.format(subs, table_name)
     self.have_current_query = u"""
-      SELECT COUNT(hash) FROM member_table WHERE hash={0} AND expiration_date > {0};
-      """.format(subs)
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expiration_date > {0};
+      """.format(subs, table_name)
     self.list_query = u"""
-      SELECT name, email, expiration_date FROM member_table;
-      """
+      SELECT name, email, expiration_date FROM {1};
+      """.format(subs, table_name)
     self.content_query = u"""
-      SELECT hash, name, email, expiration_date FROM member_table;
-      """
-    self.clone_query = u"""
-      INSERT INTO member_table (hash, name, email, expiration_date) VALUES ({0}, {0}, {0}, {0});
-      """.format(subs)
+      SELECT hash, name, email, expiration_date FROM {1};
+      """.format(subs, table_name)
     self.record_query = u"""
-      SELECT hash, name, email, expiration_date FROM member_table WHERE hash={0};
-      """.format(subs)
+      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0};
+      """.format(subs, table_name)
+    self.clone_query = u"""
+      INSERT INTO {1} (hash, name, email, expiration_date) VALUES ({0}, {0}, {0}, {0});
+      """.format(subs, table_name)
   @staticmethod
   def hash(card_data):
     """Hashes the provided RFID data using MD5"""
@@ -64,6 +65,22 @@ class MemberDatabase(object):
     # Needs to go through this for Python2 support
     # Binary data is hard to work with across versions
     return b64encode(m.digest()).decode()
+  def use_resource(self, resource):
+    self.have_query = u"""
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND resource='{2}';
+      """.format(self.subs, self.table_name, resource)
+    self.have_current_query = u"""
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expiration_date > {0} AND resource='{2}';
+      """.format(self.subs, self.table_name, resource)
+    self.list_query = u"""
+      SELECT name, email, expiration_date FROM {1} WHERE resource='{2}';
+      """.format(self.subs, self.table_name, resource)
+    self.content_query = u"""
+      SELECT hash, name, email, expiration_date FROM {1} WHERE resource='{2}';
+      """.format(self.subs, self.table_name, resource)
+    self.record_query = u"""
+      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0} AND resource='{2}';
+      """.format(self.subs, self.table_name, resource)
   def add(self, card_data, member_name, member_email, expiration):
     """Adds a new member to the list of members"""
     with closing(self.db.cursor()) as cur:
