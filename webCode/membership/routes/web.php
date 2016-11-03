@@ -24,6 +24,9 @@ Route::get('/home', 'MemberController@index');
 Route::get('members/inactive', 'MemberController@inactive')->name('members.inactive');
 Route::post('members/{member}/restore', 'MemberController@restore')->name('members.restore');
 
+Route::get('members/{member}/changeKey', 'MemberController@changeKey')->name('members.changeKey');
+Route::post('members/{member}/updateKey', 'MemberController@updateKey')->name('members.updateKey');
+
 Route::resource('members', 'MemberController', ['except' => ['show']]);
 
 Route::resource('resources', 'ResourceController');

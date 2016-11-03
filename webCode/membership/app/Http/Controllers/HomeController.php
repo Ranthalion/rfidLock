@@ -64,7 +64,6 @@ class HomeController extends Controller
     {
         $this->validate($request, [
             'email' => 'required|unique:members|max:255'
-            
         ]);
         
         if ($request->payment_provider_id == 1)

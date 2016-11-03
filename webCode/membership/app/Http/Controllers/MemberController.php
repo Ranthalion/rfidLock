@@ -153,6 +153,31 @@ class MemberController extends Controller
         return redirect('members');
     }
 
+    public function changeKey($id)
+    {
+        $member = Member::find($id);
+        
+        return view('members.changeKey', compact('member'));
+    }
+
+    public function updateKey(Request $request, $id)
+    {
+        $this->validate($request, [
+            'rfid' => 'required|max:50|unique:members'
+        ]);
+        //TODO: [ML] Find a way to make sure that rfid is unique after hashed...
+
+        $input = $request->all();
+        
+        $member = Member::find($id);
+        $member->rfid = base64_encode(md5($request->input('rfid'), true));
+        $member->save();
+
+        // redirect
+        Session::flash('message', 'Successfully updated key!');
+        return redirect('members');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
