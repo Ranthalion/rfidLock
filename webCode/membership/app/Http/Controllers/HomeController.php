@@ -7,10 +7,13 @@ use App\Services\PaymentProviders\QuickbooksService;
 use App\Services\PaymentProviders\PayPalService;
 use Illuminate\Support\Facades\Redirect;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
 use App\Models\Resource;
+use App\Services\SlackInviter;
 
 use App\Mail\Welcome;
 use Illuminate\Support\Facades\Mail;
@@ -43,12 +46,6 @@ class HomeController extends Controller
 
     public function info()
     {
-        
-        $qbo = new QuickbooksService;
-    
-        $response = $qbo->findMember('all');
-        dd($response);
-        
         return view('info');
     }
 
@@ -72,15 +69,18 @@ class HomeController extends Controller
         
         if ($request->payment_provider_id == 1)
         {
+            Log::info('Calling QBO');
             $qbo = new QuickbooksService;        
             $response = $qbo->findMember($request->email);
         }
         else if ($request->payment_provider_id == 2)
         {
+            Log::info('Calling paypal');
             $paypal = new PayPalService;        
             $response = $paypal->findMember($request->email);
         }
 
+        Log::info($response->status);
         if ($response->status != "Success")
         {
             Session::flash('error', 'There are no recorded payments in the last month from '.$request->email.'.');
@@ -155,6 +155,8 @@ class HomeController extends Controller
             $member->resources()->attach([1,2]);
 
             Mail::to($member->email)->send(new Welcome($member));
+            $slack = new SlackInviter();
+            $slack->sendInvite($member->email, $member->name);
             
             // redirect
             Session::flash('message', 'Successfully registered member and activated key.');

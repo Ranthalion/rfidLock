@@ -44,8 +44,6 @@
                             <div class="col-md-6">
                                 {{ Form::select('payment_provider_id', $providers, null, ['class' => 'form-control']) }}
 
-                                
-
                                 @if ($errors->has('payment_provider_id'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('payment_provider_id') }}</strong>
@@ -63,6 +61,20 @@
                                 @if ($errors->has('member_tier_id'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('member_tier_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('expire_date') ? ' has-error' : '' }}">
+                            {{ Form::label('expire_date', 'Membership Expiration Date', ['class' => 'col-md-4 control-label']) }}
+                                                        
+                            <div class="col-md-6">
+                                {{ Form::text('expire_date', null, ['class' => 'form-control datepicker']) }}
+
+                                @if ($errors->has('expire_date'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('expire_date') }}</strong>
                                     </span>
                                 @endif
                             </div>

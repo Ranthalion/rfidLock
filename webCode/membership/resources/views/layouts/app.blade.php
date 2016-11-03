@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <link href="/css/chosen.css" rel="stylesheet">
 
     <!-- Scripts -->
@@ -114,9 +115,12 @@
     @yield('pagescript')
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.0/js/toastr.min.js"></script>
     <script src="/js/chosen.jquery.js"></script>
-    
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
     <script>
+    $.datepicker.setDefaults({dateFormat: "mm/dd/yy"});
     $('select').chosen({disable_search_threshold: 10});
+    $('.datepicker').datepicker();
     </script>
 </body>
 </html>

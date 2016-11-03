@@ -60,6 +60,11 @@ class MemberController extends Controller
         $tiers = MemberTier::pluck('description', 'id');
         $providers = PaymentProvider::pluck('description', 'id');
 
+        $expireDate = new DateTime;
+        $expireDate->add(new DateInterval("P62D"));
+
+        $member->expire_date = date('m /d/Y', $expireDate->getTimestamp());
+
         $member->memberTier = MemberTier::where('description', 'Standard')->first();
         $member->paymentProvider = PaymentProvider::where('description', 'Paypal')->first();
         
@@ -115,7 +120,8 @@ class MemberController extends Controller
         $tiers = MemberTier::pluck('description', 'id');
         $providers = PaymentProvider::pluck('description', 'id');
         $resources = Resource::pluck('description', 'id');
-
+        $member->expire_date = date('m/d/Y', strtotime($member->expire_date));
+        
         return view('members.edit', compact('member', 'tiers', 'providers', 'resources'));
     }
 

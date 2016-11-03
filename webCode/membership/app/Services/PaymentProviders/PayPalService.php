@@ -26,7 +26,7 @@ class PayPalService
   	public function findMember($email)
   	{
   		$startDate = new DateTime;
-        $startDate->sub(new DateInterval("P30D"));
+        $startDate->sub(new DateInterval("P35D"));
         $startDate = $startDate->format(DateTime::ATOM);
 
         $response = $this->searchTransactions($startDate, $email);
