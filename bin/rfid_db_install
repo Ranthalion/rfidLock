@@ -23,7 +23,9 @@ def main():
     local_member_db.create()
     # Connect to the remote database and sync
     remote_db = mysql.connector.connect(**config['database'])
-    remote_member_db = MemberDatabase(remote_db, u'%s')
+    remote_member_db = MemberDatabase(remote_db, u'%s', config['table_name'])
+    if 'resource' in config:
+      remote_member_db.use_resource(config['resource'])
     local_member_db.mimic(remote_member_db)
     local_db.commit()
     local_db.close()

@@ -7,8 +7,7 @@
         	<div class="panel panel-default">
         		<div class="panel-heading">Confirm Member</div>
         		<div class="panel-body">
-                    {{ Form::model($member, ['action' => 'HomeController@storeMember', 'class' => 'form-horizontal']) }}
-                        
+                    {{ Form::model($member, ['action' => 'HomeController@storeMember', 'class' => 'form-horizontal']) }}                        
 
                         <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
                             <label for="rfid" class="col-md-4 control-label">rfid</label>

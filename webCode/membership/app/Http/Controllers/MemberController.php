@@ -12,6 +12,8 @@ use App\Models\Resource;
 
 use Session;
 use View;
+use DateTime;
+use DateInterval;
 
 class MemberController extends Controller
 {
@@ -58,6 +60,11 @@ class MemberController extends Controller
         $tiers = MemberTier::pluck('description', 'id');
         $providers = PaymentProvider::pluck('description', 'id');
 
+        $expireDate = new DateTime;
+        $expireDate->add(new DateInterval("P62D"));
+
+        $member->expire_date = date('m /d/Y', $expireDate->getTimestamp());
+
         $member->memberTier = MemberTier::where('description', 'Standard')->first();
         $member->paymentProvider = PaymentProvider::where('description', 'Paypal')->first();
         
@@ -82,8 +89,14 @@ class MemberController extends Controller
         
         $member = new Member;
         $member->fill($input);
-        
+
+        $expireDate = new DateTime;
+        $expireDate->add(new DateInterval("P62D"));
+
+        $member->expire_date = $expireDate;
+
         $member->member_status_id = 1;
+        $member->rfid = base64_encode(md5($request->input('rfid'), true));
 
         $member->save();
 
@@ -107,7 +120,8 @@ class MemberController extends Controller
         $tiers = MemberTier::pluck('description', 'id');
         $providers = PaymentProvider::pluck('description', 'id');
         $resources = Resource::pluck('description', 'id');
-
+        $member->expire_date = date('m/d/Y', strtotime($member->expire_date));
+        
         return view('members.edit', compact('member', 'tiers', 'providers', 'resources'));
     }
 
@@ -122,8 +136,7 @@ class MemberController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|max:255|unique:members,email,'.$id,
-            'rfid' => 'required|max:50|unique:members,rfid,'.$id
+            'email' => 'required|max:255|unique:members,email,'.$id
         ]);
 
         $input = $request->all();
@@ -137,6 +150,31 @@ class MemberController extends Controller
         $member->resources()->sync($request->get('resources'));
         // redirect
         Session::flash('message', 'Successfully saved member!');
+        return redirect('members');
+    }
+
+    public function changeKey($id)
+    {
+        $member = Member::find($id);
+        
+        return view('members.changeKey', compact('member'));
+    }
+
+    public function updateKey(Request $request, $id)
+    {
+        $this->validate($request, [
+            'rfid' => 'required|max:50|unique:members'
+        ]);
+        //TODO: [ML] Find a way to make sure that rfid is unique after hashed...
+
+        $input = $request->all();
+        
+        $member = Member::find($id);
+        $member->rfid = base64_encode(md5($request->input('rfid'), true));
+        $member->save();
+
+        // redirect
+        Session::flash('message', 'Successfully updated key!');
         return redirect('members');
     }
 

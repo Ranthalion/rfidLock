@@ -39,7 +39,8 @@
 				            		<td>{{ $member->memberStatus->description }}</td>
 				            		<td>{{ $member->paymentProvider->description }}</td>
 				            		<td>
-            			                <a class="btn btn-xs btn-info" href="{{ URL::to('members/' . $member->id . '/edit') }}">Edit</a>
+            			                <a class="btn btn-xs btn-primary" href="{{ URL::to('members/' . $member->id . '/edit') }}">Edit</a>
+            			                <a class="btn btn-xs btn-info" href="{{ URL::to('members/' . $member->id . '/changeKey') }}">Change Key</a>
             			                {!! Form::open(['method' => 'DELETE','route' => ['members.destroy', $member->id], 'style' => 'display: inline;	']) !!}
             								{!! Form::submit('Revoke', ['class' => 'btn btn-xs btn-warning revoke-member']) !!}
         								{!! Form::close() !!}

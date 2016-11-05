@@ -67,6 +67,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('expire_date') ? ' has-error' : '' }}">
+                            {{ Form::label('expire_date', 'Membership Expiration Date', ['class' => 'col-md-4 control-label']) }}
+                                                        
+                            <div class="col-md-6">
+                                {{ Form::text('expire_date', null, ['class' => 'form-control datepicker']) }}
+
+                                @if ($errors->has('expire_date'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('expire_date') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('rfid') ? ' has-error' : '' }}">
                             <label for="rfid" class="col-md-4 control-label">rfid</label>
 
@@ -83,7 +97,7 @@
                         
             			<div class="row">
             				<div class="col-md-12 text-right">
-            					<a class="btn btn-default" href="{{ url('/') }}">Cancel</a>
+            					<a class="btn btn-default" href="{{ url('/members') }}">Cancel</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
             				</div>
             			</div>
