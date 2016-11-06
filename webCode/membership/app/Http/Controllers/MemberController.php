@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use App\Http\Requests\UpdateKey;
+use App\Http\Requests\StoreMember;
+use App\Http\Requests\UpdateMember;
 use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
@@ -63,7 +65,7 @@ class MemberController extends Controller
         $expireDate = new DateTime;
         $expireDate->add(new DateInterval("P62D"));
 
-        $member->expire_date = date('m /d/Y', $expireDate->getTimestamp());
+        $member->expire_date = date('m/d/Y', $expireDate->getTimestamp());
 
         $member->memberTier = MemberTier::where('description', 'Standard')->first();
         $member->paymentProvider = PaymentProvider::where('description', 'Paypal')->first();
@@ -77,13 +79,8 @@ class MemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMember $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|unique:members|max:255',
-            'rfid' => 'required|unique:members|max:50'
-        ]);
 
         $input = $request->all();
         
@@ -96,8 +93,7 @@ class MemberController extends Controller
         $member->expire_date = $expireDate;
 
         $member->member_status_id = 1;
-        $member->rfid = base64_encode(md5($request->input('rfid'), true));
-
+        
         $member->save();
 
         $member->resources()->attach([1,2]);
@@ -132,13 +128,9 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateMember $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|max:255|unique:members,email,'.$id
-        ]);
-
+     
         $input = $request->all();
         
         $member = Member::find($id);
@@ -160,17 +152,14 @@ class MemberController extends Controller
         return view('members.changeKey', compact('member'));
     }
 
-    public function updateKey(Request $request, $id)
+    public function updateKey(UpdateKey $request, $id)
     {
-        $this->validate($request, [
-            'rfid' => 'required|max:50|unique:members'
-        ]);
-        //TODO: [ML] Find a way to make sure that rfid is unique after hashed...
-
+     
         $input = $request->all();
         
         $member = Member::find($id);
-        $member->rfid = base64_encode(md5($request->input('rfid'), true));
+        $member->rfid = $request->input('rfid');
+        
         $member->save();
 
         // redirect
