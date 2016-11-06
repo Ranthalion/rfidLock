@@ -142,8 +142,6 @@ class HomeController extends Controller
         {
             $member = $request->session()->pull('memberToAdd');
 
-            $member->rfid = base64_encode(md5($request->input('rfid'), true));
-
             $expireDate = new DateTime;
             $expireDate->add(new DateInterval("P62D"));
 

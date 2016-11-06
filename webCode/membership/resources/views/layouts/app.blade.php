@@ -116,11 +116,15 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.0/js/toastr.min.js"></script>
     <script src="/js/chosen.jquery.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="/js/jquery.blockUI.js"></script>
 
     <script>
-    $.datepicker.setDefaults({dateFormat: "mm/dd/yy"});
-    $('select').chosen({disable_search_threshold: 10});
-    $('.datepicker').datepicker();
+    $(document).ready(function(){
+        $.datepicker.setDefaults({dateFormat: "mm/dd/yy"});
+        $('select').chosen({disable_search_threshold: 10});
+        $('.datepicker').datepicker();
+        $('form').submit($.blockUI);
+    });
     </script>
 </body>
 </html>

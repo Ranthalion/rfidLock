@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\RfidHandler::class,
+        \App\Http\Middleware\DateHandler::class,
     ];
 
     /**

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\Resource;
-
+use App\Http\Requests\StoreResource;
 use Session;
 
 class ResourceController extends Controller
@@ -46,12 +46,8 @@ class ResourceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreResource $request)
     {
-        $this->validate($request, [
-            'description' => 'required|max:255|unique:resources'
-        ]);
-
         $input = $request->all();
         
         $resource = new Resource;
@@ -85,12 +81,8 @@ class ResourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreResource $request, $id)
     {
-        $this->validate($request, [
-            'description' => 'required|max:255|unique:resources,description,'.$id
-        ]);
-
         $input = $request->all();
         
         $resource = Resource::find($id);
