@@ -72,6 +72,12 @@ class PayPalService
 
         $paypalResponse = array();
         parse_str($response,$paypalResponse);
+
+        if (isset($paypalResponse["L_ERRORCODE0"]))
+        {
+            throw new \Exception('PayPal Error: '.$response);
+        }
+        
         return $paypalResponse;
 	}
 }

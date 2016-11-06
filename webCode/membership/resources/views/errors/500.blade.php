@@ -14,7 +14,7 @@
                 margin: 0;
                 padding: 0;
                 width: 100%;
-                color: #B0BEC5;
+                color: #000;
                 display: table;
                 font-weight: 100;
                 font-family: 'Lato', sans-serif;
@@ -40,7 +40,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">Something went wrong.  Contact info@hackrva.org if you continue to experience this problem.</div>
             </div>
         </div>
     </body>
