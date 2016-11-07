@@ -11,9 +11,10 @@
     <title>{{ config('app.name', 'Member Portal') }}</title>
 
     <!-- Styles -->
-    <link href="/css/app.css" rel="stylesheet">
+    {{ Html::style('css/app.css') }}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <link href="/css/chosen.css" rel="stylesheet">
+    {{ Html::style('css/chosen.css') }}
 
     <!-- Scripts -->
     <script>
@@ -111,12 +112,12 @@
     </div>
 
     <!-- Scripts -->
-    <script src="/js/app.js"></script>
-    @yield('pagescript')
+    {{ Html::script('js/app.js') }}
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.0/js/toastr.min.js"></script>
-    <script src="/js/chosen.jquery.js"></script>
+    {{ Html::script('js/chosen.jquery.js') }}
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script src="/js/jquery.blockUI.js"></script>
+    {{ Html::script('js/jquery.blockUI.js') }}
+    @yield('pagescript')
 
     <script>
     $(document).ready(function(){
