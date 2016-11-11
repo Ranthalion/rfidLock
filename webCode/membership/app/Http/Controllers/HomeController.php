@@ -13,14 +13,12 @@ use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
 use App\Models\Resource;
-use App\Services\SlackInviter;
-
-use App\Mail\Welcome;
-use Illuminate\Support\Facades\Mail;
-
+use App\Events\MemberAdded;
 use Session;
 use DateTime;
 use DateInterval;
+
+use App\Services\MailChimp;
 
 class HomeController extends Controller
 {
@@ -68,13 +66,11 @@ class HomeController extends Controller
         
         if ($request->payment_provider_id == 1)
         {
-            Log::info('Calling QBO');
             $qbo = new QuickbooksService;        
             $response = $qbo->findMember($request->email);
         }
         else if ($request->payment_provider_id == 2)
         {
-            Log::info('Calling paypal');
             $paypal = new PayPalService;        
             $response = $paypal->findMember($request->email);
         }
@@ -134,29 +130,24 @@ class HomeController extends Controller
 
     public function storeMember(Request $request)
     {
-        $this->validate($request, [
-            'rfid' => 'required|unique:members|max:50'
-        ]);
-
+  
         if ($request->session()->exists('memberToAdd')) 
         {
             $member = $request->session()->pull('memberToAdd');
-
-            $member->rfid = base64_encode(md5($request->input('rfid'), true));
 
             $expireDate = new DateTime;
             $expireDate->add(new DateInterval("P62D"));
 
             $member->expire_date = $expireDate;
 
+            $member->rfid = $request->input('rfid');
+
             $member->save();
 
             $member->resources()->attach([1,2]);
 
-            Mail::to($member->email)->send(new Welcome($member));
-            $slack = new SlackInviter();
-            $slack->sendInvite($member->email, $member->name);
-            
+            event(new MemberAdded($member));
+
             // redirect
             Session::flash('message', 'Successfully registered member and activated key.');
         }
