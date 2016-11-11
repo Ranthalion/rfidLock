@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\PaymentProviders\QuickbooksService;
 use App\Services\PaymentProviders\PayPalService;
+use App\Services\MembershipReport;
 use Illuminate\Support\Facades\Redirect;
 
 use Illuminate\Support\Facades\Log;
@@ -44,7 +45,12 @@ class HomeController extends Controller
 
     public function info()
     {
-        return view('info');
+        $rpt = new MembershipReport;
+        $summaries = $rpt->Report();
+
+        return view('home.report', compact('summaries'));
+
+        //return view('info');
     }
 
     public function addMember(Member $member)

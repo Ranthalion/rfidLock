@@ -40,7 +40,7 @@ class QuickbooksService
     return $response;
   }
 
-  public function searchTransactions($startDate, $email)
+  private function getDataService()
   {
       //Specify QBO or QBD
     $serviceType = \IntuitServicesType::QBO;
@@ -59,7 +59,14 @@ class QuickbooksService
     if (!$dataService)
       exit("Problem while initializing DataService.\n");
 
-    $customers = $dataService->Query("Select * from Customer where Active=true and PrimaryEmailAddr='".$email."'");
+    return $dataService;
+  }
+
+  public function searchTransactions($startDate, $email)
+  {
+    $dataService = $this->getDataService();
+
+    $customers = $dataService->Query("Select Id from Customer where Active=true and PrimaryEmailAddr='".$email."'");
     
     $result = new PayingMemberSearchResult;
     $result->status = "Fail";
@@ -71,8 +78,8 @@ class QuickbooksService
 
       $result->name = $customer->FullyQualifiedName;
       $result->email=$email;
-       
-      $salesReceipts = $dataService->Query("Select * from SalesReceipt where CustomerRef = '".$customer->Id."' and TxnDate > '".$startDate."'");
+
+      $salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, CreditCardPayment.* from SalesReceipt where CustomerRef = '".$customer->Id."' and TxnDate > '".$startDate."'");
 
       if(count($salesReceipts) > 0)
       {
@@ -93,5 +100,83 @@ class QuickbooksService
     return $result;
         		
 	}
+
+  public function getFailedTransactions($startDate)
+  {
+    //$dataService = $this->getDataService();
+    
+    //$salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, CreditCardPayment.* from SalesReceipt where TxnDate > '".$startDate."' MAXRESULTS 1000");
+
+    $salesReceipts = $this->getTransactions($startDate);
+
+    $failedTransactions = array_filter($salesReceipts, function($r){
+      if ($r->CreditCardPayment == null)
+        return false;
+      if ($r->CreditCardPayment->CreditChargeResponse == null)
+        return false;
+      return $r->CreditCardPayment->CreditChargeResponse->Status != "Completed";
+    });
+    //TODO: [ML] This does not help me find members that didn't even have a payment processed.
+    dd($failedTransactions);
+
+  }
+
+  public function getTransactions($startDate)
+  {
+    $dataService = $this->getDataService();
+    
+    $salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, BillEmail.*, CreditCardPayment.* from SalesReceipt where TxnDate > '".$startDate."' MAXRESULTS 1000");
+
+    usort($salesReceipts, function($x, $y) 
+      {
+        if ( $x->TxnDate == $y->TxnDate )
+          return 0;
+        else if ( $x->TxnDate > $y->TxnDate )
+          return -1;
+        else
+          return 1;
+      });
+
+    $keyed = array();
+
+    foreach($salesReceipts as $salesReceipt)
+    {
+      if($salesReceipt->BillEmail != null)
+      {
+        $keyed[$salesReceipt->BillEmail->Address] = $salesReceipt;
+      }
+      else
+      {
+        $keyed[] = $salesReceipt;
+      }
+    }
+
+
+    return $keyed;
+
+  }
+
+  public function getActiveMembers()
+  {
+    $dataService = $this->getDataService();
+
+    $customers = $dataService->Query("Select Id, MetaData.CreateTime, GivenName, FamilyName, DisplayName, PrimaryEmailAddr from Customer where Active = true MAXRESULTS 1000");
+
+    $keyed = array();
+    foreach($customers as $customer)
+    {
+      if($customer->PrimaryEmailAddr != null)
+      {
+        $keyed[$customer->PrimaryEmailAddr->Address] = $customer;
+      }
+      else
+      {
+        $keyed[] = $customer;
+      }
+    }
+
+    return $keyed;
+  }
+
 }
 

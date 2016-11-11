@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <link href="/css/chosen.css" rel="stylesheet">
     {{ Html::style('css/chosen.css') }}
-
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([

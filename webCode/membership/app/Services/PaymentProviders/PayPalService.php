@@ -38,7 +38,7 @@ class PayPalService
 
         if (array_key_exists("L_EMAIL0", $response))
         {
-        	$result->email = $response["L_EMAIL0"];;
+        	$result->email = $response["L_EMAIL0"];
         	$result->name = $response["L_NAME0"];
         	$result->amount = $response["L_AMT0"];
         	$result->status = "Success";
@@ -64,8 +64,10 @@ class PayPalService
         $params = $params."&VERSION=".urlencode("204");
         $params = $params."&METHOD=TransactionSearch";
         $params = $params."&STARTDATE=".urlencode($startDate);
-        $params = $params."&EMAIL=".urlencode($email);
-
+        if ($email != null)
+        {
+            $params = $params."&EMAIL=".urlencode($email);
+        }
         curl_setopt($ch,CURLOPT_POSTFIELDS,$params);
 
         $response = curl_exec($ch);
