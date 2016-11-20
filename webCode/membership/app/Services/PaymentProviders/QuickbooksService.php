@@ -2,7 +2,7 @@
 
 namespace App\Services\PaymentProviders;
 
-require_once('./../v3-php-sdk-2.5.0/config.php');
+require_once(dirname(__FILE__) . '/../../../v3-php-sdk-2.5.0/config.php');
 require_once(PATH_SDK_ROOT.'Core/ServiceContext.php');
 require_once(PATH_SDK_ROOT.'DataService/DataService.php');
 require_once(PATH_SDK_ROOT.'PlatformService/PlatformService.php');
@@ -127,30 +127,33 @@ class QuickbooksService
     
     $salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, BillEmail.*, CreditCardPayment.* from SalesReceipt where TxnDate > '".$startDate."' MAXRESULTS 1000");
 
-    usort($salesReceipts, function($x, $y) 
-      {
-        if ( $x->TxnDate == $y->TxnDate )
-          return 0;
-        else if ( $x->TxnDate > $y->TxnDate )
-          return -1;
-        else
-          return 1;
-      });
-
     $keyed = array();
-
-    foreach($salesReceipts as $salesReceipt)
+    
+    if ($salesReceipts != null)
     {
-      if($salesReceipt->BillEmail != null)
+    
+      usort($salesReceipts, function($x, $y) 
+        {
+          if ( $x->TxnDate == $y->TxnDate )
+            return 0;
+          else if ( $x->TxnDate > $y->TxnDate )
+            return -1;
+          else
+            return 1;
+        });
+
+      foreach($salesReceipts as $salesReceipt)
       {
-        $keyed[$salesReceipt->BillEmail->Address] = $salesReceipt;
-      }
-      else
-      {
-        $keyed[] = $salesReceipt;
+        if($salesReceipt->BillEmail != null)
+        {
+          $keyed[$salesReceipt->BillEmail->Address] = $salesReceipt;
+        }
+        else
+        {
+          $keyed[] = $salesReceipt;
+        }
       }
     }
-
 
     return $keyed;
 

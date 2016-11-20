@@ -43,6 +43,11 @@ class OAuthRequestValidator extends RequestValidator
 	 public $ConsumerSecret;
 	 
 
+	 function __construct($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret)
+	 {
+	 	$this->OAuthRequestValidator($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret);
+	 }
+
 	/**
 	 * Initializes a new instance of the OAuthRequestValidator class.
 	 *

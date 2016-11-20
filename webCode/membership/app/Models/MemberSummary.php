@@ -10,4 +10,5 @@ class MemberSummary
 	public $paymentDate = "";
 	public $amount = "";
 	public $provider = "";
+	public $type = "";
 }

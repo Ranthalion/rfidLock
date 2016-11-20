@@ -6,20 +6,82 @@ use App\Services\PaymentProviders\QuickbooksService;
 use App\Services\PaymentProviders\PayPalService;
 
 use App\Models\MemberSummary;
+use App\Models\Customer;
+use App\Models\Payment;
 
-class MembershipReport
+class PaymentImporter
 {
 
 	public function __construct()
 	{
+
   }
 
-	public function Report()
-	{
+  public function import($days)
+  {
     $startDate = new \DateTime;
-    $startDate->sub(new \DateInterval("P35D"));
+    $startDate->sub(new \DateInterval("P".$days."D"));
     $startDate = $startDate->format(\DateTime::ATOM);
 
+    $customer_payments = $this->getCustomerPayments($startDate);
+
+    foreach($customer_payments as $payment)
+    {
+      $customer = null;
+      
+      if ($payment->paymentDate != null && $payment->amount != null)
+      {
+        if (filter_var($payment->email, FILTER_VALIDATE_EMAIL))
+        {
+
+          $payment->paymentDate = new \DateTimeImmutable($payment->paymentDate);
+          $nextPayment = $payment->paymentDate->add(new \DateInterval("P1M"));
+
+          if ($payment->provider == 'PayPal')
+            $payment->provider = 2;
+          else
+            $payment->provider = 1;
+
+          $customer = Customer::updateOrCreate(
+            [ 'email' => $payment->email,
+              'name' => $payment->name
+            ], 
+            [ 'last_payment_date' => $payment->paymentDate, 
+              'last_payment_amount' => $payment->amount,
+              'payment_provider_id' => $payment->provider,
+              'next_payment_date' => $nextPayment,
+              'last_payment_status' => $payment->status
+            ]);
+
+          if ($customer != null)
+          {
+            $currentPayment = $customer->payments()->where('date', $payment->paymentDate->format('Y-m-d'))->first();
+
+            if ($currentPayment == null)
+            {
+              $currentPayment = new Payment;
+
+              $currentPayment->date = $payment->paymentDate; 
+              $currentPayment->amount = $payment->amount; 
+              $currentPayment->status = $payment->status;
+              $currentPayment->payment_provider_id = $payment->provider;
+
+              $customer->payments()->save($currentPayment);
+            }
+          }
+        }
+        else
+        {
+          //TODO: Log an issue to the system somehow.
+          //Not a valid email address
+        }
+      }
+    }
+
+  }
+
+	public function getCustomerPayments($startDate)
+	{
     $qbo = new QuickbooksService;        
 
     $customers = $qbo->getActiveMembers();

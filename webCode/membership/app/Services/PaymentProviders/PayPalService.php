@@ -64,6 +64,7 @@ class PayPalService
         $params = $params."&VERSION=".urlencode("204");
         $params = $params."&METHOD=TransactionSearch";
         $params = $params."&STARTDATE=".urlencode($startDate);
+        
         if ($email != null)
         {
             $params = $params."&EMAIL=".urlencode($email);
