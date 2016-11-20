@@ -10,7 +10,7 @@ require_once(PATH_SDK_ROOT.'Utility/Configuration/ConfigurationManager.php');
 
 use DateTime;
 use DateInterval;
-use App\Models\PayingMemberSearchResult;
+use App\Models\CustomerPayment;
 
 class QuickbooksService
 {
@@ -66,20 +66,19 @@ class QuickbooksService
   {
     $dataService = $this->getDataService();
 
-    $customers = $dataService->Query("Select Id from Customer where Active=true and PrimaryEmailAddr='".$email."'");
+    $customers = $dataService->Query("Select Id, FullyQualifiedName from Customer where Active=true and PrimaryEmailAddr='".$email."'");
     
-    $result = new PayingMemberSearchResult;
-    $result->status = "Fail";
-    $result->provider = "Quickbooks";
-
+    $payments = array();
+    
     if (count($customers) == 1)
     {
       $customer = $customers[0];
+      
+      $payment = new CustomerPayment;
+      $payment->name = $customer->FullyQualifiedName;
+      $payment->email = $email;
 
-      $result->name = $customer->FullyQualifiedName;
-      $result->email=$email;
-
-      $salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, CreditCardPayment.* from SalesReceipt where CustomerRef = '".$customer->Id."' and TxnDate > '".$startDate."'");
+      $salesReceipts = $dataService->Query("Select TxnDate, TotalAmt, BillEmail.*, CreditCardPayment.*  from SalesReceipt where CustomerRef = '".$customer->Id."' and TxnDate > '".$startDate."'");
 
       if(count($salesReceipts) > 0)
       {
@@ -87,9 +86,12 @@ class QuickbooksService
         {
           if ($salesReceipt->CreditCardPayment->CreditChargeResponse->Status == 'Completed')
           {
-            $result->amount = $salesReceipt->TotalAmt;
-            $result->status = 'Success';
-            return $result;
+            $payment->amount = $salesReceipt->TotalAmt;
+            $payment->status = 'Success';
+            $payment->paymentDate = $salesReceipt->TxnDate;
+            $payment->provider = 'Quickbooks';
+            $payment->type = "Recurring Payment";
+            $payments[] = $payment;
           }
         }
         //TODO: [ML] What if the customer is found, but there are no completed payments?
@@ -97,8 +99,8 @@ class QuickbooksService
     }
       
     //TODO: [ML] What if there are multiple customers using the same email address?
-    return $result;
-        		
+
+    return $payments;
 	}
 
   public function getFailedTransactions($startDate)
@@ -179,6 +181,49 @@ class QuickbooksService
     }
 
     return $keyed;
+  }
+
+  public function getCustomerPayments($startDate)
+  {
+
+    $customers = $this->getActiveMembers();
+    $transactions = $this->getTransactions($startDate);
+
+    $payments = array();
+
+    foreach($customers as $email => $customer)
+    {
+      $payment = new CustomerPayment;
+      $payment->email = $email;
+      $payment->name = $customer->GivenName . " " . $customer->FamilyName;
+      $payment->provider="Quickbooks";
+
+      if(isset($transactions[$email]))
+      {
+        $payment->paymentDate = $transactions[$email]->TxnDate;
+        if ($transactions[$email]->CreditCardPayment != null)
+        {
+          if($transactions[$email]->CreditCardPayment->CreditChargeInfo != null)
+          {
+            $payment->amount=$transactions[$email]->CreditCardPayment->CreditChargeInfo->Amount;
+          }
+          if($transactions[$email]->CreditCardPayment->CreditChargeResponse != null)
+          {
+            $payment->status= $transactions[$email]->CreditCardPayment->CreditChargeResponse->Status;
+          }
+        } 
+        else
+        {
+          $payment->status = "???";
+        }
+      }
+      else
+      {
+        $payment->status = "Expired";
+      }
+      $payments[] = $payment;
+    }
+    return $payments;
   }
 
 }

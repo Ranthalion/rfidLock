@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schdedule->command('membership:getPayments 5')
+        $schedule->command('membership:getPayments 5')
             ->dailyAt('07:30');
     }
 

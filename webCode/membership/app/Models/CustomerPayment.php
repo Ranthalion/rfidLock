@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class MemberSummary
+class CustomerPayment
 {
 	public $name = "";
 	public $email = "";
