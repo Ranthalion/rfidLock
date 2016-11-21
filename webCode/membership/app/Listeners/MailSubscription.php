@@ -1,6 +1,6 @@
 <?php
 
-namespace App\listeners;
+namespace App\Listeners;
 
 use App\Events\MemberAdded;
 use Illuminate\Queue\InteractsWithQueue;
