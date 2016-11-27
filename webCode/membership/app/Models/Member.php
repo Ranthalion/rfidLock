@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\MemberTier;
 use App\Models\MemberStatus;
 use App\Models\PaymentProvider;
+use App\Models\MemberNotification;
 
 class Member extends Model
 {
@@ -30,5 +31,10 @@ class Member extends Model
 	public function resources()
 	{
 		return $this->belongsToMany(Resource::class);
+	}
+
+	public function memberNotifications()
+	{
+		return $this->hasMany(MemberNotification::class);
 	}
 }

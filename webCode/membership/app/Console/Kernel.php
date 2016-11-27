@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\GetPayments::class
+        Commands\GetPayments::class,
+        Commands\FailedQuickbooksPayments::class
     ];
 
     /**
@@ -26,6 +27,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('membership:getPayments 5')
             ->dailyAt('07:30');
+
+        $schedule->command('membership:FailedQuickbooksPayments')
+            ->dailyAt('08:30');
     }
 
     /**
