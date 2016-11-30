@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\GetPayments::class,
-        Commands\FailedQuickbooksPayments::class
+        Commands\FailedQuickbooksPayments::class,
+        Commands\PendingRevokation::class
     ];
 
     /**
@@ -30,6 +31,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('membership:FailedQuickbooksPayments')
             ->dailyAt('08:30');
+
+        $schedule->command('membership:PendingRevokation')
+            ->dailyAt('17:00');
     }
 
     /**

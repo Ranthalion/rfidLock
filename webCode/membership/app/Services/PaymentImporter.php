@@ -14,6 +14,7 @@ use App\Models\NotificationType;
 
 use App\Services\CustomerDAL;
 use App\Mail\FailedQuickbooksPayment;;
+use App\Mail\PendingRevokation;
 
 class PaymentImporter
 {
@@ -52,6 +53,7 @@ class PaymentImporter
       }
     }
 
+    $this->updateCustomerStatus();
   }
 
 	public function getCustomerPayments($startDate)
@@ -63,6 +65,31 @@ class PaymentImporter
     $paypalPayments = $paypal->searchTransactions($startDate, null);
 
     return array_merge($qboPayments, $paypalPayments);
+  }
+
+  public function updateCustomerStatus()
+  {
+    $query='Update customers c 
+      inner join (Select customer_id, date, amount, payment_provider_id, (date + INTERVAL 1 MONTH) as \'next_payment\'
+        from payments
+        where created_at  >= CURDATE() && created_at < (CURDATE() + INTERVAL 1 DAY)) p
+      on c.id = p.customer_id
+      Set c.payment_provider_id = p.payment_provider_id,
+        c.last_payment_date = p.date,
+        c.last_payment_amount = p.amount,
+          c.next_payment_date = p.next_payment;';
+  
+    \DB::update($query);
+
+    $query = 'Update members m
+      inner join customers c
+      on m.customer_id = c.id
+      set m.expire_date = (c.next_payment_date + INTERVAL 1 MONTH),
+        m.member_status_id = 1
+      where c.updated_at >= CURDATE() && c.updated_at < (CURDATE() + INTERVAL 1 DAY)
+        and c.next_payment_date is not null;';
+
+    \DB::update($query);
   }
 
   public function getFailedPayments()
@@ -85,10 +112,11 @@ class PaymentImporter
           and n.notification_date >= :notification_date
         where pp.description = \'Quickbooks\'
           and n.id is null
+          and c.created_at < :customer_created
           and (p.status = \'Unknown\'
             or p.status is null);';
 
-    $failedPayments = \DB::select($query, ['payment_date'=>$startDate, 'notification_date'=>$startDate]);
+    $failedPayments = \DB::select($query, ['customer_created' =>$startDate, 'payment_date'=>$startDate, 'notification_date'=>$startDate]);
 
     foreach($failedPayments as $payment)
     {
@@ -103,6 +131,44 @@ class PaymentImporter
         ->bcc('info@hackrva.org')
         ->queue(new FailedQuickbooksPayment($member));      
     }
+  }
+
+  public function pendingRevokation()
+  {
+    $notificationThreshold = new \DateTime;
+    $notificationThreshold->sub(new \DateInterval("P7D"));
+    $notificationThreshold = $notificationThreshold->format(\DateTime::ATOM);
+
+    $expirationDate = new \DateTime;
+    $expirationDate->add(new \DateInterval("P15D"));
+    $expirationDate = $expirationDate->format(\DateTime::ATOM);
+
+    $query = 'Select m.id, m.email, m.name, m.expire_date
+      from members m
+      left join member_notifications n 
+      on m.id = n.member_id
+        and n.notification_type_id = 4
+        and n.notification_date >= :notification_threshold
+      where n.id is null
+        and m.expire_date < :expiration_date
+          and m.member_status_id = 1;';
+
+    $pending = \DB::select($query, ['notification_threshold' =>$notificationThreshold, 'expiration_date'=>$expirationDate]);
+
+    foreach($pending as $p)
+    {
+      
+      $member = Member::find($p->id);
+      $notification = new MemberNotification;
+      $notification->notification_type_id = 4;
+      $notification->notification_date = new \DateTime;
+      $member->memberNotifications()->save($notification);
+
+      \Mail::to($member)
+        ->bcc('info@hackrva.org')
+        ->queue(new PendingRevokation($member));      
+    }
+
   }
 
 }

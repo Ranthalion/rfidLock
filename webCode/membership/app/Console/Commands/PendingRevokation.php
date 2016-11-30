@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Services\PaymentImporter;
 
 class PendingRevokation extends Command
 {
@@ -20,14 +21,16 @@ class PendingRevokation extends Command
      */
     protected $description = 'Sends emails for members pending revokation in the next 15 days';
 
+    protected $paymentImporter;
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PaymentImporter $importer)
     {
         parent::__construct();
+        $this->paymentImporter = $importer;
     }
 
     /**
@@ -38,5 +41,6 @@ class PendingRevokation extends Command
     public function handle()
     {
         //TODO: [ML] Send pending revokation emails
+        $this->paymentImporter->pendingRevokation();
     }
 }
