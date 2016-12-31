@@ -72,7 +72,7 @@ To remove the member server after installation:
 
 
 #### Raspberry Pi
-
+Secure Network IP: 172.12.123.98
 ```bash
 git clone https://github.com/Ranthalion/rfidLock.git
 sudo pip install rfidLock/
