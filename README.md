@@ -1,6 +1,9 @@
 # rfidLock
 RFID Lock system
 
+###Lock Hardware
+The lock is [Morning Industry RF-01SN](https://www.amazon.com/gp/product/B000FBU2KW "Morning Industry RF-01SN").
+
 ###Lamp Server
 Primary Network IP: 10.200.200.11 up on eth0   
 Secure Network IP: 172.12.123.20 up on eth1   
