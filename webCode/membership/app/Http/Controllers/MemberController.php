@@ -11,6 +11,7 @@ use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
 use App\Models\Resource;
+use App\Models\Customer;
 
 use Session;
 use View;
@@ -83,16 +84,22 @@ class MemberController extends Controller
     {
 
         $input = $request->all();
-        
+         
+        $customer = new Customer;
+        $customer->name = $input["name"];
+        $customer->email = $input["email"];
+        $customer->payment_provider_id = $input["payment_provider_id"];
+        $customer->save();
+
         $member = new Member;
         $member->fill($input);
-
         $expireDate = new DateTime;
         $expireDate->add(new DateInterval("P62D"));
 
         $member->expire_date = $expireDate;
 
         $member->member_status_id = 1;
+        $member->customer_id = $customer->id;
         
         $member->save();
 

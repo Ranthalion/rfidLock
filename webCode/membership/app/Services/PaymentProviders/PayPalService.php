@@ -4,7 +4,7 @@ namespace App\Services\PaymentProviders;
 
 use DateTime;
 use DateInterval;
-use App\Models\PayingMemberSearchResult;
+use App\Models\CustomerPayment;
 
 class PayPalService
 {
@@ -29,22 +29,26 @@ class PayPalService
         $startDate->sub(new DateInterval("P35D"));
         $startDate = $startDate->format(DateTime::ATOM);
 
-        $response = $this->searchTransactions($startDate, $email);
+        $payments = $this->searchTransactions($startDate, $email);
 
-        $result = new PayingMemberSearchResult;
+        return $payments;
+
+        /*
+        $result = new CustomerPayment;
 
         $result->status = "Fail";
         $result->provider = "PayPal";
 
         if (array_key_exists("L_EMAIL0", $response))
         {
-        	$result->email = $response["L_EMAIL0"];;
+        	$result->email = $response["L_EMAIL0"];
         	$result->name = $response["L_NAME0"];
         	$result->amount = $response["L_AMT0"];
         	$result->status = "Success";
         }
 		
 		return $result;
+        */
   	}
 
 	public function searchTransactions($startDate, $email)
@@ -64,8 +68,11 @@ class PayPalService
         $params = $params."&VERSION=".urlencode("204");
         $params = $params."&METHOD=TransactionSearch";
         $params = $params."&STARTDATE=".urlencode($startDate);
-        $params = $params."&EMAIL=".urlencode($email);
-
+        
+        if ($email != null)
+        {
+            $params = $params."&EMAIL=".urlencode($email);
+        }
         curl_setopt($ch,CURLOPT_POSTFIELDS,$params);
 
         $response = curl_exec($ch);
@@ -78,7 +85,40 @@ class PayPalService
             throw new \Exception('PayPal Error: '.$response);
         }
         
-        return $paypalResponse;
+        $payments = array();
+        $i = 0;
+        while(array_key_exists("L_TRANSACTIONID".$i, $paypalResponse))
+        {
+          $payment = new CustomerPayment;
+          $payment->email = $this->get($paypalResponse, "L_EMAIL".$i);
+          $payment->name = $this->get($paypalResponse, "L_NAME".$i);
+          $payment->amount = $this->get($paypalResponse, "L_AMT".$i);
+          $payment->paymentDate = $this->get($paypalResponse, "L_TIMESTAMP".$i);
+          $payment->provider = "PayPal";
+          $payment->status = $this->get($paypalResponse, "L_STATUS".$i);
+          $payment->type= $this->get($paypalResponse, "L_TYPE".$i);
+
+          if ($payment->amount != null && $payment->type == "Recurring Payment")
+          {
+            $payments[] = $payment;
+          }
+
+          $i = $i + 1;
+        }
+
+        return $payments;
 	}
+
+    private function get($arr, $key)
+    {
+        if (array_key_exists($key, $arr))
+        {
+            return $arr[$key];
+        }
+        else
+        {
+            return "";
+        }
+    }
 }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\PaymentProviders\QuickbooksService;
 use App\Services\PaymentProviders\PayPalService;
+
+use App\Services\PaymentImporter;
 use Illuminate\Support\Facades\Redirect;
 
 use Illuminate\Support\Facades\Log;
@@ -19,6 +21,7 @@ use DateTime;
 use DateInterval;
 
 use App\Services\MailChimp;
+use App\Services\CustomerDAL;
 
 class HomeController extends Controller
 {
@@ -40,11 +43,6 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
-    }
-
-    public function info()
-    {
-        return view('info');
     }
 
     public function addMember(Member $member)
@@ -75,39 +73,56 @@ class HomeController extends Controller
             $response = $paypal->findMember($request->email);
         }
 
-        Log::info($response->status);
-        if ($response->status != "Success")
+        if($response != null && count($response) > 0)
+        {
+            $response = $response[0];
+            $input = $request->all();
+
+            $dal = new CustomerDAL;
+            $customer = $dal->saveCustomerPayment($response);
+            
+            if ($customer != null)
+            {
+
+                $member = new Member;
+                $member->fill($input);
+
+                $member->customer_id = $customer->id;
+                $member->member_status_id = 1;
+                $member->name = $response->name;
+
+                if ($response->amount == 50.00){
+                    $member->member_tier_id = 3;
+                }
+                else if ($response->amount == 30.00)
+                {
+                    $member->member_tier_id = 2;
+                }
+                else if ($respone->amount == 20.00)
+                {
+                    $member->member_tier_id = 1;
+                }
+
+                session(['memberToAdd' => $member]);
+
+                return redirect()->route('home.confirm');
+            }
+            else
+            {
+                Log::error("Unable to find the customer for this member.\n\t".json_encode($response));
+                Session::flash("error", "Unable to find the customer for this member.\n\t".json_encode($response));
+
+                return Redirect::back()
+                    ->withInput();       
+            }   
+        }
+        else
         {
             Session::flash('error', 'There are no recorded payments in the last month from '.$request->email.'.');
 
             return Redirect::back()
                 ->withInput();       
         }
-
-        $input = $request->all();
-        
-        $member = new Member;
-        $member->fill($input);
-        
-        $member->member_status_id = 1;
-        $member->name = $response->name;
-
-        if ($response->amount == 50.00){
-            $member->member_tier_id = 3;
-        }
-        else if ($response->amount == 30.00)
-        {
-            $member->member_tier_id = 2;
-        }
-        else if ($respone->amount == 20.00)
-        {
-            $member->member_tier_id = 1;
-        }
-
-        session(['memberToAdd' => $member]);
-
-        return redirect()->route('home.confirm');
-        
     }
 
     public function confirmMember(Request $request)

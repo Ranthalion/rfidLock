@@ -14,9 +14,9 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\MemberAdded' => [
-            'App\listeners\WelcomeMailer',
-            'App\listeners\SlackInvite',
-            'App\listeners\MailSubscription',
+            'App\Listeners\WelcomeMailer',
+            'App\Listeners\SlackInvite',
+            'App\Listeners\MailSubscription',
         ],
     ];
 

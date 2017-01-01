@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\MemberTier;
 use App\Models\MemberStatus;
 use App\Models\PaymentProvider;
+use App\Models\MemberNotification;
 
 class Member extends Model
 {
 
-	protected $fillable = ['name', 'email', 'rfid', 'expire_date', 'member_tier_id', 'member_status_id', 'payment_provider_id'];
+	protected $fillable = ['name', 'email', 'rfid', 'expire_date', 'member_tier_id', 'member_status_id', 'payment_provider_id', 'customer_id'];
 
 	public function memberTier()
 	{
@@ -30,5 +31,10 @@ class Member extends Model
 	public function resources()
 	{
 		return $this->belongsToMany(Resource::class);
+	}
+
+	public function memberNotifications()
+	{
+		return $this->hasMany(MemberNotification::class);
 	}
 }
