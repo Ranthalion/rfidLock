@@ -8,7 +8,7 @@ import time
 class Door(object):
   def __init__(
       self,
-      door_connection, 
+      door_connection,
       port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 3.0),
       lock_pin = 7, # 7 is set as the output to trigure locking the door
       unlock_pin = 8, # 8 is set as the output to trigure unlocking the door
@@ -23,8 +23,8 @@ class Door(object):
     self.port = port
     self.lock_pin = lock_pin
     self.unlock_pin = unlock_pin
-    self.start_tx_pin = 17
-    self.lock_button_pin = 23
+    self.start_tx_pin = start_tx_pin
+    self.lock_button_pin = lock_button_pin
     self.connection = door_connection
   def run(self):
     RPIO.setmode(RPIO.BCM)
@@ -77,4 +77,3 @@ class Door(object):
       if self.door_connection.check_request(x):
         print 'unlocking'
         self.unlock()
-

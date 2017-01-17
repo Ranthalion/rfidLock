@@ -42,7 +42,7 @@ class DoorConnection(object):
       if self.local.have_current(card_data):
         # found locally
         return True
-      elif self.remote.have_current(card_data):
+      if self.remote.have_current(card_data):
         # found remotely, sync 
         self.local.sync(self.remote, card_data)
         return True

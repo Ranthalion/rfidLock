@@ -2,6 +2,7 @@
 # There are certain
 
 import hashlib
+import pdb
 from base64 import b64encode
 from contextlib import closing
 from datetime import datetime
@@ -24,6 +25,12 @@ class MemberDatabase(object):
     self.db = db
     self.subs = subs
     self.table_name = table_name
+
+    try:
+      self.db.autocommit(True)
+    except:
+      pass
+
     # Technically, emails may be 254 characters at most
     self.start_query = u"""
       CREATE TABLE {1} (
@@ -64,22 +71,23 @@ class MemberDatabase(object):
     m.update(card_data)
     # Needs to go through this for Python2 support
     # Binary data is hard to work with across versions
+    print b64encode(m.digest()).decode()
     return b64encode(m.digest()).decode()
   def use_resource(self, resource):
     self.have_query = u"""
-      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND resource='{2}';
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND resource={2};
       """.format(self.subs, self.table_name, resource)
     self.have_current_query = u"""
-      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expiration_date > {0} AND resource='{2}';
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expire_date > {0} AND resource="{2}";
       """.format(self.subs, self.table_name, resource)
     self.list_query = u"""
-      SELECT name, email, expiration_date FROM {1} WHERE resource='{2}';
+      SELECT name, email, expiration_date FROM {1} WHERE resource={2};
       """.format(self.subs, self.table_name, resource)
     self.content_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1} WHERE resource='{2}';
+      SELECT hash, name, email, expiration_date FROM {1} WHERE resource={2};
       """.format(self.subs, self.table_name, resource)
     self.record_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0} AND resource='{2}';
+      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0} AND resource={2};
       """.format(self.subs, self.table_name, resource)
   def add(self, card_data, member_name, member_email, expiration):
     """Adds a new member to the list of members"""
@@ -93,14 +101,22 @@ class MemberDatabase(object):
     """
     with closing(self.db.cursor()) as cur:
       cur.execute(self.have_query, (MemberDatabase.hash(card_data), ))
-      return cur.fetchone()[0] > 0
+      result = cur.fetchone()[0]
+      self.db.commit()
+      print result
+      return result > 0
   def have_current(self, card_data):
     """
     Uses the member's RFID data to check whether they are a current member.
     """
+    #pdb.set_trace()
     with closing(self.db.cursor()) as cur:
       cur.execute(self.have_current_query, (MemberDatabase.hash(card_data), datetime.now()))
-      return cur.fetchone()[0] > 0
+      result = cur.fetchone()[0]
+      self.db.commit()
+      #pdb.set_trace()
+      print result
+      return result > 0
   def list(self):
     """Retrieves a list of all members and former members"""
     with closing(self.db.cursor()) as cur:
