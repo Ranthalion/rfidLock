@@ -1,6 +1,7 @@
 import RPIO
 import serial
 import time
+import logging
 
 # I haven't had access to the reader hardware so I can't really test this live
 # Should create some stubbed out tests though
@@ -13,7 +14,8 @@ class Door(object):
       lock_pin = 7, # 7 is set as the output to trigure locking the door
       unlock_pin = 8, # 8 is set as the output to trigure unlocking the door
       start_tx_pin = 17, # 17 is a gpio tied to the serial output of the rfid reader.the interrupt for
-      lock_button_pin = 23 # 23 works as the input for the button
+      lock_button_pin = 23, # 23 works as the input for the button
+      log = logging
       ):
     # start_tx_pin and lock_button_pin set up as inputs, pulled up to avoid false detection.
     # start_tx_pin is used to determine when the reader starts transmitting
@@ -26,6 +28,7 @@ class Door(object):
     self.start_tx_pin = start_tx_pin
     self.lock_button_pin = lock_button_pin
     self.connection = door_connection
+    self.log = log
   def run(self):
     RPIO.setmode(RPIO.BCM)
     # now we'll define two threaded callback functions
@@ -63,17 +66,17 @@ class Door(object):
     RPIO.output(self.unlock_pin,False)
     self.lock_status = 0
   def lock_button_cb(self, gpio_id, value):
-    print("falling edge detected on 23")
+    self.log.info("falling edge detected on 23\n")
     #send lock signal to door
     self.lock()
   def serial_cb(self, gpio_id, value):
     rcv = self.port.read(16)
     if rcv != '':
       #removing whitespace characters coming from rdif reader
-      x = rcv[1:13]
-      print(x)
+      x = rcv[3:11]
+      self.log.info(str(x))
       #check db for user
       # This is the part swapped in
       if self.door_connection.check_request(x):
-        print 'unlocking'
+        self.log.info('unlocking\n')
         self.unlock()

@@ -21,9 +21,3 @@ setup(
     'rfidLock': ['templates/*.json', 'templates/*.html'],
   })
 
-# TODO Create /etc/rfidlock/config.json
-
-
-# TODO Install templates to /usr/share/rfidlock
-
-

@@ -6,6 +6,7 @@ from mysql.connector import errorcode
 
 import time
 from functools import partial
+import logging
 
 # remote_db = mysql.connector.connect(
 #   host = db_path,
@@ -22,9 +23,10 @@ class DoorConnection(object):
   Currently, just works with the MemberDatabase class to update the local 
   database if a member is missing.
   """
-  def __init__(self, local_member_db, remote_member_db):
+  def __init__(self, local_member_db, remote_member_db, log = logging):
     self.local = local_member_db
     self.remote = remote_member_db
+    self.log = log
   def update(self):
     """Updates the local database to match the remote database"""
     self.local.mimic(self.remote)
@@ -41,12 +43,15 @@ class DoorConnection(object):
       # Check the local database first
       if self.local.have_current(card_data):
         # found locally
+        self.log.info('User Found Cached')
         return True
       if self.remote.have_current(card_data):
         # found remotely, sync 
+        self.log.info('User Found Remotely')
         self.local.sync(self.remote, card_data)
         return True
       else:
+        self.log.info('User Not Found')
         # reject
         return False
     except mysql.connector.errors.OperationalError as e:
@@ -54,7 +59,6 @@ class DoorConnection(object):
         # Attempt to recover
         if self.recover():
           return self.checkRequest(card_data)
-      print(e)
       return False
     except mysql.connector.errors.DatabaseError as e:
       return False

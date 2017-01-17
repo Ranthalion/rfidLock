@@ -37,32 +37,32 @@ class MemberDatabase(object):
         hash CHAR(24),
         name TEXT,
         email VARCHAR(254),
-        expiration_date DATE,
+        expire_date DATE,
         CONSTRAINT pk_hash PRIMARY KEY(hash));
       """.format(subs, table_name)
     self.destroy_query = u"""
       DROP TABLE {1};
       """.format(subs, table_name)
     self.add_query = u"""
-      INSERT INTO {1} (name, email, hash, expiration_date) VALUES ({0}, {0}, {0}, {0});
+      INSERT INTO {1} (name, email, hash, expire_date) VALUES ({0}, {0}, {0}, {0});
       """.format(subs, table_name)
     self.have_query = u"""
       SELECT COUNT(hash) FROM {1} WHERE hash={0};
       """.format(subs, table_name)
     self.have_current_query = u"""
-      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expiration_date > {0};
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expire_date > {0};
       """.format(subs, table_name)
     self.list_query = u"""
-      SELECT name, email, expiration_date FROM {1};
+      SELECT name, email, expire_date FROM {1};
       """.format(subs, table_name)
     self.content_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1};
+      SELECT hash, name, email, expire_date FROM {1};
       """.format(subs, table_name)
     self.record_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0};
+      SELECT hash, name, email, expire_date FROM {1} WHERE hash={0};
       """.format(subs, table_name)
     self.clone_query = u"""
-      INSERT INTO {1} (hash, name, email, expiration_date) VALUES ({0}, {0}, {0}, {0});
+      INSERT INTO {1} (hash, name, email, expire_date) VALUES ({0}, {0}, {0}, {0});
       """.format(subs, table_name)
   @staticmethod
   def hash(card_data):
@@ -78,16 +78,16 @@ class MemberDatabase(object):
       SELECT COUNT(hash) FROM {1} WHERE hash={0} AND resource={2};
       """.format(self.subs, self.table_name, resource)
     self.have_current_query = u"""
-      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expire_date > {0} AND resource="{2}";
+      SELECT COUNT(hash) FROM {1} WHERE hash={0} AND expire_date > {0} AND resource='{2}';
       """.format(self.subs, self.table_name, resource)
     self.list_query = u"""
-      SELECT name, email, expiration_date FROM {1} WHERE resource={2};
+      SELECT name, email, expire_date FROM {1} WHERE resource='{2}';
       """.format(self.subs, self.table_name, resource)
     self.content_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1} WHERE resource={2};
+      SELECT hash, name, email, expire_date FROM {1} WHERE resource='{2}';
       """.format(self.subs, self.table_name, resource)
     self.record_query = u"""
-      SELECT hash, name, email, expiration_date FROM {1} WHERE hash={0} AND resource={2};
+      SELECT hash, name, email, expire_date FROM {1} WHERE hash={0} AND resource='{2}';
       """.format(self.subs, self.table_name, resource)
   def add(self, card_data, member_name, member_email, expiration):
     """Adds a new member to the list of members"""
