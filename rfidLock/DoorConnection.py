@@ -6,7 +6,7 @@ from mysql.connector import errorcode
 
 import time
 from functools import partial
-import logger
+import logging
 
 # remote_db = mysql.connector.connect(
 #   host = db_path,
@@ -23,7 +23,7 @@ class DoorConnection(object):
   Currently, just works with the MemberDatabase class to update the local 
   database if a member is missing.
   """
-  def __init__(self, local_member_db, remote_member_db, log = logger):
+  def __init__(self, local_member_db, remote_member_db, log = logging):
     self.local = local_member_db
     self.remote = remote_member_db
     self.log = log
