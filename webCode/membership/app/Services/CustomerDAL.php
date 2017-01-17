@@ -34,10 +34,9 @@ class CustomerDAL
           $payment->provider = 1;
 
         $customer = Customer::updateOrCreate(
-          [ 'email' => $payment->email,
-            'name' => $payment->name
-          ], 
-          [ 'last_payment_date' => $payment->paymentDate, 
+          [ 'email' => $payment->email], 
+          ['name' => $payment->name,
+            'last_payment_date' => $payment->paymentDate, 
             'last_payment_amount' => $payment->amount,
             'payment_provider_id' => $payment->provider,
             'next_payment_date' => $nextPayment,

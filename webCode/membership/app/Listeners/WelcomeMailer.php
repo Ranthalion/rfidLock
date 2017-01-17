@@ -30,6 +30,6 @@ class WelcomeMailer implements ShouldQueue
      */
     public function handle(MemberAdded $event)
     {
-        Mail::to($event->member->email)->send(new Welcome($event->member));
+        Mail::to($event->member->email)->bcc("Michael.Lane@hackrva.org")->send(new Welcome($event->member));
     }
 }
