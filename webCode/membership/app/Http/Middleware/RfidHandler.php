@@ -17,7 +17,19 @@ class RfidHandler
     {
         if ($request->has('rfid')) {
             $input = $request->all();
-            $input['rfid'] = base64_encode(md5($input['rfid'], true));
+            
+            $rfid = $input['rfid'];
+            
+            //Convert to hex
+            $rfid = dechex($rfid);
+            
+            //Convert back to string and pad with '0' to 8 characters 
+            $rfid = str_pad(strtoupper($rfid), 8, '0', STR_PAD_LEFT);
+
+            //md5 hash and base64 encode it.
+            $rfid = base64_encode(md5($rfid, true));
+
+            $input['rfid'] = $rfid;
             $request->replace($input);
         }
 

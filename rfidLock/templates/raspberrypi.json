@@ -6,7 +6,7 @@
   "lock_pin": 7,
   "unlock_pin": 8,
   "start_tx_pin": 17,
-  "lock_button_pin": 23,
+  "lock_button_pin": 18,
   "resource": "{{ resource }}",
   "table_name": "{{ table_name }}",
   "local_database": "{{ sqlite }}",

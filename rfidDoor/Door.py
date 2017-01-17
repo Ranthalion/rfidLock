@@ -9,7 +9,7 @@ import logging
 class Door(object):
   def __init__(
       self,
-      door_connection, 
+      door_connection,
       port = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout = 3.0),
       lock_pin = 7, # 7 is set as the output to trigure locking the door
       unlock_pin = 8, # 8 is set as the output to trigure unlocking the door
@@ -80,4 +80,3 @@ class Door(object):
       if self.door_connection.check_request(x):
         self.log.info('unlocking\n')
         self.unlock()
-

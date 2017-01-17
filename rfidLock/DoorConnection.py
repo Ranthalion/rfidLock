@@ -45,7 +45,7 @@ class DoorConnection(object):
         # found locally
         self.log.info('User Found Cached')
         return True
-      elif self.remote.have_current(card_data):
+      if self.remote.have_current(card_data):
         # found remotely, sync 
         self.log.info('User Found Remotely')
         self.local.sync(self.remote, card_data)
