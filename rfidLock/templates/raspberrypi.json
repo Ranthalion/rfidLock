@@ -10,6 +10,7 @@
   "resource": "{{ resource }}",
   "table_name": "{{ table_name }}",
   "local_database": "{{ sqlite }}",
+  "client_log": "/var/log/rfid_client.log",
   "database": {
     "user": "{{ mysql[0] }}",
     "password": "{{ mysql[1] }}",

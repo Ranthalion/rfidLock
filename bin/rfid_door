@@ -6,6 +6,7 @@ import json
 import serial
 import mysql.connector
 import sqlite3
+import logging
 
 # TODO Allow configuring pins and serial communication via JSON
 config_path = '/etc/rfidlock/config.json'
@@ -15,9 +16,12 @@ try:
     config = json.load(db_config)
   local_db = MemberDatabase(sqlite3.connect(config['local_database']), '?')
   remote_db = MemberDatabase(mysql.connector.connect(**config['database']), '%s', config['table_name'])
+  if 'client_log' in config:
+    logging.basicConfig(filename = config['client_log'], format="%(levelname)s:%(message)s", level=logging.INFO)
   if 'resource' in config:
     remote_db.use_resource(config['resource'])
-  door_connection = DoorConnection(local_db, remote_db)
+  door_connection = DoorConnection(local_db, remote_db, logging)
+  logging.info("=== STARTING CLIENT LOG ===")
   Door(
     door_connection,
     serial.Serial(
@@ -27,7 +31,9 @@ try:
     config['lock_pin'],
     config['unlock_pin'],
     config['start_tx_pin'],
-    config['lock_button_pin']).run()
+    config['lock_button_pin'],
+    logging).run()
+  logging.info("=== ENDING CLIENT LOG ===")
 except OSError:
   print('Config file must exist to start the RFID lock')
 except IndexError:
