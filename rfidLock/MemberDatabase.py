@@ -2,7 +2,6 @@
 # There are certain
 
 import hashlib
-import pdb
 from base64 import b64encode
 from contextlib import closing
 from datetime import datetime
@@ -109,13 +108,10 @@ class MemberDatabase(object):
     """
     Uses the member's RFID data to check whether they are a current member.
     """
-    #pdb.set_trace()
     with closing(self.db.cursor()) as cur:
       cur.execute(self.have_current_query, (MemberDatabase.hash(card_data), datetime.now()))
       result = cur.fetchone()[0]
       self.db.commit()
-      #pdb.set_trace()
-      print result
       return result > 0
   def list(self):
     """Retrieves a list of all members and former members"""
