@@ -39,7 +39,7 @@ class RfidHandler
             $str .= chr(hexdec($byte[3]));
 
             //md5 hash and base64 encode it.
-            $rfid = base64_encode(md5($rfid, true));
+            $rfid = base64_encode(md5($str, true));
 
             $input['rfid'] = $rfid;
             $request->replace($input);
