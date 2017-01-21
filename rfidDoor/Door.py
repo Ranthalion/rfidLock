@@ -76,11 +76,11 @@ class Door(object):
       x = rcv[3:11]
       self.log.info(str(x))
       # Convert hex to 32-bit, big endian binary representation
-      x = bytes(bytearray(
-        int(x[0:1], 16),
-        int(x[2:3], 16),
-        int(x[4:5], 16),
-        int(x[6:7], 16)))
+      x = bytes(bytearray([
+        int(x[0:2], 16),
+        int(x[2:4], 16),
+        int(x[4:6], 16),
+        int(x[6:8], 16)]))
       #check db for user
       # This is the part swapped in
       if self.door_connection.check_request(x):
