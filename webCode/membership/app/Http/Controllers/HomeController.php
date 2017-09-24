@@ -10,6 +10,7 @@ use App\Services\PaymentImporter;
 use Illuminate\Support\Facades\Redirect;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Input;
 
 use App\Models\Member;
 use App\Models\MemberTier;
@@ -171,6 +172,38 @@ class HomeController extends Controller
             Session::flash('error', 'Unable to register member.  Please try again.');   
         }
         return redirect('/');
+    }
+
+    public function verify(Request $request)
+    {
+        $rfid = Input::get('rfid');
+        $encryptedrfid = Input::get('encryptedrfid');
+        $resource = Input::get('resource');
+
+        $result = (object)['verified' => false];
+     
+        if($resource != null && ($rfid != null || $encryptedrfid != null))
+        {
+            if($rfid == null) 
+            {
+                $rfid = $encryptedrfid;
+            }
+
+            $member = Member::where('rfid', $rfid)
+                ->whereHas('resources', function($q) use ($resource)
+                {
+                    $q->where('description', $resource);
+                })
+                ->first();
+
+            if ($member)
+            {            
+                $result->verified = true;
+            }
+        }
+
+        return json_encode($result);
+        
     }
 
 }
