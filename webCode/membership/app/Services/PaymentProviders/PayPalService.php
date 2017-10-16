@@ -80,10 +80,11 @@ class PayPalService
         $paypalResponse = array();
         parse_str($response,$paypalResponse);
 
-        if (isset($paypalResponse["L_ERRORCODE0"]))
-        {
-            throw new \Exception('PayPal Error: '.$response);
-        }
+        //TODO: Figure out if paypal has changed the stuff
+        //if (isset($paypalResponse["L_ERRORCODE0"]))
+        //{
+        //    throw new \Exception('PayPal Error: '.$response);
+        //}
         
         $payments = array();
         $i = 0;
