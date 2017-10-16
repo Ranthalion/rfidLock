@@ -16,7 +16,10 @@ use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
 use App\Models\Resource;
+use App\Models\EventLog;
+use App\Models\EventType;
 use App\Events\MemberAdded;
+
 use Session;
 use DateTime;
 use DateInterval;
@@ -196,10 +199,21 @@ class HomeController extends Controller
                 })
                 ->first();
 
+            $event = new EventLog;
+            $event->rfid = $rfid;
+            
+            $event->data = $resource;
+
             if ($member)
-            {            
+            {
+                $event->event_type_id = EventType::find(1)->id;       
                 $result->verified = true;
             }
+            else
+            {
+                $event->event_type_id = EventType::find(2)->id;
+            }
+            $event->save();
         }
 
         return json_encode($result);
