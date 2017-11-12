@@ -82,3 +82,24 @@ sudo pip install rfidLock/
 # TODO, establish a daemon that handles the RFID lock and enable it on start-up
 ```
 
+## Web API
+
+### GET /api/verify  
+Verifies access to a resource by rfid  
+#### Consumes** 
+This API call consumes the following media types via the Content-Type request header:  
+application/x-www-form-urlencoded  
+#### Query parameters  
+**resource (required)**  
+Query Parameter — The name of the resource being requested  
+**encryptedrfid (optional)**  
+Query Parameter — The encoded rfid value  
+**rfid (optional)**  
+Query Parameter — The raw, unencoded rfid value  
+#### Return type  
+Content-Type: application/json  
+```
+{
+  "verified" : false
+}
+```
