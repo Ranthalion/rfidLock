@@ -86,7 +86,7 @@ sudo pip install rfidLock/
 
 ### GET /api/verify  
 Verifies access to a resource by rfid  
-#### Consumes** 
+#### Consumes 
 This API call consumes the following media types via the Content-Type request header:  
 application/x-www-form-urlencoded  
 #### Query parameters  
