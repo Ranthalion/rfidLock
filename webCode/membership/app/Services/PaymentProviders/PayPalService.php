@@ -20,12 +20,12 @@ class PayPalService
 	    $this->pwd = env("PAYPAL_PWD");
 	    $this->signature = env("PAYPAL_SIGNATURE");
 	    $this->version = env("PAYPAL_VERSION");
-	    $this->url = env("PAYPAL_URL");  
+	    $this->url = env("PAYPAL_URL");
   	}
 
   	public function findMember($email)
   	{
-  		$startDate = new DateTime;
+  			$startDate = new DateTime;
         $startDate->sub(new DateInterval("P35D"));
         $startDate = $startDate->format(DateTime::ATOM);
 
@@ -46,14 +46,22 @@ class PayPalService
         	$result->amount = $response["L_AMT0"];
         	$result->status = "Success";
         }
-		
+
 		return $result;
         */
   	}
 
-	public function searchTransactions($startDate, $email)
-	{
-		$ch = curl_init();
+		public function searchTransactions($startDate, $email)
+		{
+				$endDate = new DateTime;
+				$endDate = $endDate->add(new DateInterval("P1D"));
+        $endDate = $endDate->format(DateTime::ATOM);
+				return $this->findTransactions($startDate, $endDate, $email);
+		}
+
+		public function findTransactions($startDate, $endDate, $email)
+		{
+				$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_VERBOSE, 1);
         //turning off the server and peer verification(TrustManager Concept).
@@ -68,7 +76,7 @@ class PayPalService
         $params = $params."&VERSION=".urlencode("204");
         $params = $params."&METHOD=TransactionSearch";
         $params = $params."&STARTDATE=".urlencode($startDate);
-        
+
         if ($email != null)
         {
             $params = $params."&EMAIL=".urlencode($email);
@@ -85,7 +93,7 @@ class PayPalService
         //{
         //    throw new \Exception('PayPal Error: '.$response);
         //}
-        
+
         $payments = array();
         $i = 0;
         while(array_key_exists("L_TRANSACTIONID".$i, $paypalResponse))
@@ -122,4 +130,3 @@ class PayPalService
         }
     }
 }
-

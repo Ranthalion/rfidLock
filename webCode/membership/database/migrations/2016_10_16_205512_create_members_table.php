@@ -34,6 +34,7 @@ class CreateMembersTable extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description');
+            $table->string('device_identifier')->nullable();
             $table->timestamps();
         });
 
@@ -84,13 +85,13 @@ on mr.resource_id = r.id;' );
     public function down()
     {
         DB::statement('Drop View member_table;');
-        
+
         Schema::dropIfExists('member_resource');
         Schema::dropIfExists('members');
         Schema::dropIfExists('member_statuses');
         Schema::dropIfExists('member_tiers');
         Schema::dropIfExists('payment_providers');
-        
+
         Schema::dropIfExists('resources');
 
     }

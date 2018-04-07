@@ -29,20 +29,31 @@ class PaymentImporter
     $startDate->sub(new \DateInterval("P".$days."D"));
     $startDate = $startDate->format(\DateTime::ATOM);
 
-    $customer_payments = $this->getCustomerPayments($startDate);
+		$endDate = new DateTime;
+		$endDate = $endDate->add(new DateInterval("P1D"));
+		$endDate = $endDate->format(DateTime::ATOM);
+
+		return $this->importByDateRange($startDate, $endDate);
+	}
+
+	public function importByDateRange($startDate, $endDate)
+	{
+
+		$paypal = new PayPalService;
+		$customer_payments = $paypal->searchTransactions($startDate, $endDate);
 
     $dal = new CustomerDAL;
 
     foreach($customer_payments as $payment)
     {
       $customer = null;
-      
+
       if ($payment->paymentDate != null && $payment->amount != null)
-      {        
+      {
         if (filter_var($payment->email, FILTER_VALIDATE_EMAIL))
         {
 
-          $payment->paymentDate = new \DateTimeImmutable($payment->paymentDate);          
+          $payment->paymentDate = new \DateTimeImmutable($payment->paymentDate);
           $dal->SaveCustomerPayment($payment);
         }
         else
@@ -58,10 +69,16 @@ class PaymentImporter
 
 	public function getCustomerPayments($startDate)
 	{
-    $qbo = new QuickbooksService;        
+    /*
+		try {
+			$qbo = new QuickbooksService;
+			$qboPayments = $qbo->getCustomerPayments($startDate);
+		} catch (Exception $e) {
+			//Ignore because Quickbooks sucks
+		}
+		*/
+		$qboPayments = [];
     $paypal = new PayPalService;
-
-    $qboPayments = $qbo->getCustomerPayments($startDate);
     $paypalPayments = $paypal->searchTransactions($startDate, null);
 
     return array_merge($qboPayments, $paypalPayments);
@@ -69,7 +86,7 @@ class PaymentImporter
 
   public function updateCustomerStatus()
   {
-    $query='Update customers c 
+    $query='Update customers c
       inner join (Select customer_id, date, amount, payment_provider_id, (date + INTERVAL 1 MONTH) as \'next_payment\'
         from payments
         where created_at  >= CURDATE() && created_at < (CURDATE() + INTERVAL 1 DAY)) p
@@ -78,7 +95,7 @@ class PaymentImporter
         c.last_payment_date = p.date,
         c.last_payment_amount = p.amount,
           c.next_payment_date = p.next_payment;';
-  
+
     \DB::update($query);
 
     $query = 'Update members m
@@ -104,10 +121,10 @@ class PaymentImporter
         on c.payment_provider_id = pp.id
         inner join members m
         on c.id = m.customer_id
-        left join payments p 
+        left join payments p
         on c.id = p.customer_id
           and p.date >= :payment_date
-        left join member_notifications n 
+        left join member_notifications n
         on m.id = n.member_id
           and n.notification_date >= :notification_date
         where pp.description = \'Quickbooks\'
@@ -120,7 +137,7 @@ class PaymentImporter
 
     foreach($failedPayments as $payment)
     {
-      
+
       $member = Member::find($payment->id);
       $notification = new MemberNotification;
       $notification->notification_type_id = 2;
@@ -129,7 +146,7 @@ class PaymentImporter
 
       \Mail::to($member)
         ->bcc('info@hackrva.org')
-        ->queue(new FailedQuickbooksPayment($member));      
+        ->queue(new FailedQuickbooksPayment($member));
     }
   }
 
@@ -145,7 +162,7 @@ class PaymentImporter
 
     $query = 'Select m.id, m.email, m.name, m.expire_date
       from members m
-      left join member_notifications n 
+      left join member_notifications n
       on m.id = n.member_id
         and n.notification_type_id = 4
         and n.notification_date >= :notification_threshold
@@ -157,7 +174,7 @@ class PaymentImporter
 
     foreach($pending as $p)
     {
-      
+
       $member = Member::find($p->id);
       $notification = new MemberNotification;
       $notification->notification_type_id = 4;
@@ -166,7 +183,7 @@ class PaymentImporter
 
       \Mail::to($member)
         ->bcc('info@hackrva.org')
-        ->queue(new PendingRevokation($member));      
+        ->queue(new PendingRevokation($member));
     }
 
   }

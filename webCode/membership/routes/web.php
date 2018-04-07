@@ -15,6 +15,16 @@ Route::get('/', 'HomeController@addMember');
 Route::post('/validate', 'HomeController@checkForPayment')->name('home.validate');
 Route::get('/confirm', 'HomeController@confirmMember')->name('home.confirm');
 Route::post('/store', 'HomeController@storeMember')->name('home.store');
+Route::get('/membership', function(){
+  return redirect('/');
+});
+Route::get('/avea.php', 'AveaController@verify');
+Route::get('/avea.pl', 'AveaController@verify');
+Route::get('/avea.asp', 'AveaController@verify');
+Route::get('/avea.cfm', 'AveaController@verify');
+Route::get('/avea.htm', 'AveaController@verify');
+Route::get('/avea.html', 'AveaController@verify');
+Route::get('/avea.aspx', 'AveaController@verify');
 
 Auth::routes();
 
@@ -32,4 +42,3 @@ Route::get('reports/payments', 'ReportsController@payments')->name('reports.paym
 Route::resource('members', 'MemberController', ['except' => ['show']]);
 
 Route::resource('resources', 'ResourceController');
-

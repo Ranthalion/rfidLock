@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\GetPayments::class,
         Commands\FailedQuickbooksPayments::class,
-        Commands\PendingRevokation::class
+        Commands\PendingRevokation::class,
+        Commands\ImportPayments::class
     ];
 
     /**
