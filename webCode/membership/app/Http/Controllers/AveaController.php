@@ -104,7 +104,7 @@ class AveaController extends Controller
 
         $event = new EventLog;
         $event->rfid = $resourceId; //or should it be $deviceId?
-        $event->data = $request->fullUrl();
+        $event->data = mb_strimwidth($request->fullUrl(), 0, 254);
         $event->event_type_id = EventType::find(5)->id;
         $event->save();
       break;
@@ -114,7 +114,7 @@ class AveaController extends Controller
         //TODO: [ML] Determine if a switch on the device should mean something
         $event = new EventLog;
         $event->rfid = $resourceId; //or should it be $deviceId?
-        $event->data = $request->fullUrl();
+        $event->data = mb_strimwidth($request->fullUrl(), 0, 254);
         $event->event_type_id = EventType::find(6)->id;
         $event->save();
       break;
@@ -123,7 +123,7 @@ class AveaController extends Controller
       case "PG":
         $event = new EventLog;
         $event->rfid = $resourceId; //or should it be $deviceId?
-        $event->data = $request->fullUrl();
+        $event->data = mb_strimwidth($request->fullUrl(), 0, 254);
         $event->event_type_id = EventType::find(7)->id;
         $event->save();
       break;
