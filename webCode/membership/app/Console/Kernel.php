@@ -16,7 +16,9 @@ class Kernel extends ConsoleKernel
         Commands\GetPayments::class,
         Commands\FailedQuickbooksPayments::class,
         Commands\PendingRevokation::class,
-        Commands\ImportPayments::class
+        Commands\ImportPayments::class,
+        Commands\RenewalEmail::class,
+        Commands\search::class
     ];
 
     /**

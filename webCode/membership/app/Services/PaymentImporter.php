@@ -40,13 +40,13 @@ class PaymentImporter
 	{
 
 		$paypal = new PayPalService;
-		$customer_payments = $paypal->searchTransactions($startDate, $endDate);
+		$customer_payments = $paypal->findTransactions($startDate, $endDate, null);
 
-    $dal = new CustomerDAL;
+		$dal = new CustomerDAL;
 
     foreach($customer_payments as $payment)
     {
-      $customer = null;
+		  $customer = null;
 
       if ($payment->paymentDate != null && $payment->amount != null)
       {

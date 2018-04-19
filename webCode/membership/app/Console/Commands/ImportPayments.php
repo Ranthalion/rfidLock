@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\PaymentImporter;
+use DateTime;
 
 class ImportPayments extends Command
 {
@@ -43,9 +44,10 @@ class ImportPayments extends Command
      */
     public function handle()
     {
-        $startDate = $this->argument('startDate');
-        $endDate = $this->argument('startDate');
-        $this->info("Querying payments.");
+        $startDate = DateTime::createFromFormat('Y-m-d', $this->argument('startDate'))->format(DateTime::ATOM);
+        $endDate = DateTime::createFromFormat('Y-m-d', $this->argument('endDate'))->format(DateTime::ATOM);
+
+        $this->info("Querying payments from ".$startDate." to ".$endDate);
         $this->paymentImporter->importByDateRange($startDate, $endDate);
         $this->info("Payments imported.");
     }

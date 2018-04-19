@@ -3,7 +3,7 @@
 <p>{{$member->name}},</p>
 
 <p>Welcome to HackRVA!</p>
- 
+
 <p>
 Check out the <a href="https://docs.google.com/document/d/114RXi-QmGY9xcnHR4RAjVbPXWgotre8iOJuLpGTKIBo/edit?usp=sharing" target="_blank">New Member Manual</a>
 </p>
@@ -14,10 +14,10 @@ Here's some basic good stuff to know -
 <ul>
 	<li>
 		<p>
-			Join the <a href="http://lists.hackrva.org/listinfo.cgi/hack.rva-hackrva.org" target="_blank">mailing list</a>
+      Join our <a href="https://hackrva.slack.com/" target="_blank">Slack channel</a> when you receive the invitation.
 		</p>
 		<p>
-			It can be messy and it's not for everyone, but it's probably the most real time communication that goes on with the space other than being at the space physically on our peak busy days, which are usually Thursdays(open house) and Saturdays(weekly hackathons).
+			Slack is our primary avenue for real-time communication other than being at the space physically on our peak busy days, which are usually Thursdays(open house) and Saturdays(weekly hackathons).
 		</p>
 	</li>
 
