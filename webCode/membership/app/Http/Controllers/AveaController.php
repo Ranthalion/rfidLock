@@ -18,8 +18,8 @@ use App\Models\PaymentProvider;
 use App\Models\Resource;
 use App\Models\EventLog;
 use App\Models\EventType;
-use App\Events\MemberAdded;
 
+use App\Events\MemberAdded;
 use Session;
 use DateTime;
 use DateInterval;
@@ -101,7 +101,6 @@ class AveaController extends Controller
       //Heart Beat
       case "HB":
         $payload = "CK={$st}";
-
         $event = new EventLog;
         $event->rfid = $resourceId; //or should it be $deviceId?
         $event->data = mb_strimwidth($request->fullUrl(), 0, 254);
@@ -121,6 +120,7 @@ class AveaController extends Controller
 
       //Ping
       case "PG":
+        $payload="HB=0160";
         $event = new EventLog;
         $event->rfid = $resourceId; //or should it be $deviceId?
         $event->data = mb_strimwidth($request->fullUrl(), 0, 254);
@@ -130,7 +130,7 @@ class AveaController extends Controller
 
     }
 
-    return "<AVEA>{$payload}</AVEA>";
+    return "<html>\n<body>\n<AVEA>{$payload}</AVEA>\n</body>\n</html>\n";
 
   }
 
