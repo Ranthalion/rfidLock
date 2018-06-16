@@ -1,0 +1,66 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# RTE24005F
+#
+DEF RTE24005F K 0 40 N Y 1 L N
+F0 "K" -403 403 50 H V L BNN
+F1 "RTE24005F" -402 -704 50 H V L BNN
+F2 "RELAY_RTE24005F" 0 0 50 H I L BNN
+F3 "TE Connectivity" 0 0 50 H I L BNN
+F4 "None" 0 0 50 H I L BNN
+F5 "https://www.digikey.com/product-detail/en/te-connectivity-potter-brumfield-relays/RTE24005F/PB295-ND/254512?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol" 0 0 50 H I L BNN
+F6 "PB295-ND" 0 0 50 H I L BNN
+F7 "http://www.te.com/usa-en/product-4-1419108-0.html" 0 0 50 H I L BNN
+F8 "RTE24005F" 0 0 50 H I L BNN
+F9 "400 VAC" 0 0 50 H I L BNN
+F10 "RTE24005F" 0 0 50 H I L BNN
+F11 "RTE24005F _4-1419108-0_" 0 0 50 H I L BNN
+F12 "8 A" 0 0 50 H I L BNN
+DRAW
+P 2 0 0 10 -200 100 -200 270 N
+P 2 0 0 10 -200 270 -430 270 N
+P 2 0 0 10 -430 270 -430 10 N
+P 2 0 0 10 -430 10 -520 10 N
+P 2 0 0 10 -520 10 -520 -90 N
+P 2 0 0 10 -520 -90 -430 -90 N
+P 2 0 0 10 -430 -90 -330 -90 N
+P 2 0 0 10 -330 -90 -330 10 N
+P 2 0 0 10 -330 10 -430 10 N
+P 2 0 0 10 -430 -90 -430 -380 N
+P 2 0 0 10 -430 -380 -200 -380 N
+P 2 0 0 10 -200 -380 -200 -200 N
+C -200 -200 10 0 0 16 N
+P 2 0 0 10 0 -370 0 -200 N
+P 2 0 0 10 400 -370 400 -200 N
+P 2 0 0 10 0 270 0 100 N
+P 2 0 0 10 400 270 400 100 N
+P 2 0 0 10 200 -260 200 -200 N
+P 2 0 0 10 200 170 200 100 N
+P 2 0 0 10 0 270 120 270 N
+P 2 0 0 10 200 170 110 290 N
+P 2 0 0 10 280 270 400 270 N
+P 2 0 0 10 0 -370 120 -370 N
+C -200 100 10 0 0 16 N
+P 2 0 0 10 200 -260 100 -400 N
+P 2 0 0 10 280 -370 400 -370 N
+C 0 100 10 0 0 16 N
+C 200 100 10 0 0 16 N
+C 400 100 10 0 0 16 N
+C 0 -200 10 0 0 16 N
+C 200 -200 10 0 0 16 N
+C 400 -200 10 0 0 16 N
+X A1 A1 -200 100 0 L 40 40 0 0 P 
+X 12 12 0 100 100 U 40 40 0 0 P 
+X 11 11 200 100 0 U 40 40 0 0 P 
+X 14 14 400 100 100 U 40 40 0 0 P 
+X 24 24 400 -200 100 D 40 40 0 0 P 
+X 21 21 200 -200 0 D 40 40 0 0 P 
+X 22 22 0 -200 100 D 40 40 0 0 P 
+X A2 A2 -200 -200 0 L 40 40 0 0 P 
+ENDDRAW
+ENDDEF
+#
+# End Library

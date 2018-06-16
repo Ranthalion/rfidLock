@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name RTE24005F)(type Legacy)(uri "$(KIPRJMOD)/parts/RTE24005F.mod")(options "")(descr ""))
+  (lib (name button_smd_2_pin)(type KiCad)(uri "$(KIPRJMOD)/parts/button_smd_2_pin.pretty")(options "")(descr ""))
+)
