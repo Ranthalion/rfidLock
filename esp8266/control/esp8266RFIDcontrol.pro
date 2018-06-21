@@ -1,6 +1,10 @@
-update=6/12/2018 9:27:25 PM
+update=6/17/2018 5:06:15 PM
 version=1
-last_client=kicad
+last_client=eeschema
+[general]
+version=1
+RootSch=
+BoardNm=
 [pcbnew]
 version=1
 LastNetListRead=
@@ -23,11 +27,9 @@ ModuleOutlineThickness=0.150000000000
 [cvpcb]
 version=1
 NetIExt=net
-[general]
-version=1
 [eeschema]
 version=1
-LibDir=../reader/parts/rfid_125_module.pretty
+LibDir=
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -61,5 +63,6 @@ LibName29=opto
 LibName30=atmel
 LibName31=contrib
 LibName32=valves
-LibName33=parts/RTE24005F
-LibName34=rfid_module_125_khz
+LibName33=parts/esp-control.pretty/RTE24005F
+LibName34=parts/esp-control.pretty/tps561208
+LibName35=parts/esp-control.pretty/lolinesp8266
