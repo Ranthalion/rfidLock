@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>D:/Projects/rfidLock/esp8266/control/esp8266RFIDcontrol.sch</source>
+    <date>7/3/2018 6:52:54 PM</date>
+    <tool>Eeschema 4.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>esp8266RFIDcontrol.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="D3">
+      <value>LED_WIFI</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DBBEB</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>460</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DBE33</tstamp>
+    </comp>
+    <comp ref="R6">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DBFC4</tstamp>
+    </comp>
+    <comp ref="Q1">
+      <value>Q_PNP_CBE</value>
+      <footprint>TO_SOT_Packages_SMD:SOT-23_Handsoldering</footprint>
+      <libsource lib="device" part="Q_PNP_CBE"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DC12A</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>C_STRIKE</value>
+      <footprint>Connectors_Terminal_Blocks:TerminalBlock_bornier-2_P5.08mm</footprint>
+      <libsource lib="conn" part="Conn_01x02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DC77D</tstamp>
+    </comp>
+    <comp ref="SW1">
+      <value>SW_RESET</value>
+      <footprint>button_smd_2_pin:button_smd_2_pin</footprint>
+      <libsource lib="switches" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DD648</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DD76B</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>C_DOOR</value>
+      <footprint>jst:CONNECTOR_JST_SH_2</footprint>
+      <libsource lib="conn" part="Conn_01x02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1DDD86</tstamp>
+    </comp>
+    <comp ref="K1">
+      <value>RTE24005F</value>
+      <footprint>esp-control:RTE24005F</footprint>
+      <datasheet>TE Connectivity</datasheet>
+      <fields>
+        <field name="Field4">None</field>
+        <field name="Field5">https://www.digikey.com/product-detail/en/te-connectivity-potter-brumfield-relays/RTE24005F/PB295-ND/254512?utm_source=snapeda&amp;utm_medium=aggregator&amp;utm_campaign=symbol</field>
+        <field name="Field6">PB295-ND</field>
+        <field name="Field7">http://www.te.com/usa-en/product-4-1419108-0.html</field>
+        <field name="Field8">RTE24005F</field>
+        <field name="Field9">400 VAC</field>
+        <field name="Field10">RTE24005F</field>
+        <field name="Field11">RTE24005F _4-1419108-0_</field>
+        <field name="Field12">8 A</field>
+      </fields>
+      <libsource lib="RTE24005F" part="RTE24005F"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B1F1F2A</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>10uF</value>
+      <footprint>Capacitors_SMD:C_1210_HandSoldering</footprint>
+      <fields>
+        <field name="VDC">25v</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C1C3</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>0.1uF</value>
+      <footprint>Capacitors_SMD:C_1206_HandSoldering</footprint>
+      <fields>
+        <field name="VDC">25v</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C235</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>47uF</value>
+      <footprint>Capacitors_SMD:C_1210_HandSoldering</footprint>
+      <fields>
+        <field name="VDC">25v</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C283</tstamp>
+    </comp>
+    <comp ref="L1">
+      <value>4.7uH</value>
+      <footprint>Inductors_SMD:L_Wuerth_HCI-5040</footprint>
+      <fields>
+        <field name="IDC">4.4A</field>
+        <field name="DCR">0.025 Ohm</field>
+      </fields>
+      <libsource lib="device" part="L"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C31E</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>54.9k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <fields>
+        <field name="Tolerance">1%</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C389</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>10k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <fields>
+        <field name="Tolerance">1%</field>
+      </fields>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C41C</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>TPS561208</value>
+      <footprint>TO_SOT_Packages_SMD:SOT-23-6_Handsoldering</footprint>
+      <libsource lib="tps561208" part="TPS561208"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26C819</tstamp>
+    </comp>
+    <comp ref="J4">
+      <value>C_PWR</value>
+      <footprint>jst:CONNECTOR_JST_SH_2</footprint>
+      <libsource lib="conn" part="Conn_01x02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B2700E5</tstamp>
+    </comp>
+    <comp ref="J3">
+      <value>Conn_01x05</value>
+      <footprint>jst:CONNECTOR_JST_SH_5</footprint>
+      <libsource lib="conn" part="Conn_01x05"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B27081A</tstamp>
+    </comp>
+    <comp ref="U2">
+      <value>LoLinESP8266</value>
+      <footprint>esp-control:LOLIN_NODEMCU</footprint>
+      <libsource lib="lolinesp8266" part="LoLinESP8266"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B27191B</tstamp>
+    </comp>
+    <comp ref="J5">
+      <value>Barrel_Jack</value>
+      <footprint>Connectors:BARREL_JACK</footprint>
+      <libsource lib="conn" part="Barrel_Jack"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B26EC40</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="conn" part="Barrel_Jack">
+      <aliases>
+        <alias>Jack-DC</alias>
+      </aliases>
+      <description>DC Barrel Jack</description>
+      <docs>~</docs>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Barrel_Jack</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Conn_01x02">
+      <description>Generic connector, single row, 01x02</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_??x*mm*</fp>
+        <fp>Connector*:*1x??x*mm*</fp>
+        <fp>Pin?Header?Straight?1X*</fp>
+        <fp>Pin?Header?Angled?1X*</fp>
+        <fp>Socket?Strip?Straight?1X*</fp>
+        <fp>Socket?Strip?Angled?1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Conn_01x05">
+      <description>Generic connector, single row, 01x05</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_??x*mm*</fp>
+        <fp>Connector*:*1x??x*mm*</fp>
+        <fp>Pin?Header?Straight?1X*</fp>
+        <fp>Pin?Header?Angled?1X*</fp>
+        <fp>Socket?Strip?Straight?1X*</fp>
+        <fp>Socket?Strip?Angled?1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x05</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="L">
+      <description>Inductor</description>
+      <footprints>
+        <fp>Choke_*</fp>
+        <fp>*Coil*</fp>
+        <fp>Inductor_*</fp>
+        <fp>L_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">L</field>
+        <field name="Value">L</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED">
+      <description>LED generic</description>
+      <footprints>
+        <fp>LED*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="lolinesp8266" part="LoLinESP8266">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">LoLinESP8266</field>
+      </fields>
+      <pins>
+        <pin num="1" name="AO" type="input"/>
+        <pin num="2" name="GND" type="input"/>
+        <pin num="3" name="VU" type="input"/>
+        <pin num="4" name="S3" type="input"/>
+        <pin num="5" name="S2" type="input"/>
+        <pin num="6" name="S1" type="input"/>
+        <pin num="7" name="SC" type="input"/>
+        <pin num="8" name="SO" type="input"/>
+        <pin num="9" name="SK" type="input"/>
+        <pin num="10" name="GND" type="input"/>
+        <pin num="11" name="3V" type="input"/>
+        <pin num="12" name="EN" type="input"/>
+        <pin num="13" name="RST" type="input"/>
+        <pin num="14" name="GND" type="input"/>
+        <pin num="15" name="VIN" type="input"/>
+        <pin num="16" name="3V" type="input"/>
+        <pin num="17" name="GND" type="input"/>
+        <pin num="18" name="TX" type="input"/>
+        <pin num="19" name="RX" type="input"/>
+        <pin num="20" name="D8" type="input"/>
+        <pin num="21" name="D7" type="input"/>
+        <pin num="22" name="D6" type="input"/>
+        <pin num="23" name="D5" type="input"/>
+        <pin num="24" name="GND" type="input"/>
+        <pin num="25" name="3V" type="input"/>
+        <pin num="26" name="D4" type="input"/>
+        <pin num="27" name="D3" type="input"/>
+        <pin num="28" name="D2" type="input"/>
+        <pin num="29" name="D1" type="input"/>
+        <pin num="30" name="D0" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="Q_PNP_CBE">
+      <description>Transistor PNP (general)</description>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">Q_PNP_CBE</field>
+      </fields>
+      <pins>
+        <pin num="1" name="C" type="passive"/>
+        <pin num="2" name="B" type="input"/>
+        <pin num="3" name="E" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="RTE24005F" part="RTE24005F">
+      <fields>
+        <field name="Reference">K</field>
+        <field name="Value">RTE24005F</field>
+        <field name="Footprint">RELAY_RTE24005F</field>
+        <field name="Datasheet">TE Connectivity</field>
+        <field name="Field4">None</field>
+        <field name="Field5">https://www.digikey.com/product-detail/en/te-connectivity-potter-brumfield-relays/RTE24005F/PB295-ND/254512?utm_source=snapeda&amp;utm_medium=aggregator&amp;utm_campaign=symbol</field>
+        <field name="Field6">PB295-ND</field>
+        <field name="Field7">http://www.te.com/usa-en/product-4-1419108-0.html</field>
+        <field name="Field8">RTE24005F</field>
+        <field name="Field9">400 VAC</field>
+        <field name="Field10">RTE24005F</field>
+        <field name="Field11">RTE24005F _4-1419108-0_</field>
+        <field name="Field12">8 A</field>
+      </fields>
+      <pins>
+        <pin num="11" name="11" type="passive"/>
+        <pin num="12" name="12" type="passive"/>
+        <pin num="14" name="14" type="passive"/>
+        <pin num="21" name="21" type="passive"/>
+        <pin num="22" name="22" type="passive"/>
+        <pin num="24" name="24" type="passive"/>
+        <pin num="A1" name="A1" type="passive"/>
+        <pin num="A2" name="A2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="switches" part="SW_SPST">
+      <description>Single Pole Single Throw (SPST) switch</description>
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_SPST</field>
+      </fields>
+      <pins>
+        <pin num="1" name="A" type="passive"/>
+        <pin num="2" name="B" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="tps561208" part="TPS561208">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">TPS561208</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="input"/>
+        <pin num="2" name="SW" type="input"/>
+        <pin num="3" name="Vin" type="input"/>
+        <pin num="4" name="VFB" type="input"/>
+        <pin num="5" name="EN" type="input"/>
+        <pin num="6" name="VBST" type="input"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="conn">
+      <uri>D:\Programs\KiCad\share\kicad\library\conn.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>D:\Programs\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+    <library logical="tps561208">
+      <uri>D:\Projects\rfidLock\esp8266\control\parts\esp-control.pretty\tps561208.lib</uri>
+    </library>
+    <library logical="RTE24005F">
+      <uri>D:\Projects\rfidLock\esp8266\control\parts\esp-control.pretty\RTE24005F.lib</uri>
+    </library>
+    <library logical="lolinesp8266">
+      <uri>D:\Projects\rfidLock\esp8266\control\parts\esp-control.pretty\lolinesp8266.lib</uri>
+    </library>
+    <library logical="switches">
+      <uri>D:\Programs\KiCad\share\kicad\library\switches.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(U2-Pad5)">
+      <node ref="U2" pin="5"/>
+    </net>
+    <net code="2" name="Net-(U2-Pad6)">
+      <node ref="U2" pin="6"/>
+    </net>
+    <net code="3" name="Net-(U2-Pad7)">
+      <node ref="U2" pin="7"/>
+    </net>
+    <net code="4" name="Net-(U2-Pad8)">
+      <node ref="U2" pin="8"/>
+    </net>
+    <net code="5" name="Net-(U2-Pad9)">
+      <node ref="U2" pin="9"/>
+    </net>
+    <net code="6" name="Net-(U2-Pad20)">
+      <node ref="U2" pin="20"/>
+    </net>
+    <net code="7" name="Net-(U2-Pad30)">
+      <node ref="U2" pin="30"/>
+    </net>
+    <net code="8" name="Net-(U2-Pad12)">
+      <node ref="U2" pin="12"/>
+    </net>
+    <net code="9" name="Net-(U2-Pad13)">
+      <node ref="U2" pin="13"/>
+    </net>
+    <net code="10" name="Net-(U2-Pad4)">
+      <node ref="U2" pin="4"/>
+    </net>
+    <net code="11" name="Net-(U2-Pad15)">
+      <node ref="U2" pin="15"/>
+    </net>
+    <net code="12" name="D4">
+      <node ref="U2" pin="26"/>
+      <node ref="J1" pin="1"/>
+    </net>
+    <net code="13" name="Net-(U2-Pad18)">
+      <node ref="U2" pin="18"/>
+    </net>
+    <net code="14" name="Net-(U2-Pad19)">
+      <node ref="U2" pin="19"/>
+    </net>
+    <net code="15" name="Net-(D3-Pad2)">
+      <node ref="R1" pin="1"/>
+      <node ref="D3" pin="2"/>
+    </net>
+    <net code="16" name="GND">
+      <node ref="J1" pin="2"/>
+      <node ref="J5" pin="3"/>
+      <node ref="J5" pin="2"/>
+      <node ref="R4" pin="2"/>
+      <node ref="K1" pin="A2"/>
+      <node ref="C3" pin="2"/>
+      <node ref="C1" pin="2"/>
+      <node ref="J4" pin="1"/>
+      <node ref="R3" pin="2"/>
+      <node ref="U2" pin="2"/>
+      <node ref="U1" pin="1"/>
+      <node ref="U2" pin="17"/>
+      <node ref="U2" pin="10"/>
+      <node ref="U2" pin="24"/>
+      <node ref="U2" pin="14"/>
+    </net>
+    <net code="17" name="Net-(J3-Pad3)">
+      <node ref="J3" pin="3"/>
+    </net>
+    <net code="18" name="Net-(U2-Pad1)">
+      <node ref="U2" pin="1"/>
+    </net>
+    <net code="19" name="+3V3">
+      <node ref="Q1" pin="1"/>
+      <node ref="U2" pin="11"/>
+      <node ref="U2" pin="25"/>
+      <node ref="U2" pin="16"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="20" name="+12V">
+      <node ref="U1" pin="3"/>
+      <node ref="U1" pin="5"/>
+      <node ref="C1" pin="1"/>
+      <node ref="J5" pin="1"/>
+    </net>
+    <net code="21" name="D5">
+      <node ref="U2" pin="23"/>
+      <node ref="J3" pin="5"/>
+    </net>
+    <net code="22" name="D1">
+      <node ref="SW1" pin="2"/>
+      <node ref="U2" pin="29"/>
+    </net>
+    <net code="23" name="D3">
+      <node ref="D3" pin="1"/>
+      <node ref="U2" pin="27"/>
+    </net>
+    <net code="24" name="D7">
+      <node ref="J3" pin="4"/>
+      <node ref="U2" pin="21"/>
+    </net>
+    <net code="25" name="D6">
+      <node ref="J3" pin="2"/>
+      <node ref="R6" pin="2"/>
+      <node ref="U2" pin="22"/>
+    </net>
+    <net code="26" name="D2">
+      <node ref="J3" pin="1"/>
+      <node ref="U2" pin="28"/>
+    </net>
+    <net code="27" name="Net-(R4-Pad1)">
+      <node ref="R4" pin="1"/>
+      <node ref="SW1" pin="1"/>
+    </net>
+    <net code="28" name="Net-(J2-Pad2)">
+      <node ref="J2" pin="2"/>
+      <node ref="K1" pin="11"/>
+    </net>
+    <net code="29" name="Net-(K1-Pad21)">
+      <node ref="K1" pin="21"/>
+    </net>
+    <net code="30" name="Net-(K1-PadA1)">
+      <node ref="K1" pin="A1"/>
+      <node ref="Q1" pin="3"/>
+    </net>
+    <net code="31" name="Net-(K1-Pad12)">
+      <node ref="K1" pin="12"/>
+    </net>
+    <net code="32" name="Net-(K1-Pad22)">
+      <node ref="K1" pin="22"/>
+    </net>
+    <net code="33" name="Net-(K1-Pad24)">
+      <node ref="K1" pin="24"/>
+    </net>
+    <net code="34" name="Net-(Q1-Pad2)">
+      <node ref="R6" pin="1"/>
+      <node ref="Q1" pin="2"/>
+    </net>
+    <net code="35" name="Net-(J2-Pad1)">
+      <node ref="J2" pin="1"/>
+      <node ref="K1" pin="14"/>
+    </net>
+    <net code="36" name="Net-(C2-Pad2)">
+      <node ref="U1" pin="6"/>
+      <node ref="C2" pin="2"/>
+    </net>
+    <net code="37" name="+5V">
+      <node ref="C3" pin="1"/>
+      <node ref="L1" pin="2"/>
+      <node ref="R2" pin="1"/>
+      <node ref="J4" pin="2"/>
+      <node ref="U2" pin="3"/>
+    </net>
+    <net code="38" name="Net-(C2-Pad1)">
+      <node ref="L1" pin="1"/>
+      <node ref="U1" pin="2"/>
+      <node ref="C2" pin="1"/>
+    </net>
+    <net code="39" name="Net-(R2-Pad2)">
+      <node ref="R2" pin="2"/>
+      <node ref="U1" pin="4"/>
+      <node ref="R3" pin="1"/>
+    </net>
+  </nets>
+</export>

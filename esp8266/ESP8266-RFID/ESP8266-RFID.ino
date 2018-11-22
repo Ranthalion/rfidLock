@@ -13,7 +13,7 @@
 
 const byte RESET_BUTTON = D1;
 const byte LED_WIFI     = D3;
-const byte DOOR_SENSOR  = D4;
+const byte DOOR_SENSOR  = D4; //Seems to cause a problem at power up
 const byte BUZZER       = D5;
 const byte SW_RX        = D7;
 const byte SW_TX        = D8;

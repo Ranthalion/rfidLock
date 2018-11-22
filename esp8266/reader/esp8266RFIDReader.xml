@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>D:/Projects/rfidLock/esp8266/reader/esp8266RFIDReader.sch</source>
+    <date>7/2/2018 10:00:24 PM</date>
+    <tool>Eeschema 4.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>esp8266RFIDReader.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="R3">
+      <value>20k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D210</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>10k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D263</tstamp>
+    </comp>
+    <comp ref="R6">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D2DC</tstamp>
+    </comp>
+    <comp ref="R7">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D31A</tstamp>
+    </comp>
+    <comp ref="D3">
+      <value>LED_B</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D3D5</tstamp>
+    </comp>
+    <comp ref="D4">
+      <value>LED_Y</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D4E0</tstamp>
+    </comp>
+    <comp ref="BZ1">
+      <value>Buzzer</value>
+      <footprint>Buzzers_Beepers:Buzzer_12x9.5RM7.6</footprint>
+      <libsource lib="device" part="Buzzer"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21D958</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21DA01</tstamp>
+    </comp>
+    <comp ref="R5">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21DD50</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>LED_R</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21DD97</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>1k</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21DEB4</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>LED_G</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21DEBA</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>RFID_MODULE_125_KHZ</value>
+      <footprint>rfid_125_module:RFID_MODULE_125_KHZ</footprint>
+      <libsource lib="rfid_module_125_khz" part="RFID_MODULE_125_KHZ"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B21E6EB</tstamp>
+    </comp>
+    <comp ref="D5">
+      <value>LED_R</value>
+      <footprint>LEDs:LED_0603_HandSoldering</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B230913</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>Conn_01x02</value>
+      <footprint>jst:CONNECTOR_JST_SH_2</footprint>
+      <libsource lib="conn" part="Conn_01x02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B230AB2</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>Conn_01x05</value>
+      <footprint>jst:CONNECTOR_JST_SH_5</footprint>
+      <libsource lib="conn" part="Conn_01x05"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B230CEC</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>0.1uF</value>
+      <footprint>Capacitors_SMD:C_1206_HandSoldering</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B2523B7</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="device" part="Buzzer">
+      <description>Buzzer, polar</description>
+      <footprints>
+        <fp>*Buzzer*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">BZ</field>
+        <field name="Value">Buzzer</field>
+      </fields>
+      <pins>
+        <pin num="1" name="-" type="passive"/>
+        <pin num="2" name="+" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Conn_01x02">
+      <description>Generic connector, single row, 01x02</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_??x*mm*</fp>
+        <fp>Connector*:*1x??x*mm*</fp>
+        <fp>Pin?Header?Straight?1X*</fp>
+        <fp>Pin?Header?Angled?1X*</fp>
+        <fp>Socket?Strip?Straight?1X*</fp>
+        <fp>Socket?Strip?Angled?1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Conn_01x05">
+      <description>Generic connector, single row, 01x05</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_??x*mm*</fp>
+        <fp>Connector*:*1x??x*mm*</fp>
+        <fp>Pin?Header?Straight?1X*</fp>
+        <fp>Pin?Header?Angled?1X*</fp>
+        <fp>Socket?Strip?Straight?1X*</fp>
+        <fp>Socket?Strip?Angled?1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x05</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED">
+      <description>LED generic</description>
+      <footprints>
+        <fp>LED*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="rfid_module_125_khz" part="RFID_MODULE_125_KHZ">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">RFID_MODULE_125_KHZ</field>
+      </fields>
+      <pins>
+        <pin num="P1.1" name="TX" type="output"/>
+        <pin num="P1.2" name="RX" type="input"/>
+        <pin num="P1.3" name="NC" type="input"/>
+        <pin num="P1.4" name="GND" type="input"/>
+        <pin num="P1.5" name="+5V" type="input"/>
+        <pin num="P3.1" name="LED" type="input"/>
+        <pin num="P3.2" name="+5V" type="input"/>
+        <pin num="P3.3" name="GND" type="input"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="device">
+      <uri>D:\Programs\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>D:\Programs\KiCad\share\kicad\library\conn.lib</uri>
+    </library>
+    <library logical="rfid_module_125_khz">
+      <uri>D:\Projects\rfidLock\esp8266\reader\parts\rfid_125_module.pretty\rfid_module_125_khz.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="+5V">
+      <node ref="D1" pin="2"/>
+      <node ref="C1" pin="1"/>
+      <node ref="U1" pin="P3.2"/>
+      <node ref="U1" pin="P1.5"/>
+      <node ref="D5" pin="2"/>
+      <node ref="J1" pin="2"/>
+      <node ref="D3" pin="2"/>
+    </net>
+    <net code="2" name="Net-(D2-Pad2)">
+      <node ref="D5" pin="1"/>
+      <node ref="D2" pin="2"/>
+    </net>
+    <net code="3" name="Net-(U1-PadP1.3)">
+      <node ref="U1" pin="P1.3"/>
+    </net>
+    <net code="4" name="Net-(U1-PadP1.2)">
+      <node ref="U1" pin="P1.2"/>
+    </net>
+    <net code="5" name="LED_REJECT">
+      <node ref="R5" pin="2"/>
+      <node ref="J2" pin="1"/>
+    </net>
+    <net code="6" name="Net-(D2-Pad1)">
+      <node ref="D2" pin="1"/>
+      <node ref="R5" pin="1"/>
+    </net>
+    <net code="7" name="Net-(D1-Pad1)">
+      <node ref="R4" pin="1"/>
+      <node ref="D1" pin="1"/>
+    </net>
+    <net code="8" name="LED_CONFIRM">
+      <node ref="J2" pin="2"/>
+      <node ref="R4" pin="2"/>
+    </net>
+    <net code="9" name="Net-(J2-Pad3)">
+      <node ref="J2" pin="3"/>
+    </net>
+    <net code="10" name="Net-(J2-Pad4)">
+      <node ref="R1" pin="2"/>
+      <node ref="J2" pin="4"/>
+    </net>
+    <net code="11" name="GND">
+      <node ref="BZ1" pin="2"/>
+      <node ref="R3" pin="1"/>
+      <node ref="J1" pin="1"/>
+      <node ref="U1" pin="P1.4"/>
+      <node ref="U1" pin="P3.3"/>
+      <node ref="C1" pin="2"/>
+      <node ref="D4" pin="1"/>
+    </net>
+    <net code="12" name="Net-(R6-Pad2)">
+      <node ref="R6" pin="2"/>
+      <node ref="U1" pin="P3.1"/>
+      <node ref="R7" pin="2"/>
+    </net>
+    <net code="13" name="Net-(D4-Pad2)">
+      <node ref="R7" pin="1"/>
+      <node ref="D4" pin="2"/>
+    </net>
+    <net code="14" name="Net-(D3-Pad1)">
+      <node ref="R6" pin="1"/>
+      <node ref="D3" pin="1"/>
+    </net>
+    <net code="15" name="Net-(R1-Pad1)">
+      <node ref="R1" pin="1"/>
+      <node ref="R3" pin="2"/>
+      <node ref="U1" pin="P1.1"/>
+    </net>
+    <net code="16" name="Net-(BZ1-Pad1)">
+      <node ref="BZ1" pin="1"/>
+      <node ref="R2" pin="1"/>
+    </net>
+    <net code="17" name="Buzzer">
+      <node ref="J2" pin="5"/>
+      <node ref="R2" pin="2"/>
+    </net>
+  </nets>
+</export>
