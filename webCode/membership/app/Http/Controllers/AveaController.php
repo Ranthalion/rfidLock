@@ -85,8 +85,10 @@ class AveaController extends Controller
 
         if ($member)
         {
+          $duration  = config("app.grant_duration");
+          $duration = str_pad($duration, 2, "0", STR_PAD_LEFT);
           $event->event_type_id = EventType::find(1)->id;
-          $payload = "GRNT=01";
+          $payload = "GRNT=" . $duration;
           $payload .= "BEEP=1";
         }
         else

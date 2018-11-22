@@ -29,6 +29,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Grant Duration Time
+    |--------------------------------------------------------------------------
+    |
+    | Controls the amount of time sent to the Avea unit to unlock the door.
+    | The grant duration is in seconds.s
+    |
+    |
+    */
+
+    'grant_duration' => env('AVEA_GRANT_DURATION', 3),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |
