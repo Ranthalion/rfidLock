@@ -1,0 +1,111 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: test
+      DB_USERNAME: root
+      DB_PASSWORD: test
+      SERVICE_TAGS: dev
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_LOG_LEVEL: debug
+      APP_URL: http://localhost
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+      QUEUE_DRIVER: sync
+      REDIS_HOST: 127.0.0.1
+      REDIS_PASSWORD: null
+      REDIS_PORT: 6379
+      MAIL_DRIVER: mailgun
+      MAIL_HOST: mailtrap.io
+      MAIL_PORT: 2525
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+      MAILGUN_DOMAIN: YOUR_DOMAIN
+      MAILGUN_SECRET: YOUR_KEY
+      PUSHER_APP_ID: 
+      PUSHER_KEY: 
+      PUSHER_SECRET: 
+      PAYPAL_URL: https://api-3t.sandbox.paypal.com/nvp
+      PAYPAL_VERSION: 204
+      PAYPAL_USER: YOUR_USER
+      PAYPAL_PWD: YOUR_PASSWORD
+      PAYPAL_SIGNATURE: YOUR_SIGNATURE
+      QB_ACCESS_TOKEN: YOUR_TOKEN
+      QB_ACCESS_TOKEN_SECRET: YOUR_SECRET
+      QB_CONSUMER_KEY: YOUR_KEY
+      QB_CONSUMER_SECRET: YOUR_SECRET
+      QB_REALM_ID: YOUR_REALM
+      SLACK_URL: https://hackrva.slack.com/api/users.admin.invite
+      SLACK_TOKEN: YOUR_TOKEN
+      MAILCHIMP_URL: https://us14.api.mailchimp.com/3.0/
+      MAILCHIMP_KEY: YOUR_KEY
+      MAILCHIMP_LIST_ID: YOUR_LIST_ID
+
+    working_dir: /var/www
+    volumes:
+      - vendor:/var/www/vendor
+      - ./membership:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./membership:/var/www
+      - ./nginx/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: test
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    # volumes:
+      # - dbdata:/var/lib/mysql/
+      # - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  vendor:
+    driver: local
+  dbdata:
+    driver: local
