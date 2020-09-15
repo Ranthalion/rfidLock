@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Models\Member;
 
-class RenewMembership extends Mailable
+class RevokeMember extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -32,16 +32,8 @@ class RenewMembership extends Mailable
      */
     public function build()
     {
-        if ($this->member->level == "Premium")
-        {
-          return $this->view('emails.renewmembershipPremium')
-              ->text('emails.renewmembershipPremium_plain');
-        }
-        else
-        {
-          return $this->view('emails.renewmembershipStandard')
-              ->text('emails.renewmembershipStandard_plain');
-        }
-
+        return $this->from('info@hackrva.org')
+            ->view('emails.RevokeMembership')
+            ->text('emails.RevokeMembership_plain');
     }
 }

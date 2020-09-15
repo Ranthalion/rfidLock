@@ -18,6 +18,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\SlackInvite',
             'App\Listeners\MailSubscription',
         ],
+        'App\Events\MemberApproachingRevokation' => [
+            'App\Listeners\NotifyPendingREvokation'
+        ],
+        'App\Events\MemberRevoked' => [
+            'App\Listeners\NotifyRevokedMember'
+        ],
+        'App\Events\MemberReinstated' => [
+            'App\Listeners\ReinstateMember'
+        ]
     ];
 
     /**
