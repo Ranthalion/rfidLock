@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CheckResourceHealth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,7 +12,6 @@ use Session;
 
 class ResourceController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,6 +25,17 @@ class ResourceController extends Controller
     public function index()
     {
         $resources = Resource::orderBy('description')->get();
+
+        array_map(function($resource){
+            $health_status = "N/a";
+            if($resource->network_address)
+            {
+                $health_status = event(new CheckResourceHealth($resource->id));
+            }
+            $resource->health_status = $health_status;
+            return $resource;
+        }, $resources->all());
+
         return view('resources.index', compact('resources'));
     }
 

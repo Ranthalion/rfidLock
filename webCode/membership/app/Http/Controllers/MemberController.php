@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateKey;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
+use App\Events\UpdateAllResources;
 use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
@@ -70,7 +71,7 @@ class MemberController extends Controller
 
         $member->memberTier = MemberTier::where('description', 'Standard')->first();
         $member->paymentProvider = PaymentProvider::where('description', 'Paypal')->first();
-        
+
         return view('members.create', compact('member', 'tiers', 'providers'));
     }
 
@@ -84,27 +85,28 @@ class MemberController extends Controller
     {
 
         $input = $request->all();
-         
+        
         $customer = new Customer;
         $customer->name = $input["name"];
         $customer->email = $input["email"];
         $customer->payment_provider_id = $input["payment_provider_id"];
         $customer->save();
-
+        
         $member = new Member;
         $member->fill($input);
         $expireDate = new DateTime;
         $expireDate->add(new DateInterval("P62D"));
-
+        
         $member->expire_date = $expireDate;
-
+        
         $member->member_status_id = 1;
         $member->customer_id = $customer->id;
         
         $member->save();
-
-        $member->resources()->attach([1,2]);
         
+        $member->resources()->attach([1,2]);
+        event(new UpdateAllResources());
+
         // redirect
         Session::flash('message', 'Successfully saved member!');
         
@@ -147,6 +149,9 @@ class MemberController extends Controller
         $member->save();
 
         $member->resources()->sync($request->get('resources'));
+
+        event(new UpdateAllResources());
+
         // redirect
         Session::flash('message', 'Successfully saved member!');
         return redirect('members');
@@ -168,6 +173,8 @@ class MemberController extends Controller
         $member->rfid = $request->input('rfid');
         
         $member->save();
+        
+        event(new UpdateAllResources());
 
         // redirect
         Session::flash('message', 'Successfully updated key!');
@@ -187,6 +194,8 @@ class MemberController extends Controller
         $member->member_status_id = 2;
         $member->save();
 
+        event(new UpdateAllResources());
+
         Session::flash('message', $member->name.' has been revoked.');
         return redirect('members');
     }
@@ -203,6 +212,8 @@ class MemberController extends Controller
         $member = Member::find($id);
         $member->member_status_id = 1;
         $member->save();
+
+        event(new UpdateAllResources());
 
         Session::flash('message', $member->name.' has been restored.');
         return redirect('members/inactive');

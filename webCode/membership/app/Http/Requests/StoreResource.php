@@ -13,7 +13,7 @@ class StoreResource extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreResource extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'required|max:255|unique:resources,description,'.$this->route('resource')
+            'description' => 'required|max:255|unique:resources,description,'.$this->route('resource'),
+            'network_address' => 'nullable|max:255|unique:resources,description,'.$this->route('resource'),
+            'api_key' => 'nullable|max:255|unique:resources,description,'.$this->route('resource')
         ];
     }
 }
