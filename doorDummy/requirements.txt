@@ -1,0 +1,4 @@
+Flask==0.10.1
+
+# adding for jsonify
+Werkzeug==0.16.1

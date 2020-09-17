@@ -74,7 +74,8 @@ from members m
 inner join  member_resource mr
 on m.id = mr.member_id
 inner join resources r
-on mr.resource_id = r.id;' );
+on mr.resource_id = r.id
+where m.member_status_id = 1;' );
     }
 
     /**

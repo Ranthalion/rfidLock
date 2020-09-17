@@ -21,6 +21,8 @@
 				        		<tr>
 				        			<th>Resource</th>
 				        			<th>Actions</th>
+									<th>URI</th>
+				        			<th>Status</th>
 				        		</tr>
 				        	</thead>
 				        	<tbody>
@@ -33,6 +35,14 @@
             								{!! Form::submit('Disable', ['class' => 'btn btn-xs btn-warning disable-resource']) !!}
         								{!! Form::close() !!}
 				            		</td>
+									<td>
+										{{ $resource->network_address }}
+									</td>
+									<td>
+										@if ($resource->network_address)
+										{{ $resource->health_status[0] }}
+										@endif
+									</td>
 				                </tr>
 				            @endforeach
 				            </tbody>

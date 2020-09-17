@@ -99,6 +99,16 @@ services:
     networks:
       - app-network
 
+  doordummy:
+    build:
+      context: ../doorDummy
+      dockerfile: Dockerfile
+    container_name: doordummy
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
 #Docker Networks
 networks:
   app-network:

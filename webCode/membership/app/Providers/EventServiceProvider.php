@@ -18,6 +18,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\SlackInvite',
             'App\Listeners\MailSubscription',
         ],
+        'App\Events\CheckResourceHealth' => [
+            'App\Listeners\CheckResourceHealthListener'
+        ],
+        'App\Events\UpdateResourceAccessList' => [
+            'App\Listeners\UpdateResourceAccessListListener'
+        ],
+        'App\Events\UpdateAllResources' => [
+            'App\Listeners\UpdateAllResourcesListener'
+        ],
         'App\Events\MemberApproachingRevokation' => [
             'App\Listeners\NotifyPendingREvokation'
         ],
