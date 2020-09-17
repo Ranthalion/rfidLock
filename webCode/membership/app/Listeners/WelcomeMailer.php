@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Mail;
 class WelcomeMailer implements ShouldQueue
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param  MemberAdded  $event

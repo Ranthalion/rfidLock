@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateKey;
 use App\Http\Requests\StoreMember;
 use App\Http\Requests\UpdateMember;
 use App\Events\UpdateAllResources;
+use App\Events\MemberRevoked;
+use App\Events\MemberReinstated;
 use App\Models\Member;
 use App\Models\MemberTier;
 use App\Models\PaymentProvider;
@@ -195,6 +197,7 @@ class MemberController extends Controller
         $member->save();
 
         event(new UpdateAllResources());
+        event(new MemberRevoked($member));
 
         Session::flash('message', $member->name.' has been revoked.');
         return redirect('members');
@@ -214,6 +217,7 @@ class MemberController extends Controller
         $member->save();
 
         event(new UpdateAllResources());
+        event(new MemberReinstated($member));
 
         Session::flash('message', $member->name.' has been restored.');
         return redirect('members/inactive');

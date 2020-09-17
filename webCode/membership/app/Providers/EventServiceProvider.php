@@ -26,6 +26,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\UpdateAllResources' => [
             'App\Listeners\UpdateAllResourcesListener'
+        ],
+        'App\Events\MemberApproachingRevokation' => [
+            'App\Listeners\NotifyPendingREvokation'
+        ],
+        'App\Events\MemberRevoked' => [
+            'App\Listeners\NotifyRevokedMember'
+        ],
+        'App\Events\MemberReinstated' => [
+            'App\Listeners\ReinstateMember'
         ]
     ];
 

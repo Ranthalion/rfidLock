@@ -12,6 +12,8 @@ use App\Models\Member;
 use App\Models\MemberNotification;
 use App\Models\NotificationType;
 
+use App\Events\MemberRevoked;
+
 use App\Services\CustomerDAL;
 use App\Mail\FailedQuickbooksPayment;;
 use App\Mail\PendingRevokation;
@@ -188,4 +190,37 @@ class PaymentImporter
 
   }
 
+  public function revokeMembers() {
+    $notificationThreshold = new \DateTime;
+    $notificationThreshold->sub(new \DateInterval("P45D"));
+    $notificationThreshold = $notificationThreshold->format(\DateTime::ATOM);
+
+    $expirationDate = new \DateTime;
+    $expirationDate->add(new \DateInterval("P60D"));
+    $expirationDate = $expirationDate->format(\DateTime::ATOM);
+
+    $query = 'Select m.id, m.email, m.name, m.expire_date
+      from members m
+      left join member_notifications n
+      on m.id = n.member_id
+        and n.notification_type_id = 5
+        and n.notification_date >= :notification_threshold
+      where n.id is null
+        and m.expire_date < :expiration_date
+          and m.member_status_id = 1;';
+
+    $revoke = \DB::select($query, ['notification_threshold' =>$notificationThreshold, 'expiration_date'=>$expirationDate]);
+
+    foreach($revoke as $p)
+    {
+
+      $member = Member::find($p->id);
+      $notification = new MemberNotification;
+      $notification->notification_type_id = 5;
+      $notification->notification_date = new \DateTime;
+      $member->memberNotifications()->save($notification);
+
+      event(new MemberRevoked($member));
+    }
+  }
 }
