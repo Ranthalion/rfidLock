@@ -20,14 +20,16 @@ class Revoked extends Command
      */
     protected $description = 'Revoke membership for members without a payment in the previous 60 days.';
 
+    protected $paymentImporter
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PaymentImporter $importer)
     {
         parent::__construct();
+        $this->paymentImporter = $importer;
     }
 
     /**
@@ -38,5 +40,6 @@ class Revoked extends Command
     public function handle()
     {
         //TODO: [ML] Revoke membership and send email
+        $this->paymentImporter->revokeMembers();
     }
 }
